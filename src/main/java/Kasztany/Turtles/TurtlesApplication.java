@@ -1,5 +1,6 @@
 package Kasztany.Turtles;
 
+import Kasztany.Turtles.gui.App;
 import javafx.application.Application;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
