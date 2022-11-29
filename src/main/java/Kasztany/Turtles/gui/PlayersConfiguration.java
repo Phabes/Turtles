@@ -13,7 +13,7 @@ public class PlayersConfiguration {
     private final int numberOfPlayers;
     private final VBox configuration = new VBox();
     private final Button startButton = new Button("Start");
-    private final String[] colors = {"ff0000", "00ff00", "0000ff", "ffc0cb", "ffa500", "800080"};
+    private final String[] colors = {"ff0000", "00ff00", "0000ff", "ffc0cb", "ffa500", "800080", "4cf03a", "3af0de", "5f41a6", "4f2c0f"};
     private final List<HBox> playersTextBoxes = new ArrayList<>();
     private final List<HBox> colorsBoxes = new ArrayList<>();
     private final List<TextField> playersNames = new ArrayList<>();
@@ -26,6 +26,7 @@ public class PlayersConfiguration {
         for (int i = 0; i < numberOfPlayers; i++) {
             Text playerText = new Text("Player " + i);
             HBox playerTextBox = new HBox(playerText);
+            playerTextBox.setPrefWidth(textFieldSize);
             playersTextBoxes.add(playerTextBox);
             playerTextBox.setAlignment(Pos.CENTER);
             playerTextBox.setStyle("-fx-background-color: #454242;");
@@ -41,7 +42,9 @@ public class PlayersConfiguration {
             playerBox.setSpacing(optionsSpace);
             configuration.getChildren().add(playerBox);
         }
-        configuration.getChildren().add(startButton);
+        HBox startBox = new HBox(startButton);
+        startBox.setAlignment(Pos.CENTER);
+        configuration.getChildren().add(startBox);
         configuration.setSpacing(optionsSpace);
     }
 

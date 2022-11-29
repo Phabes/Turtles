@@ -51,10 +51,4 @@ public class App extends Application {
         stage.setX((primScreenBounds.getWidth() - stage.getWidth()) / 2);
         stage.setY((primScreenBounds.getHeight() - stage.getHeight()) / 2);
     }
-
-    private void refresh(){
-        Platform.runLater(() -> {
-
-        });
-    }
 }
