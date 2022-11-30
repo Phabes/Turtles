@@ -34,10 +34,12 @@ public class PlayersConfiguration {
             playersNames.add(playerName);
             playerName.setPrefWidth(textFieldSize);
             HBox playerColorBox = new HBox();
-            playerColorBox.setPrefHeight(20);
+            playerColorBox.setAlignment(Pos.CENTER);
             drawColors(playerColorBox, i);
+            VBox colorsBox = new VBox(playerColorBox);
+            colorsBox.setAlignment(Pos.CENTER);
             colorsBoxes.add(playerColorBox);
-            HBox playerBox = new HBox(playerTextBox, playerName, playerColorBox);
+            HBox playerBox = new HBox(playerTextBox, playerName, colorsBox);
             playerBox.setAlignment(Pos.CENTER);
             playerBox.setSpacing(optionsSpace);
             configuration.getChildren().add(playerBox);
@@ -51,7 +53,7 @@ public class PlayersConfiguration {
     private void drawColors(HBox playerColorBox, int index) {
         for (String color : colors) {
             VBox colorBox = new VBox();
-            colorBox.setPrefSize(20, 20);
+            colorBox.setPrefSize(30, 30);
             if (indexPlayers.containsValue(color))
                 colorBox.setStyle("-fx-background-color: #454242;");
             else {
@@ -88,10 +90,10 @@ public class PlayersConfiguration {
         return startButton;
     }
 
-    public HashMap<String, String> getPlayers() {
-        HashMap<String, String> players = new HashMap<>();
+    public HashMap<Integer, List<String>> getPlayers() {
+        HashMap<Integer, List<String>> players = new HashMap<>();
         for(int i = 0; i < numberOfPlayers; i++){
-            players.put(playersNames.get(i).getText(), indexPlayers.get(i));
+            players.put(i, List.of(playersNames.get(i).getText(), indexPlayers.get(i)));
         }
         return players;
     }

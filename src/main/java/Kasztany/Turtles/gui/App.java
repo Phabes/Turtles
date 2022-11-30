@@ -10,6 +10,7 @@ import javafx.stage.Screen;
 import javafx.stage.Stage;
 
 import java.util.HashMap;
+import java.util.List;
 
 public class App extends Application {
     private final OptionsParser optionsParser = new OptionsParser();
@@ -28,8 +29,8 @@ public class App extends Application {
             PlayersConfiguration playersConfiguration = new PlayersConfiguration(numberOfPlayers);
             playersConfiguration.getStartButton().setOnAction((e2) -> {
                 if(playersConfiguration.checkStart()){
-                    HashMap<String, String> players = playersConfiguration.getPlayers();
-                    for (String key : players.keySet() ) {
+                    HashMap<Integer, List<String>> players = playersConfiguration.getPlayers();
+                    for (int key : players.keySet() ) {
                         System.out.println(key + " " + players.get(key));
                     }
                     System.out.println("START");
