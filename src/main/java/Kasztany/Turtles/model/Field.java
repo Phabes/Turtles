@@ -40,6 +40,24 @@ public class Field {
         return neighbourFields.get(0);
     }
 
+    public int getTurtlesNumber(){
+        int turtles=0;
+        if(this.turtle.isEmpty()){
+            return turtles;
+        }
+        Turtle loopTurtle = this.turtle.get();
+        turtles++;
+        while(loopTurtle.getTurtleOnBack().isPresent()){
+            turtles++;
+            loopTurtle = loopTurtle.getTurtleOnBack().get();
+        }
+        return turtles;
+    }
+
+    public Optional<Turtle> getBottomTurtle() {
+        return turtle;
+    }
+
     public Optional<Turtle> getTopTurtle(){
         if(this.turtle.isEmpty()){
             return Optional.empty();

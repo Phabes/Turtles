@@ -95,8 +95,8 @@ public class Turtle {
         }
     }
 
-    public void linkTurtle(Optional<Turtle> bottomTurtle){
-        this.turtleOnBottom = bottomTurtle;
-        bottomTurtle.ifPresent(turtle -> turtle.setTurtleOnBack(this));
+    public void linkTurtle(Turtle bottomTurtle){
+        this.turtleOnBottom = Optional.of(bottomTurtle);
+        turtleOnBottom.ifPresent(turtle -> turtle.setTurtleOnBack(this));
     }
 }

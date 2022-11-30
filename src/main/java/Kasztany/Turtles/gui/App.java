@@ -1,5 +1,6 @@
 package Kasztany.Turtles.gui;
 
+import Kasztany.Turtles.model.Board;
 import Kasztany.Turtles.parser.OptionsParser;
 import javafx.application.Application;
 import javafx.application.Platform;
@@ -30,10 +31,12 @@ public class App extends Application {
             playersConfiguration.getStartButton().setOnAction((e2) -> {
                 if(playersConfiguration.checkStart()){
                     HashMap<Integer, List<String>> players = playersConfiguration.getPlayers();
-                    for (int key : players.keySet() ) {
-                        System.out.println(key + " " + players.get(key));
-                    }
-                    System.out.println("START");
+
+                    Board board = new Board(players,boardSize);
+                    BoardPanel boardPanel=new BoardPanel(board);
+                    Scene boardScene=new Scene(boardPanel.getBoard());
+                    primaryStage.setTitle("Board");
+                    primaryStage.setScene(boardScene);
                 }
             });
             Scene playersConfigurationScene = new Scene(playersConfiguration.getConfiguration());
