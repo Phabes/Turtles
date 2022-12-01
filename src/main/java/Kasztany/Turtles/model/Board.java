@@ -1,5 +1,10 @@
 package Kasztany.Turtles.model;
 
+import Kasztany.Turtles.persistence.GameLog;
+import Kasztany.Turtles.persistence.GameLogRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -8,9 +13,11 @@ import java.util.List;
 public class Board {
     private final ArrayList<Field> fields;
     private final ArrayList<Turtle> turtles;
-    private final Vector maxVetor=new Vector();
+    private final Vector maxVetor = new Vector();
+    @Autowired
+    private GameLogRepository gameLogRepository;
 
-    public Board(HashMap<Integer, List<String>>  players,int fieldsNum){
+    public Board(HashMap<Integer, List<String>>  players, int fieldsNum){
         this.fields = new ArrayList<>();
         this.turtles = new ArrayList<>();
 
@@ -39,11 +46,12 @@ public class Board {
             System.out.println(key + " " + players.get(key));
             this.turtles.add(new Turtle(players.get(key).get(0),players.get(key).get(1),this.fields.get(0)));
         }
-        this.fields.get(0).linkTurtle(this.turtles.get(0));
 
+        this.fields.get(0).linkTurtle(this.turtles.get(0));
         this.turtles.get(1).linkTurtle(this.turtles.get(0));
         this.turtles.get(2).linkTurtle(this.turtles.get(1));
         this.turtles.get(3).linkTurtle(this.turtles.get(2));
+
         if (this.fields.get(0).getTopTurtle().isPresent())
             System.out.println(this.fields.get(0).getTopTurtle().get().getName());
 
@@ -68,4 +76,16 @@ public class Board {
     public ArrayList<Turtle> getTurtles() {
         return turtles;
     }
+
+    public GameLogRepository getGameLogRepository() {
+        return gameLogRepository;
+    }
+
+    public void saveGameLog(int winnerIndex){
+        Turtle winner = turtles.get(winnerIndex);
+        GameLog gameLog = new GameLog(turtles.size(), fields.size(), winner.getName(), winner.getPoints());
+        gameLogRepository.save(gameLog);
+
+    }
+
 }
