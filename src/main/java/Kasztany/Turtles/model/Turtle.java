@@ -99,4 +99,8 @@ public class Turtle {
         this.turtleOnBottom = Optional.of(bottomTurtle);
         turtleOnBottom.ifPresent(turtle -> turtle.setTurtleOnBack(this));
     }
+
+    public void addPoints(int points){
+        this.points += points;
+    }
 }

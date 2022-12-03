@@ -7,7 +7,7 @@ public class Field {
     private final Integer id;
     private ArrayList<Field> neighbourFields;
     private Optional<Turtle> turtle;
-    private Vector position;
+    private final Vector position;
 
     public Field(Integer id, Vector position){
         this.id = id;
@@ -67,5 +67,9 @@ public class Field {
             loopTurtle = loopTurtle.getTurtleOnBack().get();
         }
         return Optional.of(loopTurtle);
+    }
+
+    public Boolean hasTurtle(){
+        return this.turtle.isPresent();
     }
 }

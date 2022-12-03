@@ -25,6 +25,7 @@ javafx {
 	modules = [ 'javafx.controls' ]
 }
 
+
 tasks.named('test') {
 	useJUnitPlatform()
 }

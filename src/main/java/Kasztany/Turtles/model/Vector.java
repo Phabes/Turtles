@@ -1,5 +1,7 @@
 package Kasztany.Turtles.model;
 
+import org.springframework.stereotype.Service;
+
 import java.util.Objects;
 
 public class Vector {

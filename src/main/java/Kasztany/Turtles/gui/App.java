@@ -2,6 +2,7 @@ package Kasztany.Turtles.gui;
 
 import Kasztany.Turtles.model.Board;
 import Kasztany.Turtles.parser.OptionsParser;
+import jakarta.annotation.PostConstruct;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.geometry.Rectangle2D;
@@ -9,14 +10,19 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
 
 import java.util.HashMap;
 import java.util.List;
 
+@Controller
 public class App extends Application {
+
     private final OptionsParser optionsParser = new OptionsParser();
 
-    @Override
+
+    @PostConstruct
     public void start(Stage primaryStage) throws Exception {
         primaryStage.setOnCloseRequest(windowEvent -> {
             Platform.exit();
@@ -33,6 +39,7 @@ public class App extends Application {
                     HashMap<Integer, List<String>> players = playersConfiguration.getPlayers();
 
                     Board board = new Board(players,boardSize);
+
                     BoardPanel boardPanel=new BoardPanel(board);
                     Scene boardScene=new Scene(boardPanel.getBoard());
                     primaryStage.setTitle("Board");
@@ -55,4 +62,5 @@ public class App extends Application {
         stage.setX((primScreenBounds.getWidth() - stage.getWidth()) / 2);
         stage.setY((primScreenBounds.getHeight() - stage.getHeight()) / 2);
     }
+
 }
