@@ -61,7 +61,7 @@ public class PlayersConfiguration {
                 colorBox.setOnMouseClicked((e) -> {
                     playersTextBoxes.get(index).setStyle("-fx-background-color: #" + color + ";");
                     indexPlayers.put(index, color);
-                    for(int i = 0; i < colorsBoxes.size(); i++){
+                    for (int i = 0; i < colorsBoxes.size(); i++) {
                         HBox box = colorsBoxes.get(i);
                         box.getChildren().clear();
                         drawColors(box, i);
@@ -73,9 +73,9 @@ public class PlayersConfiguration {
     }
 
     public boolean checkStart() {
-        for(int i = 0; i < playersNames.size(); i++){
-            for(int j = i + 1; j < playersNames.size(); j++){
-                if(Objects.equals(playersNames.get(i).getText(), playersNames.get(j).getText()))
+        for (int i = 0; i < playersNames.size(); i++) {
+            for (int j = i + 1; j < playersNames.size(); j++) {
+                if (Objects.equals(playersNames.get(i).getText(), playersNames.get(j).getText()))
                     return false;
             }
         }
@@ -92,7 +92,7 @@ public class PlayersConfiguration {
 
     public HashMap<Integer, List<String>> getPlayers() {
         HashMap<Integer, List<String>> players = new HashMap<>();
-        for(int i = 0; i < numberOfPlayers; i++){
+        for (int i = 0; i < numberOfPlayers; i++) {
             players.put(i, List.of(playersNames.get(i).getText(), indexPlayers.get(i)));
         }
         return players;

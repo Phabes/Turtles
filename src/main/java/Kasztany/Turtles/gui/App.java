@@ -7,10 +7,8 @@ import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
 import java.util.HashMap;
@@ -35,20 +33,22 @@ public class App extends Application {
             System.out.println("Players: " + numberOfPlayers + ", Size: " + boardSize);
             PlayersConfiguration playersConfiguration = new PlayersConfiguration(numberOfPlayers);
             playersConfiguration.getStartButton().setOnAction((e2) -> {
-                if(playersConfiguration.checkStart()){
+                if (playersConfiguration.checkStart()) {
                     HashMap<Integer, List<String>> players = playersConfiguration.getPlayers();
 
-                    Board board = new Board(players,boardSize);
+                    Board board = new Board(players, boardSize);
 
-                    BoardPanel boardPanel=new BoardPanel(board);
-                    Scene boardScene=new Scene(boardPanel.getBoard());
+                    BoardPanel boardPanel = new BoardPanel(board);
+                    Scene boardScene = new Scene(boardPanel.getBoard());
                     primaryStage.setTitle("Board");
                     primaryStage.setScene(boardScene);
+                    this.setScreenInTheMiddle(primaryStage);
                 }
             });
             Scene playersConfigurationScene = new Scene(playersConfiguration.getConfiguration());
             primaryStage.setTitle("Players Configuration");
             primaryStage.setScene(playersConfigurationScene);
+            this.setScreenInTheMiddle(primaryStage);
         });
         Scene settingsScene = new Scene(settings.getSettings());
         primaryStage.setTitle("Settings");

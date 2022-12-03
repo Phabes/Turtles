@@ -10,7 +10,7 @@ public class Turtle {
     private Optional<Turtle> turtleOnBottom;
     private Field currentField;
 
-    public Turtle(String name, String color, Field field){
+    public Turtle(String name, String color, Field field) {
         this.name = name;
         this.color = color;
         this.currentField = field;
@@ -18,7 +18,6 @@ public class Turtle {
         this.turtleOnBack = Optional.empty();
         this.turtleOnBottom = Optional.empty();
     }
-
 
     public Field getCurrentField() {
         return currentField;
@@ -64,7 +63,7 @@ public class Turtle {
         this.turtleOnBack = Optional.of(turtle);
     }
 
-    public void freeTurtleBack(){
+    public void freeTurtleBack() {
         this.turtleOnBack = Optional.empty();
     }
 
@@ -72,35 +71,45 @@ public class Turtle {
         this.turtleOnBottom = Optional.of(turtle);
     }
 
-    public void freeTurtleBottom(){
+    public void freeTurtleBottom() {
         this.turtleOnBottom = Optional.empty();
     }
 
-    public void move(){
+    public void move() {
         Field prevField = this.currentField;
         this.currentField = currentField.getFirstNeigbourField();
         Optional<Turtle> turtleToStick = this.currentField.getTopTurtle();
 
-        if(turtleToStick.isPresent()){
-            turtleToStick.get().setTurtleOnBack(this);
-            if(this.turtleOnBottom.isPresent()){
-                this.turtleOnBottom.get().freeTurtleBack();
-            }else{
-                prevField.freeField();
-            }
-            this.turtleOnBottom.get().setTurtleOnBottom(turtleToStick.get());
+        if (turtleToStick.isPresent()) {
+//            turtleToStick.get().setTurtleOnBack(this);
+//            if (this.turtleOnBottom.isPresent()) {
+//                this.turtleOnBottom.get().freeTurtleBack();
+//            } else {
+//                prevField.freeField();
+//            }
+//            this.turtleOnBottom.get().setTurtleOnBottom(turtleToStick.get());
             //
-        }else{
-            this.currentField.linkTurtle(this);
+        } else {
+            if(prevField.getTopTurtle().isPresent()){
+                if(prevField.getTopTurtle().get().equals(this)){
+                    if (this.turtleOnBottom.isPresent()) {
+                        System.out.println(this.turtleOnBottom.get().getName() + " XDD");
+                        this.turtleOnBottom.get().freeTurtleBack();
+                    } else {
+                        prevField.freeField();
+                    }
+                    this.currentField.linkTurtle(this);
+                }
+            }
         }
     }
 
-    public void linkTurtle(Turtle bottomTurtle){
+    public void linkTurtle(Turtle bottomTurtle) {
         this.turtleOnBottom = Optional.of(bottomTurtle);
         turtleOnBottom.ifPresent(turtle -> turtle.setTurtleOnBack(this));
     }
 
-    public void addPoints(int points){
+    public void addPoints(int points) {
         this.points += points;
     }
 }

@@ -9,7 +9,7 @@ public class Field {
     private Optional<Turtle> turtle;
     private final Vector position;
 
-    public Field(Integer id, Vector position){
+    public Field(Integer id, Vector position) {
         this.id = id;
         this.position = position;
         this.neighbourFields = new ArrayList<Field>();
@@ -24,30 +24,30 @@ public class Field {
         return position;
     }
 
-    public void linkTurtle(Turtle turtle){
+    public void linkTurtle(Turtle turtle) {
         this.turtle = Optional.of(turtle);
     }
 
-    public void freeField(){
+    public void freeField() {
         this.turtle = Optional.empty();
     }
 
-    public void linkField(Field next_field){
+    public void linkField(Field next_field) {
         this.neighbourFields.add(next_field);
     }
 
-    public Field getFirstNeigbourField(){
+    public Field getFirstNeigbourField() {
         return neighbourFields.get(0);
     }
 
-    public int getTurtlesNumber(){
-        int turtles=0;
-        if(this.turtle.isEmpty()){
+    public int getTurtlesNumber() {
+        int turtles = 0;
+        if (this.turtle.isEmpty()) {
             return turtles;
         }
         Turtle loopTurtle = this.turtle.get();
         turtles++;
-        while(loopTurtle.getTurtleOnBack().isPresent()){
+        while (loopTurtle.getTurtleOnBack().isPresent()) {
             turtles++;
             loopTurtle = loopTurtle.getTurtleOnBack().get();
         }
@@ -58,18 +58,18 @@ public class Field {
         return turtle;
     }
 
-    public Optional<Turtle> getTopTurtle(){
-        if(this.turtle.isEmpty()){
+    public Optional<Turtle> getTopTurtle() {
+        if (this.turtle.isEmpty()) {
             return Optional.empty();
         }
         Turtle loopTurtle = this.turtle.get();
-        while(loopTurtle.getTurtleOnBack().isPresent()){
+        while (loopTurtle.getTurtleOnBack().isPresent()) {
             loopTurtle = loopTurtle.getTurtleOnBack().get();
         }
         return Optional.of(loopTurtle);
     }
 
-    public Boolean hasTurtle(){
+    public Boolean hasTurtle() {
         return this.turtle.isPresent();
     }
 }
