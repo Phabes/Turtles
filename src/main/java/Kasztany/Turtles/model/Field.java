@@ -5,7 +5,7 @@ import java.util.Optional;
 
 public class Field {
     private final Integer id;
-    private ArrayList<Field> neighbourFields;
+    private final ArrayList<Field> neighbourFields;
     private Optional<Turtle> turtle;
     private final Vector position;
 

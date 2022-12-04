@@ -1,6 +1,7 @@
 package Kasztany.Turtles.gui;
 
 
+import Kasztany.Turtles.settings.GlobalSettings;
 import Kasztany.Turtles.model.Board;
 import Kasztany.Turtles.model.Field;
 import Kasztany.Turtles.model.Turtle;
@@ -20,17 +21,18 @@ public class BoardPanel {
     private final HBox playersBox = new HBox();
     private final Button moveButton = new Button("Move");
     private Turtle choosedTurtle = null;
+    private GlobalSettings globalSettings = new GlobalSettings();
 
     public BoardPanel(Board board) {
         this.board = board;
         boardBox.getChildren().addAll(playersBox, gridPane);
-        boardBox.setPrefSize(1000, 700);
+        boardBox.setPrefSize(globalSettings.getBoardWidth(), globalSettings.getBoardHeight());
         String boardLayout = """
                 -fx-padding: 10;
                 """;
         boardBox.setStyle(boardLayout);
         moveButton.setDisable(true);
-        gridPane.setPrefSize(800, 600);
+        gridPane.setPrefSize(globalSettings.getGridWidth(), globalSettings.getGridHeight());
         gridPane.setStyle("""
                     -fx-border-color: red;
                     -fx-border-width: 1;
@@ -38,7 +40,7 @@ public class BoardPanel {
                     """);
 
         Vector maxVector = board.getMaxVector();
-        double prefSize = 800.0 / (maxVector.getX() + 1);
+        double prefSize = globalSettings.getGridWidth() / (maxVector.getX() + 1);
 
         for (int x = 0; x <= maxVector.getX(); x++) {
             gridPane.getColumnConstraints().add(new ColumnConstraints(50, prefSize, 200));
@@ -51,7 +53,8 @@ public class BoardPanel {
     }
 
     private void drawHeader() {
-        playersBox.setPrefSize(800, 50);
+        double headerHeight = globalSettings.getBoardHeight() - globalSettings.getGridHeight();
+        playersBox.setPrefSize(globalSettings.getGridWidth(), headerHeight);
         for (Turtle turtle : board.getTurtles()) {
             Text turtleText = new Text(turtle.getName());
 
@@ -59,7 +62,7 @@ public class BoardPanel {
             turtleDrawing.setOnMouseClicked((e) -> turtleClick(turtle));
             VBox turtleBox = new VBox(turtleText, turtleDrawing);
 
-            playersBox.setSpacing(800.0 / board.getTurtles().size() - 50);
+            playersBox.setSpacing(globalSettings.getGridWidth() / board.getTurtles().size() - headerHeight);
             playersBox.getChildren().add(turtleBox);
             playersBox.setAlignment(Pos.CENTER);
             playersBox.setStyle("""
@@ -76,9 +79,11 @@ public class BoardPanel {
         Platform.runLater(() -> {
             gridPane.getChildren().clear();
             Vector maxVector = board.getMaxVector();
+            double size = Math.max(globalSettings.getGridWidth() / (maxVector.getX() + 1), globalSettings.getMinTurtleSize());
 
             for (Field field : board.getFields()) {
                 GridPane fieldBox = new GridPane();
+                fieldBox.setMinSize(globalSettings.getMinTurtleSize(), globalSettings.getMinTurtleSize());
                 fieldBox.setStyle("""
                         -fx-border-color: #AAAAAA;
                         -fx-border-width: 1;
@@ -93,10 +98,8 @@ public class BoardPanel {
                         turtle = turtle.getTurtleOnBack().get();
                         turtlesOnField.add(turtle);
                     }
-                    double size = Math.max(800 / (maxVector.getX() + 1), 50);
-                    drawTurtlesInField(size / (turtlesOnField.size()), fieldBox, turtlesOnField);
+                    drawTurtlesInField(size / (turtlesOnField.size() + 1), fieldBox, turtlesOnField);
                 }
-
                 gridPane.add(fieldBox, field.getPosition().getX(), maxVector.getY() - field.getPosition().getY());
             }
             gridPane.setAlignment(Pos.CENTER);
@@ -140,8 +143,6 @@ public class BoardPanel {
 
         HBox turtle = new HBox(shell, headBox);
         turtle.setPrefSize(size, size / 2);
-//        System.out.println("DRAW " + color);
-//        System.out.println("DRAW " + size);
         return turtle;
     }
 
@@ -160,6 +161,8 @@ public class BoardPanel {
             if(board.isGameEnd()){
                 Turtle winner = board.findWinner();
                 System.out.println("Winner is " + winner.getName() + " " + winner.getColor());
+                EndPanel endPanel = new EndPanel(winner);
+                endPanel.showPanel();
             }
             drawBoard();
             moveButton.setDisable(true);

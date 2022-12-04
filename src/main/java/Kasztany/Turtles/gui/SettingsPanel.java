@@ -1,5 +1,6 @@
 package Kasztany.Turtles.gui;
 
+import Kasztany.Turtles.settings.GlobalSettings;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
@@ -12,13 +13,12 @@ public class SettingsPanel {
     private final TextField numberOfPlayers = new TextField("4");
     private final TextField boardSize = new TextField("10");
     private final Button startButton = new Button("Start");
+    private GlobalSettings globalSettings = new GlobalSettings();
 
     public SettingsPanel() {
-        int optionsSpace = 20;
-        int textFieldSize = 100;
-        numberOfPlayers.setPrefWidth(textFieldSize);
-        boardSize.setPrefWidth(textFieldSize);
-        numberOfPlayers.setPrefWidth(textFieldSize);
+        numberOfPlayers.setPrefWidth(globalSettings.getTextFieldSize());
+        boardSize.setPrefWidth(globalSettings.getTextFieldSize());
+        numberOfPlayers.setPrefWidth(globalSettings.getTextFieldSize());
         Text numberOfPlayersText = new Text("Number Of Players");
         HBox numberOfPlayersBox = new HBox(numberOfPlayersText, numberOfPlayers);
         numberOfPlayersBox.setAlignment(Pos.CENTER);
@@ -28,7 +28,7 @@ public class SettingsPanel {
         HBox startBox = new HBox(startButton);
         startBox.setAlignment(Pos.CENTER);
         settings.getChildren().addAll(numberOfPlayersBox, boardSizeBox, startBox);
-        settings.setSpacing(optionsSpace);
+        settings.setSpacing(globalSettings.getOptionsSpace());
     }
 
     public VBox getSettings() {
