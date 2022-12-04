@@ -38,18 +38,13 @@ public class BoardPanel {
                     """);
 
         Vector maxVector = board.getMaxVector();
-        System.out.println(maxVector.toString());
         double prefSize = 800.0 / (maxVector.getX() + 1);
-        System.out.println(prefSize);
-
 
         for (int x = 0; x <= maxVector.getX(); x++) {
             gridPane.getColumnConstraints().add(new ColumnConstraints(50, prefSize, 200));
-//            gridPane.getColumnConstraints().add(new ColumnConstraints(50, 50, 200));
         }
         for (int y = 0; y <= maxVector.getY(); y++) {
             gridPane.getRowConstraints().add(new RowConstraints(50, prefSize, 200));
-//            gridPane.getRowConstraints().add(new RowConstraints(50, 50, 200));
         }
         drawHeader();
         drawBoard();
@@ -92,7 +87,6 @@ public class BoardPanel {
                         """);
                 if (field.getBottomTurtle().isPresent()) {
                     Turtle turtle = field.getBottomTurtle().get();
-                    System.out.println(turtle.getName() + " " + turtle.getColor() + " " + field.getPosition().toString());
                     ArrayList<Turtle> turtlesOnField = new ArrayList<>();
                     turtlesOnField.add(turtle);
                     while (turtle.getTurtleOnBack().isPresent()) {
@@ -100,8 +94,7 @@ public class BoardPanel {
                         turtlesOnField.add(turtle);
                     }
                     double size = Math.max(800 / (maxVector.getX() + 1), 50);
-//                System.out.println(800 / (maxVector.getX() + 1));
-                    drawTurtlesInField(size / (turtlesOnField.size() - 1), fieldBox, turtlesOnField);
+                    drawTurtlesInField(size / (turtlesOnField.size()), fieldBox, turtlesOnField);
                 }
 
                 gridPane.add(fieldBox, field.getPosition().getX(), maxVector.getY() - field.getPosition().getY());
@@ -111,9 +104,6 @@ public class BoardPanel {
     }
 
     private void drawTurtlesInField(double size, GridPane field, ArrayList<Turtle> turtlesOnField) {
-        System.out.println("SIZE " + turtlesOnField.size());
-//        if(turtlesOnField.size() == 1)
-//            size/=2;
         for (int i = 0; i < turtlesOnField.size(); i++) {
             field.add(drawTurtle(size, turtlesOnField.get(i).getColor()), 0, turtlesOnField.size() - i - 1);
         }
@@ -134,8 +124,8 @@ public class BoardPanel {
         head.setStyle(
                 "-fx-border-color: black;\n" +
                         "-fx-border-width: 1;\n" +
-                        "-fx-border-style: solid;\n"
-//                        "-fx-padding:" + size / 20 + ";\n"
+                        "-fx-border-style: solid;\n" +
+                        "-fx-padding:" + size / 20 + ";\n"
         );
         head.setAlignment(Pos.TOP_RIGHT);
         headBox.getChildren().add(head);
@@ -150,20 +140,27 @@ public class BoardPanel {
 
         HBox turtle = new HBox(shell, headBox);
         turtle.setPrefSize(size, size / 2);
-        System.out.println("DRAW " + color);
+//        System.out.println("DRAW " + color);
+//        System.out.println("DRAW " + size);
         return turtle;
     }
 
     private void turtleClick(Turtle turtle) {
-        System.out.println("Choose " + turtle.getColor());
-        choosedTurtle = turtle;
-        moveButton.setDisable(false);
+        if(!board.isGameEnd()){
+            System.out.println("Choose " + turtle.getName() + " " + turtle.getColor());
+            choosedTurtle = turtle;
+            moveButton.setDisable(false);
+        }
     }
 
     private void moveButtonClick() {
         if (choosedTurtle != null) {
             System.out.println("Move " + choosedTurtle.getName());
             choosedTurtle.move();
+            if(board.isGameEnd()){
+                Turtle winner = board.findWinner();
+                System.out.println("Winner is " + winner.getName() + " " + winner.getColor());
+            }
             drawBoard();
             moveButton.setDisable(true);
             choosedTurtle = null;

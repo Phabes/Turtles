@@ -77,29 +77,40 @@ public class Turtle {
 
     public void move() {
         Field prevField = this.currentField;
-        this.currentField = currentField.getFirstNeigbourField();
-        Optional<Turtle> turtleToStick = this.currentField.getTopTurtle();
+        Field nextField = currentField.getFirstNeigbourField();
+        Optional<Turtle> turtleToStick = nextField.getTopTurtle();
 
         if (turtleToStick.isPresent()) {
-//            turtleToStick.get().setTurtleOnBack(this);
-//            if (this.turtleOnBottom.isPresent()) {
-//                this.turtleOnBottom.get().freeTurtleBack();
-//            } else {
-//                prevField.freeField();
-//            }
-//            this.turtleOnBottom.get().setTurtleOnBottom(turtleToStick.get());
-            //
-        } else {
-            if(prevField.getTopTurtle().isPresent()){
-                if(prevField.getTopTurtle().get().equals(this)){
-                    if (this.turtleOnBottom.isPresent()) {
-                        System.out.println(this.turtleOnBottom.get().getName() + " XDD");
-                        this.turtleOnBottom.get().freeTurtleBack();
+            Optional<Turtle> currTurtle = Optional.of(this);
+            while (currTurtle.isPresent()) {
+                Turtle turtle = currTurtle.get();
+                turtle.setCurrentField(nextField);
+                if (turtle.equals(this)) {
+                    if (turtleOnBottom.isPresent()) {
+                        turtleOnBottom.get().freeTurtleBack();
                     } else {
                         prevField.freeField();
                     }
-                    this.currentField.linkTurtle(this);
+                    setTurtleOnBottom(turtleToStick.get());
+                    turtleToStick.get().setTurtleOnBack(this);
                 }
+                currTurtle = turtle.getTurtleOnBack();
+            }
+        } else {
+            Optional<Turtle> currTurtle = Optional.of(this);
+            while (currTurtle.isPresent()) {
+                Turtle turtle = currTurtle.get();
+                turtle.setCurrentField(nextField);
+                if (turtle.equals(this)) {
+                    currentField.linkTurtle(this);
+                    if (turtleOnBottom.isPresent()) {
+                        turtleOnBottom.get().freeTurtleBack();
+                        freeTurtleBottom();
+                    } else {
+                        prevField.freeField();
+                    }
+                }
+                currTurtle = turtle.getTurtleOnBack();
             }
         }
     }
