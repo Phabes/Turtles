@@ -1,19 +1,17 @@
 package Kasztany.Turtles.model;
 
-import org.springframework.stereotype.Service;
-
 import java.util.Objects;
 
 public class Vector {
     private Integer x;
     private Integer y;
 
-    public Vector(){
+    public Vector() {
         this.x = 0;
         this.y = 0;
     }
 
-    public Vector(Integer x, Integer y){
+    public Vector(Integer x, Integer y) {
         this.x = x;
         this.y = y;
     }
@@ -33,12 +31,14 @@ public class Vector {
     public void setY(Integer y) {
         this.y = y;
     }
-    public void setMaximal(Vector vector){
-        if(vector.x>x)
-            x=vector.x;
-        if(vector.y>y)
-            y=vector.y;
+
+    public void setMaximal(Vector vector) {
+        if (vector.x > x)
+            x = vector.x;
+        if (vector.y > y)
+            y = vector.y;
     }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

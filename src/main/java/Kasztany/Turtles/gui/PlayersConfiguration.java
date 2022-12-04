@@ -1,5 +1,6 @@
 package Kasztany.Turtles.gui;
 
+import Kasztany.Turtles.settings.GlobalSettings;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
@@ -13,26 +14,25 @@ public class PlayersConfiguration {
     private final int numberOfPlayers;
     private final VBox configuration = new VBox();
     private final Button startButton = new Button("Start");
-    private final String[] colors = {"ff0000", "00ff00", "0000ff", "ffc0cb", "ffa500", "800080", "4cf03a", "3af0de", "5f41a6", "4f2c0f"};
+    private final String[] colors = {"ff0000", "00ff00", "0000ff", "ffa500", "800080", "ffc0cb", "4cf03a", "3af0de", "5f41a6", "4f2c0f"};
     private final List<HBox> playersTextBoxes = new ArrayList<>();
     private final List<HBox> colorsBoxes = new ArrayList<>();
     private final List<TextField> playersNames = new ArrayList<>();
     private final HashMap<Integer, String> indexPlayers = new HashMap<>();
+    private GlobalSettings globalSettings = new GlobalSettings();
 
     public PlayersConfiguration(int numberOfPlayers) {
         this.numberOfPlayers = numberOfPlayers;
-        int optionsSpace = 20;
-        int textFieldSize = 100;
         for (int i = 0; i < numberOfPlayers; i++) {
             Text playerText = new Text("Player " + i);
             HBox playerTextBox = new HBox(playerText);
-            playerTextBox.setPrefWidth(textFieldSize);
+            playerTextBox.setPrefWidth(globalSettings.getTextFieldSize());
             playersTextBoxes.add(playerTextBox);
             playerTextBox.setAlignment(Pos.CENTER);
             playerTextBox.setStyle("-fx-background-color: #454242;");
             TextField playerName = new TextField("Player " + i);
             playersNames.add(playerName);
-            playerName.setPrefWidth(textFieldSize);
+            playerName.setPrefWidth(globalSettings.getTextFieldSize());
             HBox playerColorBox = new HBox();
             playerColorBox.setAlignment(Pos.CENTER);
             drawColors(playerColorBox, i);
@@ -41,13 +41,13 @@ public class PlayersConfiguration {
             colorsBoxes.add(playerColorBox);
             HBox playerBox = new HBox(playerTextBox, playerName, colorsBox);
             playerBox.setAlignment(Pos.CENTER);
-            playerBox.setSpacing(optionsSpace);
+            playerBox.setSpacing(globalSettings.getOptionsSpace());
             configuration.getChildren().add(playerBox);
         }
         HBox startBox = new HBox(startButton);
         startBox.setAlignment(Pos.CENTER);
         configuration.getChildren().add(startBox);
-        configuration.setSpacing(optionsSpace);
+        configuration.setSpacing(globalSettings.getOptionsSpace());
     }
 
     private void drawColors(HBox playerColorBox, int index) {
@@ -61,7 +61,7 @@ public class PlayersConfiguration {
                 colorBox.setOnMouseClicked((e) -> {
                     playersTextBoxes.get(index).setStyle("-fx-background-color: #" + color + ";");
                     indexPlayers.put(index, color);
-                    for(int i = 0; i < colorsBoxes.size(); i++){
+                    for (int i = 0; i < colorsBoxes.size(); i++) {
                         HBox box = colorsBoxes.get(i);
                         box.getChildren().clear();
                         drawColors(box, i);
@@ -73,9 +73,9 @@ public class PlayersConfiguration {
     }
 
     public boolean checkStart() {
-        for(int i = 0; i < playersNames.size(); i++){
-            for(int j = i + 1; j < playersNames.size(); j++){
-                if(Objects.equals(playersNames.get(i).getText(), playersNames.get(j).getText()))
+        for (int i = 0; i < playersNames.size(); i++) {
+            for (int j = i + 1; j < playersNames.size(); j++) {
+                if (Objects.equals(playersNames.get(i).getText(), playersNames.get(j).getText()))
                     return false;
             }
         }
@@ -92,7 +92,7 @@ public class PlayersConfiguration {
 
     public HashMap<Integer, List<String>> getPlayers() {
         HashMap<Integer, List<String>> players = new HashMap<>();
-        for(int i = 0; i < numberOfPlayers; i++){
+        for (int i = 0; i < numberOfPlayers; i++) {
             players.put(i, List.of(playersNames.get(i).getText(), indexPlayers.get(i)));
         }
         return players;
