@@ -29,7 +29,7 @@ public class Board {
             this.fields.add(new Field(i, currVec));
         }
         for (int i = 0; i < fieldsNum - 1; i++) {
-            fields.get(i).linkField(fields.get(i + 1));
+            fields.get(i).linkField(fields.get(i + 1), Direction.EAST);
         }
 //        for (int i = 1; i < fieldsNum; i++) {
 //            fields.get(i).linkField(fields.get(i - 1));
@@ -74,7 +74,6 @@ public class Board {
         this.fields = new ArrayList<>();
         this.turtles = new ArrayList<>();
     }
-
 
     public void addFields(int fieldsNum) {
         for (int i = 0; i < fieldsNum; i++) {

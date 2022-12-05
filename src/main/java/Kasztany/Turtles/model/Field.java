@@ -1,23 +1,22 @@
 package Kasztany.Turtles.model;
 
-import java.util.ArrayList;
 import java.util.Optional;
 
 public class Field {
     private final Integer id;
-    private final ArrayList<Field> neighbourFields;
+    private final Neighbourhood neighborhood;
     private Optional<Turtle> turtle;
     private final Vector position;
 
     public Field(Integer id, Vector position) {
         this.id = id;
         this.position = position;
-        this.neighbourFields = new ArrayList<Field>();
+        this.neighborhood = new Neighbourhood();
         this.turtle = Optional.empty();
     }
 
-    public ArrayList<Field> getNeighbourFields() {
-        return neighbourFields;
+    public Neighbourhood getNeighbourFields() {
+        return neighborhood;
     }
 
     public Vector getPosition() {
@@ -32,12 +31,12 @@ public class Field {
         this.turtle = Optional.empty();
     }
 
-    public void linkField(Field next_field) {
-        this.neighbourFields.add(next_field);
+    public void linkField(Field nextField, Direction direction) {
+        this.neighborhood.setNeighbour(direction, nextField);
     }
 
-    public Field getFirstNeigbourField() {
-        return neighbourFields.get(0);
+    public Optional<Field> getFirstNeighbourField() {
+        return neighborhood.getNeighbour(Direction.EAST);
     }
 
     public int getTurtlesNumber() {

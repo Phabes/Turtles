@@ -32,6 +32,7 @@ public class BoardPanel {
                 """;
         boardBox.setStyle(boardLayout);
         moveButton.setDisable(true);
+        moveButton.setOnMouseClicked((e) -> moveButtonClick());
         gridPane.setPrefSize(globalSettings.getGridWidth(), globalSettings.getGridHeight());
         gridPane.setStyle("""
                     -fx-border-color: red;
@@ -71,7 +72,6 @@ public class BoardPanel {
                     -fx-border-style: solid;
                     """);
         }
-        moveButton.setOnMouseClicked((e) -> moveButtonClick());
         playersBox.getChildren().add(moveButton);
     }
 

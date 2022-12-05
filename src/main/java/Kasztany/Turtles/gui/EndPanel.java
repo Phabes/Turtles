@@ -4,6 +4,7 @@ import Kasztany.Turtles.settings.GlobalSettings;
 import Kasztany.Turtles.model.Turtle;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;

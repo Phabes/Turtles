@@ -1,5 +1,8 @@
 package Kasztany.Turtles.settings;
 
+import org.springframework.stereotype.Service;
+
+@Service
 public class GlobalSettings {
     private final int optionsSpace;
     private final int textFieldSize;
