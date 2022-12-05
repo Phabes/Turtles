@@ -12,6 +12,7 @@ public class GlobalSettings {
     private final double gridWidth;
     private final double gridHeight;
     private final double minTurtleSize;
+    private final double headerTurtleSize;
 
     public GlobalSettings(){
         optionsSpace = 20;
@@ -22,6 +23,7 @@ public class GlobalSettings {
         gridWidth = 800;
         gridHeight = 650;
         minTurtleSize = 40;
+        headerTurtleSize = 50;
     }
     public int getOptionsSpace() {
         return optionsSpace;
@@ -53,5 +55,9 @@ public class GlobalSettings {
 
     public double getMinTurtleSize() {
         return minTurtleSize;
+    }
+
+    public double getHeaderTurtleSize() {
+        return headerTurtleSize;
     }
 }

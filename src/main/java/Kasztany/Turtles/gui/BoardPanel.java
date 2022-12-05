@@ -8,6 +8,8 @@ import Kasztany.Turtles.model.Turtle;
 import Kasztany.Turtles.model.Vector;
 import javafx.application.Platform;
 import javafx.geometry.Pos;
+import javafx.scene.Cursor;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.layout.*;
 import javafx.scene.text.Text;
@@ -33,12 +35,14 @@ public class BoardPanel {
         boardBox.setStyle(boardLayout);
         moveButton.setDisable(true);
         moveButton.setOnMouseClicked((e) -> moveButtonClick());
+        setMoveButtonColor("454242");
         gridPane.setPrefSize(globalSettings.getGridWidth(), globalSettings.getGridHeight());
         gridPane.setStyle("""
-                    -fx-border-color: red;
-                    -fx-border-width: 1;
-                    -fx-border-style: solid;
-                    """);
+                -fx-border-color: red;
+                -fx-border-width: 1;
+                -fx-border-style: solid;
+                """);
+
 
         Vector maxVector = board.getMaxVector();
         double prefSize = globalSettings.getGridWidth() / (maxVector.getX() + 1);
@@ -59,8 +63,9 @@ public class BoardPanel {
         for (Turtle turtle : board.getTurtles()) {
             Text turtleText = new Text(turtle.getName());
 
-            HBox turtleDrawing = drawTurtle(50, turtle.getColor());
+            HBox turtleDrawing = drawTurtle(globalSettings.getHeaderTurtleSize(), turtle.getColor());
             turtleDrawing.setOnMouseClicked((e) -> turtleClick(turtle));
+            turtleDrawing.setOnMouseEntered((e) -> turtleDrawing.setCursor(Cursor.HAND));
             VBox turtleBox = new VBox(turtleText, turtleDrawing);
 
             playersBox.setSpacing(globalSettings.getGridWidth() / board.getTurtles().size() - headerHeight);
@@ -147,10 +152,11 @@ public class BoardPanel {
     }
 
     private void turtleClick(Turtle turtle) {
-        if(!board.isGameEnd()){
+        if (!board.isGameEnd()) {
             System.out.println("Choose " + turtle.getName() + " " + turtle.getColor());
             choosedTurtle = turtle;
             moveButton.setDisable(false);
+            setMoveButtonColor(turtle.getColor());
         }
     }
 
@@ -158,7 +164,7 @@ public class BoardPanel {
         if (choosedTurtle != null) {
             System.out.println("Move " + choosedTurtle.getName());
             choosedTurtle.move();
-            if(board.isGameEnd()){
+            if (board.isGameEnd()) {
                 Turtle winner = board.findWinner();
                 System.out.println("Winner is " + winner.getName() + " " + winner.getColor());
                 EndPanel endPanel = new EndPanel(winner);
@@ -167,7 +173,16 @@ public class BoardPanel {
             drawBoard();
             moveButton.setDisable(true);
             choosedTurtle = null;
+            setMoveButtonColor("454242");
         }
+    }
+
+    private void setMoveButtonColor(String color) {
+        moveButton.setStyle(
+                "-fx-border-color: #" + color + ";\n" +
+                        "-fx-border-width: 3;\n" +
+                        " -fx-border-style: solid;\n"
+        );
     }
 
     public VBox getBoard() {
