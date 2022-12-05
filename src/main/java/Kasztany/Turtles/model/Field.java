@@ -1,0 +1,74 @@
+package Kasztany.Turtles.model;
+
+import java.util.Optional;
+
+public class Field {
+    private final Integer id;
+    private final Neighbourhood neighbourhood;
+    private Optional<Turtle> turtle;
+    private final Vector position;
+
+    public Field(Integer id, Vector position) {
+        this.id = id;
+        this.position = position;
+        this.neighbourhood = new Neighbourhood();
+        this.turtle = Optional.empty();
+    }
+
+    public Neighbourhood getNeighbourFields() {
+        return neighbourhood;
+    }
+
+    public Vector getPosition() {
+        return position;
+    }
+
+    public void linkTurtle(Turtle turtle) {
+        this.turtle = Optional.of(turtle);
+    }
+
+    public void freeField() {
+        this.turtle = Optional.empty();
+    }
+
+    public void linkField(Field nextField, Direction direction) {
+        this.neighbourhood.setNeighbour(direction, nextField);
+    }
+
+    public Optional<Field> getFirstNeighbourField() {
+        return neighbourhood.getNeighbour(Direction.EAST);
+    }
+
+    public int getTurtlesNumber() {
+        int turtles = 0;
+        if (this.turtle.isEmpty()) {
+            return turtles;
+        }
+        Turtle loopTurtle = this.turtle.get();
+        turtles++;
+        while (loopTurtle.getTurtleOnBack().isPresent()) {
+            turtles++;
+            loopTurtle = loopTurtle.getTurtleOnBack().get();
+        }
+        return turtles;
+    }
+
+    public Optional<Turtle> getBottomTurtle() {
+        return turtle;
+    }
+
+    public Optional<Turtle> getTopTurtle() {
+        if (this.turtle.isEmpty()) {
+            return Optional.empty();
+        }
+        Turtle loopTurtle = this.turtle.get();
+        while (loopTurtle.getTurtleOnBack().isPresent()) {
+            loopTurtle = loopTurtle.getTurtleOnBack().get();
+        }
+        return Optional.of(loopTurtle);
+    }
+
+    public Boolean hasTurtle() {
+        return this.turtle.isPresent();
+    }
+}
