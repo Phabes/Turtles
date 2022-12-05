@@ -4,19 +4,19 @@ import java.util.Optional;
 
 public class Field {
     private final Integer id;
-    private final Neighbourhood neighborhood;
+    private final Neighbourhood neighbourhood;
     private Optional<Turtle> turtle;
     private final Vector position;
 
     public Field(Integer id, Vector position) {
         this.id = id;
         this.position = position;
-        this.neighborhood = new Neighbourhood();
+        this.neighbourhood = new Neighbourhood();
         this.turtle = Optional.empty();
     }
 
     public Neighbourhood getNeighbourFields() {
-        return neighborhood;
+        return neighbourhood;
     }
 
     public Vector getPosition() {
@@ -32,11 +32,11 @@ public class Field {
     }
 
     public void linkField(Field nextField, Direction direction) {
-        this.neighborhood.setNeighbour(direction, nextField);
+        this.neighbourhood.setNeighbour(direction, nextField);
     }
 
     public Optional<Field> getFirstNeighbourField() {
-        return neighborhood.getNeighbour(Direction.EAST);
+        return neighbourhood.getNeighbour(Direction.EAST);
     }
 
     public int getTurtlesNumber() {
