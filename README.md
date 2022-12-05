@@ -1,4 +1,4 @@
-﻿#Technologie Obiektowe - projekt
+﻿# Technologie Obiektowe - projekt
 
 Mateusz Mazur
 
@@ -8,7 +8,7 @@ Mikołaj Klimek
 ## Milestone 1
 ### Model
 Diagram klas modelu
-![alt text](https://bitbucket.lab.ii.agh.edu.pl/projects/TO2022/repos/mp-pn-1500-kasztany/browse/diagram.jpg)
+![alt text](https://bitbucket.lab.ii.agh.edu.pl/projects/TO2022/repos/mp-pn-1500-kasztany/browse/diagram.jpg?at=m1)
 
 - **Klasa Vector** używana jest do określania pozycji pól na mapie
 - **Klasa Turtle** reprezentuje żółwia, wraz z nickiem użytkownika oraz liczbą punktów, a także wskaźniki na opcjonalne żółwie, które mogą znajdować się nad lub pod tym konkretnym żółwiem
