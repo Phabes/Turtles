@@ -3,33 +3,38 @@ package Kasztany.Turtles.model;
 import java.util.Objects;
 
 public class Vector {
-    private Integer x;
-    private Integer y;
+    private int x;
+    private int y;
 
     public Vector() {
         this.x = 0;
         this.y = 0;
     }
 
-    public Vector(Integer x, Integer y) {
+    public Vector(int x, int y) {
         this.x = x;
         this.y = y;
     }
 
-    public Integer getX() {
+    public int getX() {
         return x;
     }
 
-    public Integer getY() {
+    public int getY() {
         return y;
     }
 
-    public void setX(Integer x) {
+    public void setX(int x) {
         this.x = x;
     }
 
-    public void setY(Integer y) {
+    public void setY(int y) {
         this.y = y;
+    }
+
+
+    protected Vector add(Vector other) {
+        return new Vector(this.x + other.x, this.y + other.y);
     }
 
     public void setMaximal(Vector vector) {
@@ -40,16 +45,20 @@ public class Vector {
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Vector vector = (Vector) o;
-        return Objects.equals(x, vector.x) && Objects.equals(y, vector.y);
+    public int hashCode() {
+        return Objects.hash(this.x, this.y);
+    }
+
+    @Override
+    public boolean equals(Object other) {
+        if (!(other instanceof Vector that))
+            return false;
+        return Objects.equals(this.x, that.x) && Objects.equals(this.y, that.y);
     }
 
     @Override
     public String toString() {
-        return "Vector{" +
+        return "Vector {" +
                 "x=" + x +
                 ", y=" + y +
                 '}';

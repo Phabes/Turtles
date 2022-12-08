@@ -1,9 +1,6 @@
 package Kasztany.Turtles;
 
-import Kasztany.Turtles.model.Board;
-import Kasztany.Turtles.model.Field;
-import Kasztany.Turtles.model.Turtle;
-import Kasztany.Turtles.model.Vector;
+import Kasztany.Turtles.model.*;
 import Kasztany.Turtles.persistence.GameLogRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +17,8 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 class TurtlesApplicationTests {
 	@Autowired
 	Board board;
+	@Autowired
+	Neighbourhood neighbourhood;
 	@Test
 	void contextLoads() {
 	}
@@ -31,7 +30,7 @@ class TurtlesApplicationTests {
 
 	@Test
 	void turtleConnectionTest(){
-		Field field = new Field(0, new Vector(0,0));
+		Field field = new Field(0, new Vector(0,0), neighbourhood);
 		Turtle turtle1 = new Turtle("Player1", "#0000000", field);
 		Turtle turtle2 = new Turtle("Player2", "#0000000", field);
 		field.linkTurtle(turtle2);
@@ -42,7 +41,7 @@ class TurtlesApplicationTests {
 
 	@Test
 	void fieldConnectionTest(){
-		Field field = new Field(0, new Vector(0,0));
+		Field field = new Field(0, new Vector(0,0), neighbourhood);
 		Turtle turtle1 = new Turtle("Player1", "#0000000", field);
 		Turtle turtle2 = new Turtle("Player2", "#0000000", field);
 		Turtle turtle3 = new Turtle("Player2", "#0000000", field);

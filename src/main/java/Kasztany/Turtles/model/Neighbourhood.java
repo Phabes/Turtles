@@ -1,24 +1,33 @@
 package Kasztany.Turtles.model;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.Collection;
 import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
 
+@Service
 public class Neighbourhood {
-    private final Map<Direction, Optional<Field>> neighbours;
+    private final HashMap<Vector, Field> wholeNeighbourhood;
 
+    @Autowired
     public Neighbourhood(){
-        this.neighbours = new HashMap<>();
-        for (Direction direction: Direction.values()) {
-            neighbours.put(direction, Optional.empty());
-        }
+        this.wholeNeighbourhood = new HashMap<>();
     }
 
-    public void setNeighbour(Direction direction, Field field){
-        neighbours.put(direction, Optional.of(field));
+    public void addField(Vector vector, Field field){
+        wholeNeighbourhood.put(vector, field);
     }
 
-    public Optional<Field> getNeighbour(Direction direction){
-        return neighbours.get(direction);
+    public Field getFieldByVector(Vector vector){
+        return wholeNeighbourhood.get(vector);
+    }
+
+    public HashMap<Vector, Field> getWholeNeighbourhood() {
+        return wholeNeighbourhood;
+    }
+
+    public Collection<Field> getFields(){
+        return wholeNeighbourhood.values();
     }
 }

@@ -77,44 +77,38 @@ public class Turtle {
 
     public void move() {
         Field prevField = this.currentField;
-        Optional<Field> potentialNextField = currentField.getFirstNeighbourField();
-        if(potentialNextField.isPresent()){
+        System.out.println(color + " " + this.currentField.getPosition());
+        Optional<Field> potentialNextField = currentField.getNeighbour(Direction.EAST);
+        if (potentialNextField.isPresent()) {
             Field nextField = potentialNextField.get();
             Optional<Turtle> turtleToStick = nextField.getTopTurtle();
-
-            if (turtleToStick.isPresent()) {
-                Optional<Turtle> currTurtle = Optional.of(this);
-                while (currTurtle.isPresent()) {
-                    Turtle turtle = currTurtle.get();
-                    turtle.setCurrentField(nextField);
-                    if (turtle.equals(this)) {
-                        if (turtleOnBottom.isPresent()) {
-                            turtleOnBottom.get().freeTurtleBack();
-                        } else {
-                            prevField.freeField();
-                        }
-                        setTurtleOnBottom(turtleToStick.get());
-                        turtleToStick.get().setTurtleOnBack(this);
-                    }
-                    currTurtle = turtle.getTurtleOnBack();
+            setCurrentField(nextField);
+            if (turtleOnBottom.isPresent()) {
+                if (turtleOnBack.isPresent()) {
+                    turtleOnBottom.get().setTurtleOnBack(turtleOnBack.get());
+                    turtleOnBack.get().setTurtleOnBottom(turtleOnBottom.get());
+                } else {
+                    turtleOnBottom.get().freeTurtleBack();
                 }
             } else {
-                Optional<Turtle> currTurtle = Optional.of(this);
-                while (currTurtle.isPresent()) {
-                    Turtle turtle = currTurtle.get();
-                    turtle.setCurrentField(nextField);
-                    if (turtle.equals(this)) {
-                        currentField.linkTurtle(this);
-                        if (turtleOnBottom.isPresent()) {
-                            turtleOnBottom.get().freeTurtleBack();
-                            freeTurtleBottom();
-                        } else {
-                            prevField.freeField();
-                        }
-                    }
-                    currTurtle = turtle.getTurtleOnBack();
+                if(turtleOnBack.isPresent()){
+                    turtleOnBack.get().freeTurtleBottom();
+                    prevField.linkTurtle(turtleOnBack.get());
+                }
+                else{
+                    prevField.freeField();
                 }
             }
+            if (turtleToStick.isPresent()) {
+                setTurtleOnBottom(turtleToStick.get());
+                turtleToStick.get().setTurtleOnBack(this);
+            }else {
+                nextField.linkTurtle(this);
+                freeTurtleBottom();
+            }
+            Optional<Turtle> turtleToMove = turtleOnBack;
+            freeTurtleBack();
+            turtleToMove.ifPresent(Turtle::move);
         }
     }
 

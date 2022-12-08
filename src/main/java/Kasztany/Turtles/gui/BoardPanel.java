@@ -15,6 +15,8 @@ import javafx.scene.layout.*;
 import javafx.scene.text.Text;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class BoardPanel {
     private final Board board;
@@ -85,8 +87,7 @@ public class BoardPanel {
             gridPane.getChildren().clear();
             Vector maxVector = board.getMaxVector();
             double size = Math.max(globalSettings.getGridWidth() / (maxVector.getX() + 1), globalSettings.getMinTurtleSize());
-
-            for (Field field : board.getFields()) {
+            for (Field field: board.getNeighbourhood().getFields()) {
                 GridPane fieldBox = new GridPane();
                 fieldBox.setMinSize(globalSettings.getMinTurtleSize(), globalSettings.getMinTurtleSize());
                 fieldBox.setStyle("""

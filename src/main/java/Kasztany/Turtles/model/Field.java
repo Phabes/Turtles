@@ -4,19 +4,15 @@ import java.util.Optional;
 
 public class Field {
     private final Integer id;
-    private final Neighbourhood neighborhood;
-    private Optional<Turtle> turtle;
     private final Vector position;
+    private final Neighbourhood neighbourhood;
+    private Optional<Turtle> turtle;
 
-    public Field(Integer id, Vector position) {
+    public Field(Integer id, Vector position, Neighbourhood neighbourhood) {
         this.id = id;
         this.position = position;
-        this.neighborhood = new Neighbourhood();
+        this.neighbourhood = neighbourhood;
         this.turtle = Optional.empty();
-    }
-
-    public Neighbourhood getNeighbourFields() {
-        return neighborhood;
     }
 
     public Vector getPosition() {
@@ -31,12 +27,11 @@ public class Field {
         this.turtle = Optional.empty();
     }
 
-    public void linkField(Field nextField, Direction direction) {
-        this.neighborhood.setNeighbour(direction, nextField);
-    }
-
-    public Optional<Field> getFirstNeighbourField() {
-        return neighborhood.getNeighbour(Direction.EAST);
+    public Optional<Field> getNeighbour(Direction direction) {
+        Vector directionVector = direction.toVector();
+        Vector neighbourPosition = position.add(directionVector);
+        Field neighbourField = neighbourhood.getFieldByVector(neighbourPosition);
+        return Optional.of(neighbourField);
     }
 
     public int getTurtlesNumber() {

@@ -12,7 +12,7 @@ import java.util.List;
 
 @Service
 public class Board {
-    private final ArrayList<Field> fields;
+    private final Neighbourhood neighbourhood;
     private final ArrayList<Turtle> turtles;
     private final Vector maxVector = new Vector();
 
@@ -20,58 +20,36 @@ public class Board {
     private GameLogRepository gameLogRepository;
 
     public Board(HashMap<Integer, List<String>> players, int fieldsNum) {
-        this.fields = new ArrayList<>();
+        this.neighbourhood = new Neighbourhood();
         this.turtles = new ArrayList<>();
 
         for (int i = 0; i < fieldsNum; i++) {
             Vector currVec = new Vector(i, 0);
             maxVector.setMaximal(currVec);
-            this.fields.add(new Field(i, currVec));
+            Field field = new Field(i, currVec, neighbourhood);
+            neighbourhood.addField(currVec, field);
         }
-        for (int i = 0; i < fieldsNum - 1; i++) {
-            fields.get(i).linkField(fields.get(i + 1), Direction.EAST);
-        }
-//        for (int i = 1; i < fieldsNum; i++) {
-//            fields.get(i).linkField(fields.get(i - 1));
-//        }
-//        Vector currVec1 = new Vector(2, 1);
-//        maxVector.setMaximal(currVec1);
-//        this.fields.add(new Field(11, currVec1));
-//        Vector currVec2 = new Vector(2, 2);
-//        maxVector.setMaximal(currVec2);
-//        this.fields.add(new Field(12, currVec2));
-//        Vector currVec3 = new Vector(3, 2);
-//        maxVector.setMaximal(currVec3);
-//        this.fields.add(new Field(13, currVec3));
-//        Vector currVec4 = new Vector(4, 2);
-//        maxVector.setMaximal(currVec4);
-//        this.fields.add(new Field(14, currVec4));
-//        Vector currVec5 = new Vector(4, 1);
-//        maxVector.setMaximal(currVec5);
-//        this.fields.add(new Field(15, currVec5));
 
-        this.lastField = this.fields.get(fieldsNum - 1);
+        this.lastField = neighbourhood.getFieldByVector(new Vector(fieldsNum - 1, 0));
+
+        Vector startVector = new Vector();
 
         for (int key : players.keySet()) {
             System.out.println(key + " " + players.get(key));
-            this.turtles.add(new Turtle(players.get(key).get(0), players.get(key).get(1), this.fields.get(0)));
+            this.turtles.add(new Turtle(players.get(key).get(0), players.get(key).get(1), neighbourhood.getFieldByVector(startVector)));
         }
 
-        this.fields.get(0).linkTurtle(this.turtles.get(0));
+        neighbourhood.getFieldByVector(startVector).linkTurtle(turtles.get(0));
 
         for (int i = 1; i < turtles.size(); i++) {
-            this.turtles.get(i).linkTurtle(this.turtles.get(i - 1));
+            turtles.get(i).linkTurtle(turtles.get(i - 1));
         }
-
-        if (this.fields.get(0).getTopTurtle().isPresent())
-            System.out.println(this.fields.get(0).getTopTurtle().get().getName());
-
     }
 
     @Autowired
     public Board(GameLogRepository repository) {
         this.gameLogRepository = repository;
-        this.fields = new ArrayList<>();
+        this.neighbourhood = new Neighbourhood();
         this.turtles = new ArrayList<>();
     }
 
@@ -79,51 +57,52 @@ public class Board {
         for (int i = 0; i < fieldsNum; i++) {
             Vector currVec = new Vector(i, 0);
             maxVector.setMaximal(currVec);
-            this.fields.add(new Field(i, currVec));
+            neighbourhood.addField(currVec, new Field(i, currVec, neighbourhood));
         }
         Vector currVec1 = new Vector(2, 1);
         maxVector.setMaximal(currVec1);
-        this.fields.add(new Field(11, currVec1));
+        neighbourhood.addField(currVec1, new Field(11, currVec1, neighbourhood));
         Vector currVec2 = new Vector(2, 2);
         maxVector.setMaximal(currVec2);
-        this.fields.add(new Field(12, currVec2));
+        neighbourhood.addField(currVec2, new Field(12, currVec2, neighbourhood));
         Vector currVec3 = new Vector(3, 2);
         maxVector.setMaximal(currVec3);
-        this.fields.add(new Field(13, currVec3));
+        neighbourhood.addField(currVec3, new Field(13, currVec3, neighbourhood));
         Vector currVec4 = new Vector(4, 2);
         maxVector.setMaximal(currVec4);
-        this.fields.add(new Field(14, currVec4));
+        neighbourhood.addField(currVec4, new Field(14, currVec4, neighbourhood));
         Vector currVec5 = new Vector(4, 1);
         maxVector.setMaximal(currVec5);
-        this.fields.add(new Field(15, currVec5));
+        neighbourhood.addField(currVec5, new Field(15, currVec5, neighbourhood));
     }
 
     public void addTurtlesFromHashMap(HashMap<Integer, List<String>> players) {
+        Vector startVector = new Vector();
         for (int key : players.keySet()) {
-            this.turtles.add(new Turtle(players.get(key).get(0), players.get(key).get(1), this.fields.get(0)));
+            turtles.add(new Turtle(players.get(key).get(0), players.get(key).get(1), neighbourhood.getFieldByVector(startVector)));
         }
 
-        this.fields.get(0).linkTurtle(this.turtles.get(0));
+        neighbourhood.getFieldByVector(startVector).linkTurtle(turtles.get(0));
 
         for (int i = 1; i < turtles.size(); i++) {
-            this.turtles.get(i).linkTurtle(this.turtles.get(i - 1));
+            turtles.get(i).linkTurtle(turtles.get(i - 1));
         }
     }
 
     public void addTurtle(Turtle turtle) {
-        this.turtles.add(turtle);
+        turtles.add(turtle);
     }
 
     public Field getStartingField() {
-        return this.fields.get(0);
+        return this.neighbourhood.getFieldByVector(new Vector());
     }
 
     public Vector getMaxVector() {
         return maxVector;
     }
 
-    public ArrayList<Field> getFields() {
-        return fields;
+    public Neighbourhood getNeighbourhood() {
+        return neighbourhood;
     }
 
     public ArrayList<Turtle> getTurtles() {
@@ -137,7 +116,7 @@ public class Board {
 
     public void saveGameLog(int winnerIndex) {
         Turtle winner = turtles.get(winnerIndex);
-        GameLog gameLog = new GameLog(turtles.size(), fields.size(), winner.getName(), winner.getPoints());
+        GameLog gameLog = new GameLog(turtles.size(), neighbourhood.getWholeNeighbourhood().size(), winner.getName(), winner.getPoints());
         gameLogRepository.save(gameLog);
     }
 
