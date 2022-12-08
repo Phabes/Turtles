@@ -3,16 +3,20 @@ package Kasztany.Turtles.model;
 import java.util.Optional;
 
 public class Field {
-    private final Integer id;
-    private final Vector position;
+    private final int id;
     private final Neighbourhood neighbourhood;
     private Optional<Turtle> turtle;
+    private final Vector position;
 
     public Field(Integer id, Vector position, Neighbourhood neighbourhood) {
         this.id = id;
         this.position = position;
         this.neighbourhood = neighbourhood;
         this.turtle = Optional.empty();
+    }
+
+    public Neighbourhood getNeighbourFields() {
+        return neighbourhood;
     }
 
     public Vector getPosition() {
