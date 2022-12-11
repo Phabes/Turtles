@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Text?>
+<VBox xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="Kasztany.Turtles.controller.EndGame"
+      alignment="CENTER"
+      spacing="10"
+      prefWidth="300">
+    <Text fx:id="winnerName"/>
+    <Text fx:id="winnerPoints"/>
+</VBox>

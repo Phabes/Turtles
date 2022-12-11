@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.text.Text?>
+
+<VBox xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="Kasztany.Turtles.controller.GameSettings"
+      spacing="10">
+    <HBox alignment="CENTER">
+        <Text>Number Of Players</Text>
+        <TextField fx:id="numberOfPlayers" text="4"/>
+    </HBox>
+    <HBox alignment="CENTER">
+        <Text>Board Size</Text>
+        <TextField fx:id="boardSize" text="10"/>
+    </HBox>
+    <HBox alignment="CENTER">
+        <Button text="START" onAction="#handleStartClick"/>
+    </HBox>
+</VBox>

@@ -1,19 +1,27 @@
 package Kasztany.Turtles.gui;
 
 
+import Kasztany.Turtles.controller.EndGame;
 import Kasztany.Turtles.settings.GlobalSettings;
 import Kasztany.Turtles.model.Board;
 import Kasztany.Turtles.model.Field;
 import Kasztany.Turtles.model.Turtle;
 import Kasztany.Turtles.model.Vector;
 import javafx.application.Platform;
+import javafx.event.ActionEvent;
+import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
 import javafx.scene.Cursor;
+import javafx.scene.Node;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.text.Text;
+import javafx.stage.Stage;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -36,7 +44,13 @@ public class BoardPanel {
                 """;
         boardBox.setStyle(boardLayout);
         moveButton.setDisable(true);
-        moveButton.setOnMouseClicked((e) -> moveButtonClick());
+        moveButton.setOnMouseClicked((e) -> {
+            try {
+                moveButtonClick(e);
+            } catch (IOException ex) {
+                throw new RuntimeException(ex);
+            }
+        });
         setMoveButtonColor("454242");
         gridPane.setPrefSize(globalSettings.getGridWidth(), globalSettings.getGridHeight());
         gridPane.setStyle("""
@@ -161,15 +175,25 @@ public class BoardPanel {
         }
     }
 
-    private void moveButtonClick() {
+    private void moveButtonClick(MouseEvent event) throws IOException {
         if (choosedTurtle != null) {
             System.out.println("Move " + choosedTurtle.getName());
             choosedTurtle.move();
             if (board.isGameEnd()) {
                 Turtle winner = board.findWinner();
-                System.out.println("Winner is " + winner.getName() + " " + winner.getColor());
-                EndPanel endPanel = new EndPanel(winner);
-                endPanel.showPanel();
+//                System.out.println("Winner is " + winner.getName() + " " + winner.getColor());
+//                EndPanel endPanel = new EndPanel(winner);
+//                endPanel.showPanel();
+
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/EndGame.fxml"));
+                Parent root = loader.load();
+                EndGame endGame = loader.getController();
+                endGame.reveiceData(winner);
+                Scene scene = new Scene(root);
+                Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+                stage.setTitle("End Game");
+                stage.setScene(scene);
+                globalSettings.setScreenInTheMiddle(stage);
             }
             drawBoard();
             moveButton.setDisable(true);

@@ -5,7 +5,7 @@ import java.util.Optional;
 public class Turtle {
     private String name;
     private String color;
-    private Integer points;
+    private int points;
     private Optional<Turtle> turtleOnBack;
     private Optional<Turtle> turtleOnBottom;
     private Field currentField;
@@ -23,7 +23,7 @@ public class Turtle {
         return currentField;
     }
 
-    public Integer getPoints() {
+    public int getPoints() {
         return points;
     }
 

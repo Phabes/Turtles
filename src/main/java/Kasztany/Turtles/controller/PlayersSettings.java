@@ -1,28 +1,41 @@
-package Kasztany.Turtles.gui;
+package Kasztany.Turtles.controller;
 
+import Kasztany.Turtles.gui.BoardPanel;
+import Kasztany.Turtles.model.Board;
+import Kasztany.Turtles.parser.OptionsParser;
 import Kasztany.Turtles.settings.GlobalSettings;
+import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
 import javafx.geometry.Pos;
-import javafx.scene.control.Button;
+import javafx.scene.Node;
+import javafx.scene.Scene;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
+import javafx.stage.Stage;
+import org.springframework.stereotype.Controller;
 
 import java.util.*;
 
-public class PlayersConfiguration {
-    private final int numberOfPlayers;
-    private final VBox configuration = new VBox();
-    private final Button startButton = new Button("Start");
+@Controller
+public class PlayersSettings {
+    private int numberOfPlayers;
+    private int boardSize;
+    private final OptionsParser optionsParser = new OptionsParser();
+    private final GlobalSettings globalSettings = new GlobalSettings();
     private final String[] colors = {"ff0000", "00ff00", "0000ff", "ffa500", "800080", "ffc0cb", "4cf03a", "3af0de", "5f41a6", "4f2c0f"};
+    @FXML
+    private VBox configuration;
     private final List<HBox> playersTextBoxes = new ArrayList<>();
     private final List<HBox> colorsBoxes = new ArrayList<>();
     private final List<TextField> playersNames = new ArrayList<>();
     private final HashMap<Integer, String> indexPlayers = new HashMap<>();
-    private GlobalSettings globalSettings = new GlobalSettings();
 
-    public PlayersConfiguration(int numberOfPlayers) {
-        this.numberOfPlayers = numberOfPlayers;
+    @FXML
+    public void receiveData(String numberOfPlayersStr, String boardSizeStr){
+        numberOfPlayers = optionsParser.getInt(numberOfPlayersStr);
+        boardSize = optionsParser.getInt(boardSizeStr);
         for (int i = 0; i < numberOfPlayers; i++) {
             Text playerText = new Text("Player " + i);
             HBox playerTextBox = new HBox(playerText);
@@ -44,10 +57,6 @@ public class PlayersConfiguration {
             playerBox.setSpacing(globalSettings.getOptionsSpace());
             configuration.getChildren().add(playerBox);
         }
-        HBox startBox = new HBox(startButton);
-        startBox.setAlignment(Pos.CENTER);
-        configuration.getChildren().add(startBox);
-        configuration.setSpacing(globalSettings.getOptionsSpace());
     }
 
     private void drawColors(HBox playerColorBox, int index) {
@@ -82,19 +91,24 @@ public class PlayersConfiguration {
         return indexPlayers.size() == numberOfPlayers;
     }
 
-    public VBox getConfiguration() {
-        return configuration;
-    }
-
-    public Button getStartButton() {
-        return startButton;
-    }
-
     public HashMap<Integer, List<String>> getPlayers() {
         HashMap<Integer, List<String>> players = new HashMap<>();
         for (int i = 0; i < numberOfPlayers; i++) {
             players.put(i, List.of(playersNames.get(i).getText(), indexPlayers.get(i)));
         }
         return players;
+    }
+
+    @FXML
+    public void handleStartClick(ActionEvent event) {
+        if(checkStart()){
+            Board board = new Board(getPlayers(), boardSize);
+            BoardPanel boardPanel = new BoardPanel(board);
+            Scene boardScene = new Scene(boardPanel.getBoard());
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            stage.setTitle("Board");
+            stage.setScene(boardScene);
+            globalSettings.setScreenInTheMiddle(stage);
+        }
     }
 }

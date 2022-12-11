@@ -1,12 +1,14 @@
 package Kasztany.Turtles.settings;
 
+import javafx.geometry.Rectangle2D;
+import javafx.stage.Screen;
+import javafx.stage.Stage;
 import org.springframework.stereotype.Service;
 
 @Service
 public class GlobalSettings {
     private final int optionsSpace;
     private final int textFieldSize;
-    private final int endPanelWidth;
     private final double boardWidth;
     private final double boardHeight;
     private final double gridWidth;
@@ -17,7 +19,6 @@ public class GlobalSettings {
     public GlobalSettings(){
         optionsSpace = 20;
         textFieldSize = 100;
-        endPanelWidth = 300;
         boardWidth = 1000;
         boardHeight = 700;
         gridWidth = 800;
@@ -31,10 +32,6 @@ public class GlobalSettings {
 
     public int getTextFieldSize() {
         return textFieldSize;
-    }
-
-    public int getEndPanelWidth() {
-        return endPanelWidth;
     }
 
     public double getBoardWidth() {
@@ -59,5 +56,11 @@ public class GlobalSettings {
 
     public double getHeaderTurtleSize() {
         return headerTurtleSize;
+    }
+
+    public void setScreenInTheMiddle(Stage stage) {
+        Rectangle2D primScreenBounds = Screen.getPrimary().getVisualBounds();
+        stage.setX((primScreenBounds.getWidth() - stage.getWidth()) / 2);
+        stage.setY((primScreenBounds.getHeight() - stage.getHeight()) / 2);
     }
 }
