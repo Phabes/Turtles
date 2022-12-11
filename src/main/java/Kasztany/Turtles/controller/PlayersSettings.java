@@ -1,13 +1,15 @@
 package Kasztany.Turtles.controller;
 
-import Kasztany.Turtles.gui.BoardPanel;
+
 import Kasztany.Turtles.model.Board;
 import Kasztany.Turtles.parser.OptionsParser;
 import Kasztany.Turtles.settings.GlobalSettings;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
@@ -16,6 +18,7 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import org.springframework.stereotype.Controller;
 
+import java.io.IOException;
 import java.util.*;
 
 @Controller
@@ -100,11 +103,16 @@ public class PlayersSettings {
     }
 
     @FXML
-    public void handleStartClick(ActionEvent event) {
+    public void handleStartClick(ActionEvent event) throws IOException {
         if(checkStart()){
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/BoardPane.fxml"));
+            Parent root = loader.load();
+
+            BoardController boardController=loader.getController();
             Board board = new Board(getPlayers(), boardSize);
-            BoardPanel boardPanel = new BoardPanel(board);
-            Scene boardScene = new Scene(boardPanel.getBoard());
+            boardController.receiveData(board);
+//            BoardPanel boardPanel = new BoardPanel(board);
+            Scene boardScene = new Scene(root);
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
             stage.setTitle("Board");
             stage.setScene(boardScene);

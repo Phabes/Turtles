@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="Kasztany.Turtles.controller.BoardController"
+            fx:id="pane"
+            style="-fx-padding: 10"
+>
+    <HBox fx:id="playersBox">
+        <Button fx:id="moveButton" text="Move"  onAction="#handleMoveClick"/>
+    </HBox>
+    <GridPane fx:id="boardGrid"/>
+
+</VBox>
