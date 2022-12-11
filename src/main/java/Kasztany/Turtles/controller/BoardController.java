@@ -24,6 +24,7 @@ import org.springframework.stereotype.Controller;
 import java.io.IOException;
 import java.util.ArrayList;
 
+
 @Controller
 public class BoardController {
     private final GlobalSettings globalSettings=new GlobalSettings();
@@ -83,7 +84,7 @@ public class BoardController {
         drawBoard();
     }
     @FXML
-    public void handleMoveClick(ActionEvent event) throws IOException {
+    public void handleMoveClick(ActionEvent event) throws IOException{
         if (choosedTurtle != null) {
             System.out.println("Move " + choosedTurtle.getName());
             choosedTurtle.move();

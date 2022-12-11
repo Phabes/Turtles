@@ -1,6 +1,7 @@
 package Kasztany.Turtles.controller;
 
 
+import Kasztany.Turtles.TurtlesApplication;
 import Kasztany.Turtles.model.Board;
 import Kasztany.Turtles.parser.OptionsParser;
 import Kasztany.Turtles.settings.GlobalSettings;
@@ -16,6 +17,8 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.stereotype.Controller;
 
 import java.io.IOException;
@@ -25,18 +28,21 @@ import java.util.*;
 public class PlayersSettings {
     private int numberOfPlayers;
     private int boardSize;
-    private final OptionsParser optionsParser = new OptionsParser();
-    private final GlobalSettings globalSettings = new GlobalSettings();
-    private final String[] colors = {"ff0000", "00ff00", "0000ff", "ffa500", "800080", "ffc0cb", "4cf03a", "3af0de", "5f41a6", "4f2c0f"};
+    private final String[] colors = {"ff0000", "00ff00", "0000ff", "ffa500", "ffc0cb", "800080", "f2dc46", "3af0de", "5f41a6", "4f2c0f"};
     @FXML
     private VBox configuration;
     private final List<HBox> playersTextBoxes = new ArrayList<>();
     private final List<HBox> colorsBoxes = new ArrayList<>();
     private final List<TextField> playersNames = new ArrayList<>();
     private final HashMap<Integer, String> indexPlayers = new HashMap<>();
+    private static final ApplicationContext applicationContext = new AnnotationConfigApplicationContext(TurtlesApplication.class);
+    private GlobalSettings globalSettings;
+    private OptionsParser optionsParser;
 
     @FXML
     public void receiveData(String numberOfPlayersStr, String boardSizeStr){
+        this.globalSettings = applicationContext.getBean(GlobalSettings.class);
+        this.optionsParser = applicationContext.getBean(OptionsParser.class);
         numberOfPlayers = optionsParser.getInt(numberOfPlayersStr);
         boardSize = optionsParser.getInt(boardSizeStr);
         for (int i = 0; i < numberOfPlayers; i++) {
@@ -109,9 +115,11 @@ public class PlayersSettings {
             Parent root = loader.load();
 
             BoardController boardController=loader.getController();
-            Board board = new Board(getPlayers(), boardSize);
+            Board board = applicationContext.getBean(Board.class);
+            board.addFields(boardSize);
+            board.addTurtlesFromHashMap(getPlayers());
             boardController.receiveData(board);
-//            BoardPanel boardPanel = new BoardPanel(board);
+
             Scene boardScene = new Scene(root);
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
             stage.setTitle("Board");
