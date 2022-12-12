@@ -13,6 +13,7 @@ public class GlobalSettings {
     private final double gridHeight;
     private final double minTurtleSize;
     private final double headerTurtleSize;
+    private final int fruitSize;
 
     public GlobalSettings(){
         optionsSpace = 20;
@@ -23,6 +24,7 @@ public class GlobalSettings {
         gridHeight = 650;
         minTurtleSize = 40;
         headerTurtleSize = 50;
+        fruitSize = 20;
     }
     public int getOptionsSpace() {
         return optionsSpace;
@@ -54,6 +56,10 @@ public class GlobalSettings {
 
     public double getHeaderTurtleSize() {
         return headerTurtleSize;
+    }
+
+    public int getFruitSize() {
+        return fruitSize;
     }
 
     public void setScreenInTheMiddle(Stage stage) {

@@ -6,12 +6,12 @@ public enum Direction {
     SOUTH,
     WEST;
 
-    public Vector toVector(){
+    public Vector2d toVector(){
         return switch (this){
-            case NORTH -> new Vector(0, 1);
-            case EAST -> new Vector(1, 0);
-            case SOUTH -> new Vector(0, -1);
-            case WEST -> new Vector(-1, 0);
+            case NORTH -> new Vector2d(0, 1);
+            case EAST -> new Vector2d(1, 0);
+            case SOUTH -> new Vector2d(0, -1);
+            case WEST -> new Vector2d(-1, 0);
         };
     }
 }

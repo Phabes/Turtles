@@ -4,22 +4,18 @@ import java.util.Optional;
 
 public class Field {
     private final int id;
-    private final Neighbourhood neighbourhood;
+    private final Vector2d position;
     private Optional<Turtle> turtle;
-    private final Vector position;
+    private Optional<Fruit> fruit;
 
-    public Field(Integer id, Vector position, Neighbourhood neighbourhood) {
+    public Field(Integer id, Vector2d position) {
         this.id = id;
         this.position = position;
-        this.neighbourhood = neighbourhood;
         this.turtle = Optional.empty();
+        this.fruit = Optional.empty();
     }
 
-    public Neighbourhood getNeighbourFields() {
-        return neighbourhood;
-    }
-
-    public Vector getPosition() {
+    public Vector2d getPosition() {
         return position;
     }
 
@@ -28,14 +24,19 @@ public class Field {
     }
 
     public void freeField() {
-        this.turtle = Optional.empty();
+        turtle = Optional.empty();
     }
 
-    public Optional<Field> getNeighbour(Direction direction) {
-        Vector directionVector = direction.toVector();
-        Vector neighbourPosition = position.add(directionVector);
-        Field neighbourField = neighbourhood.getFieldByVector(neighbourPosition);
-        return Optional.of(neighbourField);
+    public void addFruit(int points){
+        fruit = Optional.of(new Fruit(points));
+    }
+
+    public Optional<Fruit> getFruit() {
+        return fruit;
+    }
+
+    public void deleteFruit(){
+        fruit = Optional.empty();
     }
 
     public int getTurtlesNumber() {

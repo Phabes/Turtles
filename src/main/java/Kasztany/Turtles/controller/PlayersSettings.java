@@ -40,7 +40,7 @@ public class PlayersSettings {
     private OptionsParser optionsParser;
 
     @FXML
-    public void receiveData(String numberOfPlayersStr, String boardSizeStr){
+    public void receiveData(String numberOfPlayersStr, String boardSizeStr) {
         this.globalSettings = applicationContext.getBean(GlobalSettings.class);
         this.optionsParser = applicationContext.getBean(OptionsParser.class);
         numberOfPlayers = optionsParser.getInt(numberOfPlayersStr);
@@ -110,14 +110,15 @@ public class PlayersSettings {
 
     @FXML
     public void handleStartClick(ActionEvent event) throws IOException {
-        if(checkStart()){
+        if (checkStart()) {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/BoardPane.fxml"));
             Parent root = loader.load();
 
-            BoardController boardController=loader.getController();
+            BoardController boardController = loader.getController();
             Board board = applicationContext.getBean(Board.class);
             board.addFields(boardSize);
             board.addTurtlesFromHashMap(getPlayers());
+            board.addRandomFruits(boardSize);
             boardController.receiveData(board);
 
             Scene boardScene = new Scene(root);

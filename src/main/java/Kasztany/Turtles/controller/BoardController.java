@@ -1,9 +1,7 @@
 package Kasztany.Turtles.controller;
 
-import Kasztany.Turtles.model.Board;
-import Kasztany.Turtles.model.Field;
-import Kasztany.Turtles.model.Turtle;
-import Kasztany.Turtles.model.Vector;
+import Kasztany.Turtles.gui.ImageBoxElement;
+import Kasztany.Turtles.model.*;
 import Kasztany.Turtles.settings.GlobalSettings;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
@@ -15,43 +13,45 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import org.springframework.stereotype.Controller;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 
 
 @Controller
 public class BoardController {
-    private final GlobalSettings globalSettings=new GlobalSettings();
+    private Board board;
+    private final GlobalSettings globalSettings = new GlobalSettings();
+    private final ImageBoxElement imageBoxElement = new ImageBoxElement("peach.png");
     @FXML
     private VBox pane;
     @FXML
     private HBox playersBox;
     @FXML
     private GridPane boardGrid;
-
     @FXML
     private Button moveButton;
     private Turtle choosedTurtle = null;
 
-    private Board board;
+    public BoardController() throws FileNotFoundException {
+    }
 
     @FXML
     public void initialize() {
         pane.setPrefSize(globalSettings.getBoardWidth(), globalSettings.getBoardHeight());
 
-        playersBox.setPrefSize(globalSettings.getGridWidth(),globalSettings.getBoardHeight() - globalSettings.getGridHeight());
+        playersBox.setPrefSize(globalSettings.getGridWidth(), globalSettings.getBoardHeight() - globalSettings.getGridHeight());
         playersBox.setAlignment(Pos.CENTER);
         playersBox.setStyle("""
-                    -fx-border-color: blue;
-                    -fx-border-width: 1;
-                    -fx-border-style: solid;
-                    """);
+                -fx-border-color: blue;
+                -fx-border-width: 1;
+                -fx-border-style: solid;
+                """);
         boardGrid.setPrefSize(globalSettings.getGridWidth(), globalSettings.getGridHeight());
         boardGrid.setStyle("""
                 -fx-border-color: red;
@@ -59,21 +59,24 @@ public class BoardController {
                 -fx-border-style: solid;
                 """);
     }
+
     @FXML
-    public void receiveData(Board receivedboard){
-        board=receivedboard;
+    public void receiveData(Board receivedBoard) {
+        board = receivedBoard;
         playersBox.setSpacing(globalSettings.getGridWidth() / board.getTurtles().size() - (globalSettings.getBoardHeight() - globalSettings.getGridHeight()));
         board.getTurtles().forEach(turtle -> {
             Text turtleText = new Text(turtle.getName());
-            HBox turtleIcon=drawTurtle(globalSettings.getHeaderTurtleSize(), turtle.getColor());
+            HBox turtleIcon = drawTurtle(globalSettings.getHeaderTurtleSize(), turtle.getColor());
             VBox turtleBox = new VBox(turtleText, turtleIcon);
             turtleBox.setOnMouseClicked((e) -> turtleClick(turtle));
             turtleBox.setOnMouseEntered((e) -> turtleIcon.setCursor(Cursor.HAND));
             playersBox.getChildren().add(turtleBox);
         });
 
-        Vector maxVector = board.getMaxVector();
+        Vector2d maxVector = board.getMaxVector();
         double prefSize = globalSettings.getGridWidth() / (maxVector.getX() + 1);
+        int fruitSize = (int) prefSize / 2;
+        imageBoxElement.setSize(fruitSize);
 
         for (int x = 0; x <= maxVector.getX(); x++) {
             boardGrid.getColumnConstraints().add(new ColumnConstraints(50, prefSize, 200));
@@ -83,22 +86,18 @@ public class BoardController {
         }
         drawBoard();
     }
+
     @FXML
-    public void handleMoveClick(ActionEvent event) throws IOException{
+    public void handleMoveClick(ActionEvent event) throws IOException {
         if (choosedTurtle != null) {
-            System.out.println("Move " + choosedTurtle.getName());
-            choosedTurtle.move();
+            Field nextTurtleField = board.getFieldForTurtleMove(choosedTurtle.getCurrentField().getPosition(), Direction.EAST);
+            choosedTurtle.move(nextTurtleField);
+            if(nextTurtleField.getFruit().isPresent()){
+                choosedTurtle.eat(nextTurtleField.getFruit().get());
+                nextTurtleField.deleteFruit();
+            }
             if (board.isGameEnd()) {
-                Turtle winner = board.findWinner();
-                FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/EndGame.fxml"));
-                Parent root = loader.load();
-                EndGame endGame = loader.getController();
-                endGame.reveiceData(winner);
-                Scene scene = new Scene(root);
-                Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-                stage.setTitle("End Game");
-                stage.setScene(scene);
-                globalSettings.setScreenInTheMiddle(stage);
+                showEndView(event);
             }
             drawBoard();
             moveButton.setDisable(true);
@@ -106,6 +105,7 @@ public class BoardController {
             setMoveButtonColor("454242");
         }
     }
+
     private void turtleClick(Turtle turtle) {
         if (!board.isGameEnd()) {
             System.out.println("Choose " + turtle.getName() + " " + turtle.getColor());
@@ -114,6 +114,7 @@ public class BoardController {
             setMoveButtonColor(turtle.getColor());
         }
     }
+
     private HBox drawTurtle(double size, String color) {
         HBox shell = new HBox();
         shell.setMinSize(size / 2, size / 2);
@@ -150,9 +151,9 @@ public class BoardController {
     private void drawBoard() {
         Platform.runLater(() -> {
             boardGrid.getChildren().clear();
-            Vector maxVector = board.getMaxVector();
+            Vector2d maxVector = board.getMaxVector();
             double size = Math.max(globalSettings.getGridWidth() / (maxVector.getX() + 1), globalSettings.getMinTurtleSize());
-            for (Field field: board.getNeighbourhood().getFields()) {
+            for (Field field : board.getNeighbourhood().getFields()) {
                 GridPane fieldBox = new GridPane();
                 fieldBox.setMinSize(globalSettings.getMinTurtleSize(), globalSettings.getMinTurtleSize());
                 fieldBox.setStyle("""
@@ -170,7 +171,10 @@ public class BoardController {
                         turtlesOnField.add(turtle);
                     }
                     drawTurtlesInField(size / (turtlesOnField.size() + 1), fieldBox, turtlesOnField);
+                } else if (field.getFruit().isPresent()) {
+                    fieldBox.add(imageBoxElement.getImage(), 0, 0);
                 }
+                fieldBox.setAlignment(Pos.CENTER);
                 boardGrid.add(fieldBox, field.getPosition().getX(), maxVector.getY() - field.getPosition().getY());
             }
             boardGrid.setAlignment(Pos.CENTER);
@@ -181,13 +185,26 @@ public class BoardController {
         moveButton.setStyle(
                 "-fx-border-color: #" + color + ";\n" +
                         "-fx-border-width: 3;\n" +
-                        " -fx-border-style: solid;\n"
+                        "-fx-border-style: solid;\n"
         );
     }
+
     private void drawTurtlesInField(double size, GridPane field, ArrayList<Turtle> turtlesOnField) {
         for (int i = 0; i < turtlesOnField.size(); i++) {
             field.add(drawTurtle(size, turtlesOnField.get(i).getColor()), 0, turtlesOnField.size() - i - 1);
         }
-        field.setAlignment(Pos.CENTER);
+    }
+
+    private void showEndView(ActionEvent event) throws IOException {
+        Turtle winner = board.findWinner();
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/EndGame.fxml"));
+        Parent root = loader.load();
+        EndGame endGame = loader.getController();
+        endGame.reveiceData(winner);
+        Scene scene = new Scene(root);
+        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        stage.setTitle("End Game");
+        stage.setScene(scene);
+        globalSettings.setScreenInTheMiddle(stage);
     }
 }

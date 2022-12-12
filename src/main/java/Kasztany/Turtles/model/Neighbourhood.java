@@ -8,22 +8,22 @@ import java.util.HashMap;
 
 @Service
 public class Neighbourhood {
-    private final HashMap<Vector, Field> wholeNeighbourhood;
+    private final HashMap<Vector2d, Field> wholeNeighbourhood;
 
     @Autowired
     public Neighbourhood(){
         this.wholeNeighbourhood = new HashMap<>();
     }
 
-    public void addField(Vector vector, Field field){
+    public void addField(Vector2d vector, Field field){
         wholeNeighbourhood.put(vector, field);
     }
 
-    public Field getFieldByVector(Vector vector){
+    public Field getFieldByVector(Vector2d vector){
         return wholeNeighbourhood.get(vector);
     }
 
-    public HashMap<Vector, Field> getWholeNeighbourhood() {
+    public HashMap<Vector2d, Field> getWholeNeighbourhood() {
         return wholeNeighbourhood;
     }
 

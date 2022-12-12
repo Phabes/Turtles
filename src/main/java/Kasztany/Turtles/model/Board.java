@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 
@@ -13,8 +14,7 @@ import java.util.List;
 public class Board {
     private final Neighbourhood neighbourhood;
     private final ArrayList<Turtle> turtles;
-    private final Vector maxVector = new Vector();
-
+    private final Vector2d maxVector = new Vector2d();
     private Field lastField;
     private final GameLogRepository gameLogRepository;
 
@@ -24,18 +24,17 @@ public class Board {
         this.turtles = new ArrayList<>();
     }
 
-    public void addFields(int fieldsNum) {
-        for (int i = 0; i < fieldsNum; i++) {
-            Vector currVec = new Vector(i, 0);
+    public void addFields(int boardSize) {
+        for (int i = 0; i < boardSize; i++) {
+            Vector2d currVec = new Vector2d(i, 0);
             maxVector.setMaximal(currVec);
-            neighbourhood.addField(currVec, new Field(i, currVec, neighbourhood));
+            neighbourhood.addField(currVec, new Field(i, currVec));
         }
-        this.lastField = neighbourhood.getFieldByVector(new Vector(fieldsNum - 1, 0));
-
+        this.lastField = neighbourhood.getFieldByVector(new Vector2d(boardSize - 1, 0));
     }
 
     public void addTurtlesFromHashMap(HashMap<Integer, List<String>> players) {
-        Vector startVector = new Vector();
+        Vector2d startVector = new Vector2d();
         for (int key : players.keySet()) {
             turtles.add(new Turtle(players.get(key).get(0), players.get(key).get(1), neighbourhood.getFieldByVector(startVector)));
         }
@@ -47,24 +46,39 @@ public class Board {
         }
     }
 
-    public void addTurtle(Turtle turtle) {
-        turtles.add(turtle);
-    }
-
-    public Field getStartingField() {
-        return this.neighbourhood.getFieldByVector(new Vector());
-    }
-
-    public Vector getMaxVector() {
-        return maxVector;
+    public void addRandomFruits(int boardSize) {
+        int i = 0;
+        for (Field field : neighbourhood.getFields()) {
+            if (i % 3 == 2) {
+                field.addFruit(i);
+            }
+            i += 1;
+        }
     }
 
     public Neighbourhood getNeighbourhood() {
         return neighbourhood;
     }
 
+    public void addTurtle(Turtle turtle) {
+        turtles.add(turtle);
+    }
+
+    public Field getStartingField() {
+        return this.neighbourhood.getFieldByVector(new Vector2d());
+    }
+
+    public Vector2d getMaxVector() {
+        return maxVector;
+    }
+
     public ArrayList<Turtle> getTurtles() {
         return turtles;
+    }
+
+    public Field getFieldForTurtleMove(Vector2d turtlePosition, Direction direction) {
+        Vector2d nextTurtlePosition = turtlePosition.add(direction.toVector());
+        return neighbourhood.getFieldByVector(nextTurtlePosition);
     }
 
     @Autowired
@@ -78,7 +92,7 @@ public class Board {
         gameLogRepository.save(gameLog);
     }
 
-    public Turtle findWinner(){
+    public Turtle findWinner() {
         int winnerPoints = 10;
 
         Turtle currTurtle = lastField.getTopTurtle().orElse(null);
@@ -87,7 +101,6 @@ public class Board {
             winnerPoints--;
             currTurtle = currTurtle.getTurtleOnBottom().orElse(null);
         }
-
 
         Turtle winningTurtle = this.turtles.get(0);
         for (Turtle turtle : this.turtles) {
@@ -102,5 +115,4 @@ public class Board {
     public Boolean isGameEnd() {
         return lastField.hasTurtle();
     }
-
 }

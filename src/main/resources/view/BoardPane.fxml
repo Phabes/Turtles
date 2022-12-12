@@ -13,7 +13,7 @@
             style="-fx-padding: 10"
 >
     <HBox fx:id="playersBox">
-        <Button fx:id="moveButton" text="Move"  onAction="#handleMoveClick"/>
+        <Button fx:id="moveButton" text="Move"  onAction="#handleMoveClick" disable="true" style="-fx-border-color: #454242; -fx-border-width: 3; -fx-border-style: solid"/>
     </HBox>
     <GridPane fx:id="boardGrid"/>
 

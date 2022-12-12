@@ -30,7 +30,7 @@ class TurtlesApplicationTests {
 
 	@Test
 	void turtleConnectionTest(){
-		Field field = new Field(0, new Vector(0,0), neighbourhood);
+		Field field = new Field(0, new Vector2d(0,0));
 		Turtle turtle1 = new Turtle("Player1", "#0000000", field);
 		Turtle turtle2 = new Turtle("Player2", "#0000000", field);
 		field.linkTurtle(turtle2);
@@ -41,7 +41,7 @@ class TurtlesApplicationTests {
 
 	@Test
 	void fieldConnectionTest(){
-		Field field = new Field(0, new Vector(0,0), neighbourhood);
+		Field field = new Field(0, new Vector2d(0,0));
 		Turtle turtle1 = new Turtle("Player1", "#0000000", field);
 		Turtle turtle2 = new Turtle("Player2", "#0000000", field);
 		Turtle turtle3 = new Turtle("Player2", "#0000000", field);

@@ -2,16 +2,16 @@ package Kasztany.Turtles.model;
 
 import java.util.Objects;
 
-public class Vector {
+public class Vector2d {
     private int x;
     private int y;
 
-    public Vector() {
+    public Vector2d() {
         this.x = 0;
         this.y = 0;
     }
 
-    public Vector(int x, int y) {
+    public Vector2d(int x, int y) {
         this.x = x;
         this.y = y;
     }
@@ -33,11 +33,11 @@ public class Vector {
     }
 
 
-    protected Vector add(Vector other) {
-        return new Vector(this.x + other.x, this.y + other.y);
+    protected Vector2d add(Vector2d other) {
+        return new Vector2d(this.x + other.x, this.y + other.y);
     }
 
-    public void setMaximal(Vector vector) {
+    public void setMaximal(Vector2d vector) {
         if (vector.x > x)
             x = vector.x;
         if (vector.y > y)
@@ -51,7 +51,7 @@ public class Vector {
 
     @Override
     public boolean equals(Object other) {
-        if (!(other instanceof Vector that))
+        if (!(other instanceof Vector2d that))
             return false;
         return Objects.equals(this.x, that.x) && Objects.equals(this.y, that.y);
     }
