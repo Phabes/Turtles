@@ -1,23 +1,33 @@
 package Kasztany.Turtles.model;
 
+import java.util.ArrayList;
 import java.util.Optional;
 
 public class Field {
-    private final int id;
+//    private final int id;
     private final Vector2d position;
     private Optional<Turtle> turtle;
     private Optional<Fruit> fruit;
+    private ArrayList<Direction> possibleDirections=new ArrayList<>();
 
-    public Field(Integer id, Vector2d position) {
-        this.id = id;
+    public Field(Vector2d position) {
+//        this.id = id;
         this.position = position;
         this.turtle = Optional.empty();
         this.fruit = Optional.empty();
+    }
+    public void addPossibleDirection(Direction direction){
+        possibleDirections.add(direction);
+    }
+
+    public ArrayList<Direction> getPossibleDirections() {
+        return possibleDirections;
     }
 
     public Vector2d getPosition() {
         return position;
     }
+
 
     public void linkTurtle(Turtle turtle) {
         this.turtle = Optional.of(turtle);

@@ -16,8 +16,11 @@
         <TextField fx:id="numberOfPlayers" text="4"/>
     </HBox>
     <HBox alignment="CENTER">
-        <Text>Board Size</Text>
-        <TextField fx:id="boardSize" text="10"/>
+        <Text>Board Name</Text>
+        <TextField fx:id="boardName" text="map1"/>
+    </HBox>
+    <HBox alignment="CENTER">
+        <Text fx:id="errorMessage" fill="#ff0000" ></Text>
     </HBox>
     <HBox alignment="CENTER">
         <Button text="START" onAction="#handleStartClick"/>

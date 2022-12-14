@@ -70,7 +70,7 @@ class TurtlesApplicationTests {
 			players.put(i, List.of(playersNames.get(i), indexPlayers.get(i)));
 		}
 
-		board.addFields(10);
+//		board.addFields(10);
 		board.addTurtlesFromHashMap(players);
 		GameLogRepository repository = board.getGameLogRepository();
 		long prevRepositoryCount = repository.count();

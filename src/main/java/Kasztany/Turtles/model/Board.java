@@ -1,14 +1,13 @@
 package Kasztany.Turtles.model;
 
+import Kasztany.Turtles.parser.MapParser;
 import Kasztany.Turtles.persistence.GameLog;
 import Kasztany.Turtles.persistence.GameLogRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
+import java.io.*;
+import java.util.*;
 
 
 public class Board {
@@ -16,6 +15,7 @@ public class Board {
     private final ArrayList<Turtle> turtles;
     private final Vector2d maxVector = new Vector2d();
     private Field lastField;
+    private Field startField;
     private final GameLogRepository gameLogRepository;
 
     public Board(GameLogRepository repository) {
@@ -24,17 +24,29 @@ public class Board {
         this.turtles = new ArrayList<>();
     }
 
-    public void addFields(int boardSize) {
-        for (int i = 0; i < boardSize; i++) {
-            Vector2d currVec = new Vector2d(i, 0);
-            maxVector.setMaximal(currVec);
-            neighbourhood.addField(currVec, new Field(i, currVec));
-        }
-        this.lastField = neighbourhood.getFieldByVector(new Vector2d(boardSize - 1, 0));
+    public void addFields(File map) throws IOException {
+        BufferedReader bufferedReader= new BufferedReader(new FileReader(map));
+        MapParser mapParser=new MapParser();
+
+        Field startField=mapParser.parseMapLine(bufferedReader.readLine());
+        maxVector.setMaximal(startField.getPosition());
+        neighbourhood.addField(startField.getPosition(),startField);
+        this.startField=startField;
+
+        bufferedReader.lines().forEach(line->{
+            System.out.println(line);
+            Field field=mapParser.parseMapLine(line);
+            if(field.getPossibleDirections().isEmpty()){
+                this.lastField=field;
+            }
+            maxVector.setMaximal(field.getPosition());
+            neighbourhood.addField(field.getPosition(),field);
+        });
+
     }
 
     public void addTurtlesFromHashMap(HashMap<Integer, List<String>> players) {
-        Vector2d startVector = new Vector2d();
+        Vector2d startVector = startField.getPosition();
         for (int key : players.keySet()) {
             turtles.add(new Turtle(players.get(key).get(0), players.get(key).get(1), neighbourhood.getFieldByVector(startVector)));
         }
@@ -46,15 +58,7 @@ public class Board {
         }
     }
 
-    public void addRandomFruits(int boardSize) {
-        int i = 0;
-        for (Field field : neighbourhood.getFields()) {
-            if (i % 3 == 2) {
-                field.addFruit(i);
-            }
-            i += 1;
-        }
-    }
+
 
     public Neighbourhood getNeighbourhood() {
         return neighbourhood;

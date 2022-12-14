@@ -21,13 +21,14 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.stereotype.Controller;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.*;
 
 @Controller
 public class PlayersSettings {
     private int numberOfPlayers;
-    private int boardSize;
+    private File map;
     private final String[] colors = {"ff0000", "00ff00", "0000ff", "ffa500", "ffc0cb", "800080", "f2dc46", "3af0de", "5f41a6", "4f2c0f"};
     @FXML
     private VBox configuration;
@@ -40,11 +41,12 @@ public class PlayersSettings {
     private OptionsParser optionsParser;
 
     @FXML
-    public void receiveData(String numberOfPlayersStr, String boardSizeStr) {
+    public void receiveData(String numberOfPlayersStr, File map) {
         this.globalSettings = applicationContext.getBean(GlobalSettings.class);
         this.optionsParser = applicationContext.getBean(OptionsParser.class);
         numberOfPlayers = optionsParser.getInt(numberOfPlayersStr);
-        boardSize = optionsParser.getInt(boardSizeStr);
+        this.map=map;
+//        boardSize = optionsParser.getInt(boardSizeStr);
         for (int i = 0; i < numberOfPlayers; i++) {
             Text playerText = new Text("Player " + i);
             HBox playerTextBox = new HBox(playerText);
@@ -116,9 +118,9 @@ public class PlayersSettings {
 
             BoardController boardController = loader.getController();
             Board board = applicationContext.getBean(Board.class);
-            board.addFields(boardSize);
+            board.addFields(map);
             board.addTurtlesFromHashMap(getPlayers());
-            board.addRandomFruits(boardSize);
+//            board.addRandomFruits(boardSize);
             boardController.receiveData(board);
 
             Scene boardScene = new Scene(root);
