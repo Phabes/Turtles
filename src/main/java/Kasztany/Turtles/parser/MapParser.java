@@ -15,7 +15,7 @@ public class MapParser {
         String[] coordinates=splitedLine[0].split(":");
         Vector2d currVec = new Vector2d(optionsParser.getInt(coordinates[0]), optionsParser.getInt(coordinates[1]));
         Field field=new Field(currVec);
-        if(splitedLine.length==2){
+        if(splitedLine.length>=2){
             String[] directionsStrings=splitedLine[1].split(";");
             Arrays.stream(directionsStrings).toList().forEach(dir->{
                 Direction direction= switch (dir) {
@@ -29,7 +29,8 @@ public class MapParser {
                     field.addPossibleDirection(direction);
                 }
             });
-        }else if(splitedLine.length==3){
+        }
+        if(splitedLine.length==3){
             field.addFruit(optionsParser.getInt(splitedLine[2]));
         }
 

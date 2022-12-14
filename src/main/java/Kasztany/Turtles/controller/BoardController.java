@@ -108,7 +108,37 @@ public class BoardController {
 
     private void turtleClick(Turtle turtle) {
         if (!board.isGameEnd()) {
-            System.out.println("Choose " + turtle.getName() + " " + turtle.getColor());
+            Field field=turtle.getCurrentField();
+            if(choosedTurtle!=null){
+                System.out.println("Field "+choosedTurtle.getCurrentField().getPosition().toString());
+                System.out.println("Field "+choosedTurtle.getCurrentField().getPossibleDirections());
+                for (Direction direction:choosedTurtle.getCurrentField().getPossibleDirections()) {
+                    Vector2d possibleVector=choosedTurtle.getCurrentField().getPosition().add(direction.toVector());
+                    System.out.println(possibleVector.toString());
+
+                    Node boardField=boardGrid.lookup("#field-"+String.valueOf(possibleVector.getX())+"-"+String.valueOf(possibleVector.getY()));
+                    boardField.setStyle("""
+                        -fx-border-color: #AAAAAA;
+                        -fx-border-width: 1;
+                        -fx-border-style: solid;
+                        -fx-border-insets: 1;
+                        -fx-background-color: #f4f4f4;
+                        """);
+                }
+            }
+            System.out.println("Choose " + turtle.getName() + " " + turtle.getColor() +" on field "+field.getPosition().toString());
+            for (Direction direction:field.getPossibleDirections()) {
+                Vector2d possibleVector=field.getPosition().add(direction.toVector());
+                Node boardField=boardGrid.lookup("#field-"+String.valueOf(possibleVector.getX())+"-"+String.valueOf(possibleVector.getY()));
+                boardField.setStyle("""
+                        -fx-border-color: #AAAAAA;
+                        -fx-border-width: 1;
+                        -fx-border-style: solid;
+                        -fx-border-insets: 1;
+                        -fx-background-color: #add8e6;
+                        """);
+            }
+
             choosedTurtle = turtle;
             moveButton.setDisable(false);
             setMoveButtonColor(turtle.getColor());
@@ -155,6 +185,7 @@ public class BoardController {
             double size = Math.max(globalSettings.getGridWidth() / (maxVector.getX() + 1), globalSettings.getMinTurtleSize());
             for (Field field : board.getNeighbourhood().getFields()) {
                 GridPane fieldBox = new GridPane();
+                fieldBox.setId("field-"+String.valueOf(field.getPosition().getX())+"-"+String.valueOf(field.getPosition().getY()));
                 fieldBox.setMinSize(globalSettings.getMinTurtleSize(), globalSettings.getMinTurtleSize());
                 fieldBox.setStyle("""
                         -fx-border-color: #AAAAAA;
