@@ -4,20 +4,24 @@ import java.util.ArrayList;
 import java.util.Optional;
 
 public class Field {
-//    private final int id;
+    private final String id;
     private final Vector2d position;
     private Optional<Turtle> turtle;
     private Optional<Fruit> fruit;
     private ArrayList<Direction> possibleDirections=new ArrayList<>();
 
     public Field(Vector2d position) {
-//        this.id = id;
+        this.id = "field-"+String.valueOf(position.getX())+"-"+String.valueOf(position.getY());
         this.position = position;
         this.turtle = Optional.empty();
         this.fruit = Optional.empty();
     }
     public void addPossibleDirection(Direction direction){
         possibleDirections.add(direction);
+    }
+
+    public String getId() {
+        return id;
     }
 
     public ArrayList<Direction> getPossibleDirections() {

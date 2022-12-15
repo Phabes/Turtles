@@ -13,6 +13,7 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
@@ -21,6 +22,7 @@ import org.springframework.stereotype.Controller;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Optional;
 
 
 @Controller
@@ -36,7 +38,11 @@ public class BoardController {
     private GridPane boardGrid;
     @FXML
     private Button moveButton;
+
+    private ArrayList<Field> possibleFields=new ArrayList<>();
     private Turtle choosedTurtle = null;
+    private Field choosedField = null;
+
 
     public BoardController() throws FileNotFoundException {
     }
@@ -89,8 +95,8 @@ public class BoardController {
 
     @FXML
     public void handleMoveClick(ActionEvent event) throws IOException {
-        if (choosedTurtle != null) {
-            Field nextTurtleField = board.getFieldForTurtleMove(choosedTurtle.getCurrentField().getPosition(), Direction.EAST);
+        if (choosedTurtle != null && choosedField!=null) {
+            Field nextTurtleField = choosedField;
             choosedTurtle.move(nextTurtleField);
             if(nextTurtleField.getFruit().isPresent()){
                 choosedTurtle.eat(nextTurtleField.getFruit().get());
@@ -109,14 +115,8 @@ public class BoardController {
     private void turtleClick(Turtle turtle) {
         if (!board.isGameEnd()) {
             Field field=turtle.getCurrentField();
-            if(choosedTurtle!=null){
-                System.out.println("Field "+choosedTurtle.getCurrentField().getPosition().toString());
-                System.out.println("Field "+choosedTurtle.getCurrentField().getPossibleDirections());
-                for (Direction direction:choosedTurtle.getCurrentField().getPossibleDirections()) {
-                    Vector2d possibleVector=choosedTurtle.getCurrentField().getPosition().add(direction.toVector());
-                    System.out.println(possibleVector.toString());
-
-                    Node boardField=boardGrid.lookup("#field-"+String.valueOf(possibleVector.getX())+"-"+String.valueOf(possibleVector.getY()));
+            for (Field possibleField:possibleFields) {
+                Node boardField=boardGrid.lookup("#"+possibleField.getId());
                     boardField.setStyle("""
                         -fx-border-color: #AAAAAA;
                         -fx-border-width: 1;
@@ -124,12 +124,24 @@ public class BoardController {
                         -fx-border-insets: 1;
                         -fx-background-color: #f4f4f4;
                         """);
-                }
+
             }
-            System.out.println("Choose " + turtle.getName() + " " + turtle.getColor() +" on field "+field.getPosition().toString());
-            for (Direction direction:field.getPossibleDirections()) {
-                Vector2d possibleVector=field.getPosition().add(direction.toVector());
-                Node boardField=boardGrid.lookup("#field-"+String.valueOf(possibleVector.getX())+"-"+String.valueOf(possibleVector.getY()));
+            if(choosedField!=null){
+                Node lastChoosenField=boardGrid.lookup("#"+choosedField.getId());
+                lastChoosenField.setStyle("""
+                        -fx-border-color: #AAAAAA;
+                        -fx-border-width: 1;
+                        -fx-border-style: solid;
+                        -fx-border-insets: 1;
+                        -fx-background-color: #f4f4f4;
+                        """);
+            }
+            choosedField=null;
+            possibleFields.clear();
+            moveButton.setDisable(true);
+            highlightPossibleFieldsToMove(field,1);
+            for (Field possibleField:possibleFields) {
+                Node boardField=boardGrid.lookup("#"+possibleField.getId());
                 boardField.setStyle("""
                         -fx-border-color: #AAAAAA;
                         -fx-border-width: 1;
@@ -137,12 +149,47 @@ public class BoardController {
                         -fx-border-insets: 1;
                         -fx-background-color: #add8e6;
                         """);
+
+                boardField.setOnMouseClicked((e) -> {
+                    if(choosedField!=null){
+                        Node lastChoosenField=boardGrid.lookup("#"+choosedField.getId());
+                        lastChoosenField.setStyle("""
+                        -fx-border-color: #AAAAAA;
+                        -fx-border-width: 1;
+                        -fx-border-style: solid;
+                        -fx-border-insets: 1;
+                        -fx-background-color: #add8e6;
+                        """);
+                    }
+                    boardField.setStyle("""
+                        -fx-border-color: #ffd700;
+                        -fx-border-width: 1;
+                        -fx-border-style: solid;
+                        -fx-border-insets: 1;
+                        -fx-background-color: #add8e6;
+                        """);
+                    choosedField=possibleField;
+                    moveButton.setDisable(false);
+                });
             }
 
             choosedTurtle = turtle;
-            moveButton.setDisable(false);
+
             setMoveButtonColor(turtle.getColor());
         }
+    }
+    private void highlightPossibleFieldsToMove(Field previousField,int steps){
+        steps--;
+            for (Direction direction:previousField.getPossibleDirections()) {
+                Field nextField=board.getFieldForTurtleMove(previousField.getPosition(),direction);
+                if(nextField!=null){
+                    if(steps==0){
+                        possibleFields.add(nextField);
+                    }else{
+                        highlightPossibleFieldsToMove(nextField,steps);
+                    }
+                }
+            }
     }
 
     private HBox drawTurtle(double size, String color) {
@@ -185,7 +232,7 @@ public class BoardController {
             double size = Math.max(globalSettings.getGridWidth() / (maxVector.getX() + 1), globalSettings.getMinTurtleSize());
             for (Field field : board.getNeighbourhood().getFields()) {
                 GridPane fieldBox = new GridPane();
-                fieldBox.setId("field-"+String.valueOf(field.getPosition().getX())+"-"+String.valueOf(field.getPosition().getY()));
+                fieldBox.setId(field.getId());
                 fieldBox.setMinSize(globalSettings.getMinTurtleSize(), globalSettings.getMinTurtleSize());
                 fieldBox.setStyle("""
                         -fx-border-color: #AAAAAA;
