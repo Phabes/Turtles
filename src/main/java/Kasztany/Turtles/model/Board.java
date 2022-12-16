@@ -72,6 +72,10 @@ public class Board {
         return this.neighbourhood.getFieldByVector(new Vector2d());
     }
 
+    public Field getLastField() {
+        return lastField;
+    }
+
     public Vector2d getMaxVector() {
         return maxVector;
     }
@@ -85,7 +89,6 @@ public class Board {
         return neighbourhood.getFieldByVector(nextTurtlePosition);
     }
 
-    @Autowired
     public GameLogRepository getGameLogRepository() {
         return gameLogRepository;
     }

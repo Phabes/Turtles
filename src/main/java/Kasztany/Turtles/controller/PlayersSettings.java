@@ -2,6 +2,7 @@ package Kasztany.Turtles.controller;
 
 
 import Kasztany.Turtles.TurtlesApplication;
+import Kasztany.Turtles.gui.App;
 import Kasztany.Turtles.model.Board;
 import Kasztany.Turtles.parser.OptionsParser;
 import Kasztany.Turtles.settings.GlobalSettings;
@@ -36,6 +37,7 @@ public class PlayersSettings {
     private final List<HBox> colorsBoxes = new ArrayList<>();
     private final List<TextField> playersNames = new ArrayList<>();
     private final HashMap<Integer, String> indexPlayers = new HashMap<>();
+    //private static final ApplicationContext applicationContext = new AnnotationConfigApplicationContext(App.class);
     private static final ApplicationContext applicationContext = new AnnotationConfigApplicationContext(TurtlesApplication.class);
     private GlobalSettings globalSettings;
     private OptionsParser optionsParser;
