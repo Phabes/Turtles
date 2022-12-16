@@ -3,7 +3,6 @@ package Kasztany.Turtles.gui;
 import Kasztany.Turtles.settings.GlobalSettings;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import org.springframework.stereotype.Service;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;

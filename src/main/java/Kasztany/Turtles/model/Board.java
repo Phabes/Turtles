@@ -3,12 +3,10 @@ package Kasztany.Turtles.model;
 import Kasztany.Turtles.parser.MapParser;
 import Kasztany.Turtles.persistence.GameLog;
 import Kasztany.Turtles.persistence.GameLogRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 
 
 import java.io.*;
 import java.util.*;
-
 
 public class Board {
     private final Neighbourhood neighbourhood;
