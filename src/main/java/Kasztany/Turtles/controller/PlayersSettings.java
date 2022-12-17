@@ -40,7 +40,6 @@ public class PlayersSettings {
     private final HashMap<Integer, String> indexPlayers = new HashMap<>();
 
 
-
     public PlayersSettings(GlobalSettings globalSettings, OptionsParser optionsParser, Board board) {
         this.globalSettings = globalSettings;
         this.optionsParser = optionsParser;
@@ -50,7 +49,7 @@ public class PlayersSettings {
     @FXML
     public void receiveData(String numberOfPlayersStr, File map) {
         numberOfPlayers = optionsParser.getInt(numberOfPlayersStr);
-        this.map=map;
+        this.map = map;
 //        boardSize = optionsParser.getInt(boardSizeStr);
         for (int i = 0; i < numberOfPlayers; i++) {
             Text playerText = new Text("Player " + i);

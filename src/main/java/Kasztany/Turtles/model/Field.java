@@ -8,15 +8,16 @@ public class Field {
     private final Vector2d position;
     private Optional<Turtle> turtle;
     private Optional<Fruit> fruit;
-    private ArrayList<Direction> possibleDirections=new ArrayList<>();
+    private ArrayList<Direction> possibleDirections = new ArrayList<>();
 
     public Field(Vector2d position) {
-        this.id = "field-"+String.valueOf(position.getX())+"-"+String.valueOf(position.getY());
+        this.id = "field-" + String.valueOf(position.getX()) + "-" + String.valueOf(position.getY());
         this.position = position;
         this.turtle = Optional.empty();
         this.fruit = Optional.empty();
     }
-    public void addPossibleDirection(Direction direction){
+
+    public void addPossibleDirection(Direction direction) {
         possibleDirections.add(direction);
     }
 
@@ -41,7 +42,7 @@ public class Field {
         turtle = Optional.empty();
     }
 
-    public void addFruit(int points){
+    public void addFruit(int points) {
         fruit = Optional.of(new Fruit(points));
     }
 
@@ -49,7 +50,7 @@ public class Field {
         return fruit;
     }
 
-    public void deleteFruit(){
+    public void deleteFruit() {
         fruit = Optional.empty();
     }
 

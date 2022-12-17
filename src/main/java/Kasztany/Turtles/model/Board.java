@@ -27,22 +27,22 @@ public class Board {
     }
 
     public void addFields(File map) throws IOException {
-        BufferedReader bufferedReader= new BufferedReader(new FileReader(map));
-        MapParser mapParser=new MapParser();
+        BufferedReader bufferedReader = new BufferedReader(new FileReader(map));
+        MapParser mapParser = new MapParser();
 
-        Field startField=mapParser.parseMapLine(bufferedReader.readLine());
+        Field startField = mapParser.parseMapLine(bufferedReader.readLine());
         maxVector.setMaximal(startField.getPosition());
-        neighbourhood.addField(startField.getPosition(),startField);
-        this.startField=startField;
+        neighbourhood.addField(startField.getPosition(), startField);
+        this.startField = startField;
 
-        bufferedReader.lines().forEach(line->{
+        bufferedReader.lines().forEach(line -> {
             System.out.println(line);
-            Field field=mapParser.parseMapLine(line);
-            if(field.getPossibleDirections().isEmpty()){
-                this.lastField=field;
+            Field field = mapParser.parseMapLine(line);
+            if (field.getPossibleDirections().isEmpty()) {
+                this.lastField = field;
             }
             maxVector.setMaximal(field.getPosition());
-            neighbourhood.addField(field.getPosition(),field);
+            neighbourhood.addField(field.getPosition(), field);
         });
 
     }
@@ -59,7 +59,6 @@ public class Board {
             turtles.get(i).linkTurtle(turtles.get(i - 1));
         }
     }
-
 
 
     public Neighbourhood getNeighbourhood() {

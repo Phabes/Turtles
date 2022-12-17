@@ -31,7 +31,7 @@ public class App extends Application {
         globalSettings.setScreenInTheMiddle(primaryStage);
     }
 
-    private void closeWindow(){
+    private void closeWindow() {
         Platform.exit();
         System.exit(0);
     }

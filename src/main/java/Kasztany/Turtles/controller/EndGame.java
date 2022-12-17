@@ -10,7 +10,7 @@ public class EndGame {
     @FXML
     private Text winnerPoints;
 
-    public void reveiceData(Turtle winner){
+    public void reveiceData(Turtle winner) {
         winnerName.setText("Winner: " + winner.getName());
         winnerPoints.setText("Points: " + winner.getPoints());
     }

@@ -20,7 +20,7 @@ public class GameLog {
     private Integer winnerPoints;
     private LocalDate date;
 
-    public GameLog(Integer numberOfPlayers, Integer fieldsNum, String winnerName, Integer winnerPoints){
+    public GameLog(Integer numberOfPlayers, Integer fieldsNum, String winnerName, Integer winnerPoints) {
         this.numberOfPlayers = numberOfPlayers;
         this.fieldsNum = fieldsNum;
         this.winnerName = winnerName;
@@ -28,7 +28,7 @@ public class GameLog {
         this.date = LocalDate.now();
     }
 
-    public GameLog(){
+    public GameLog() {
         this.numberOfPlayers = 0;
         this.fieldsNum = 0;
         this.winnerName = " ";

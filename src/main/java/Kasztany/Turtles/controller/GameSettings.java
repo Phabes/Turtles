@@ -2,6 +2,7 @@ package Kasztany.Turtles.controller;
 
 import java.io.File;
 import java.io.IOException;
+
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -36,9 +37,9 @@ public class GameSettings {
 
     @FXML
     private void handleStartClick(ActionEvent event) throws IOException {
-        Resource resource = new ClassPathResource("/map/"+boardName.getText());
-        if(resource.exists()){
-            File map=resource.getFile();
+        Resource resource = new ClassPathResource("/map/" + boardName.getText());
+        if (resource.exists()) {
+            File map = resource.getFile();
             FXMLLoader loader = loaderProvider.getLoader(getClass().getResource("/view/PlayersSettings.fxml"));
             Parent root = loader.load();
             PlayersSettings playersSettings = loader.getController();
@@ -49,7 +50,7 @@ public class GameSettings {
             stage.setScene(scene);
             stage.show();
             globalSettings.setScreenInTheMiddle(stage);
-        }else{
+        } else {
             errorMessage.setText("No such map in resources");
         }
 

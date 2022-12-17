@@ -106,7 +106,7 @@ public class Turtle {
         turtleToMove.ifPresent(turtle -> turtle.move(nextField));
     }
 
-    public void eat(Fruit fruit){
+    public void eat(Fruit fruit) {
         System.out.println(name + " is eating fruit with " + fruit.getPoints() + " points");
         points += fruit.getPoints();
     }

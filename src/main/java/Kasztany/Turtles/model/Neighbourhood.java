@@ -11,15 +11,15 @@ public class Neighbourhood {
     private final HashMap<Vector2d, Field> wholeNeighbourhood;
 
     @Autowired
-    public Neighbourhood(){
+    public Neighbourhood() {
         this.wholeNeighbourhood = new HashMap<>();
     }
 
-    public void addField(Vector2d vector, Field field){
+    public void addField(Vector2d vector, Field field) {
         wholeNeighbourhood.put(vector, field);
     }
 
-    public Field getFieldByVector(Vector2d vector){
+    public Field getFieldByVector(Vector2d vector) {
         return wholeNeighbourhood.get(vector);
     }
 
@@ -27,7 +27,7 @@ public class Neighbourhood {
         return wholeNeighbourhood;
     }
 
-    public Collection<Field> getFields(){
+    public Collection<Field> getFields() {
         return wholeNeighbourhood.values();
     }
 }
