@@ -3,7 +3,9 @@ package Kasztany.Turtles.settings;
 import javafx.geometry.Rectangle2D;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
+import org.springframework.stereotype.Component;
 
+@Component
 public class GlobalSettings {
     private final int optionsSpace;
     private final int textFieldSize;

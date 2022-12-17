@@ -39,7 +39,7 @@ public class BoardController {
     @FXML
     private Button moveButton;
 
-    private ArrayList<Field> possibleFields=new ArrayList<>();
+    private ArrayList<Field> possibleFields = new ArrayList<>();
     private Turtle choosedTurtle = null;
     private Field choosedField = null;
 

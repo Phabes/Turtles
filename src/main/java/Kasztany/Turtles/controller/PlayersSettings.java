@@ -1,7 +1,6 @@
 package Kasztany.Turtles.controller;
 
 
-import Kasztany.Turtles.TurtlesApplication;
 import Kasztany.Turtles.model.Board;
 import Kasztany.Turtles.parser.OptionsParser;
 import Kasztany.Turtles.settings.GlobalSettings;
@@ -17,8 +16,6 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.stereotype.Controller;
 
 import java.io.File;
@@ -27,6 +24,11 @@ import java.util.*;
 
 @Controller
 public class PlayersSettings {
+
+    private final GlobalSettings globalSettings;
+    private final OptionsParser optionsParser;
+    private final Board board;
+
     private int numberOfPlayers;
     private File map;
     private final String[] colors = {"ff0000", "00ff00", "0000ff", "ffa500", "ffc0cb", "800080", "f2dc46", "3af0de", "5f41a6", "4f2c0f"};
@@ -36,14 +38,17 @@ public class PlayersSettings {
     private final List<HBox> colorsBoxes = new ArrayList<>();
     private final List<TextField> playersNames = new ArrayList<>();
     private final HashMap<Integer, String> indexPlayers = new HashMap<>();
-    private static final ApplicationContext applicationContext = new AnnotationConfigApplicationContext(TurtlesApplication.class);
-    private GlobalSettings globalSettings;
-    private OptionsParser optionsParser;
+
+
+
+    public PlayersSettings(GlobalSettings globalSettings, OptionsParser optionsParser, Board board) {
+        this.globalSettings = globalSettings;
+        this.optionsParser = optionsParser;
+        this.board = board;
+    }
 
     @FXML
     public void receiveData(String numberOfPlayersStr, File map) {
-        this.globalSettings = applicationContext.getBean(GlobalSettings.class);
-        this.optionsParser = applicationContext.getBean(OptionsParser.class);
         numberOfPlayers = optionsParser.getInt(numberOfPlayersStr);
         this.map=map;
 //        boardSize = optionsParser.getInt(boardSizeStr);
@@ -117,7 +122,6 @@ public class PlayersSettings {
             Parent root = loader.load();
 
             BoardController boardController = loader.getController();
-            Board board = applicationContext.getBean(Board.class);
             board.addFields(map);
             board.addTurtlesFromHashMap(getPlayers());
 //            board.addRandomFruits(boardSize);

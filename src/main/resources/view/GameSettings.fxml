@@ -17,7 +17,7 @@
     </HBox>
     <HBox alignment="CENTER">
         <Text>Board Name</Text>
-        <TextField fx:id="boardName" text="map1"/>
+        <TextField fx:id="boardName" text="map0"/>
     </HBox>
     <HBox alignment="CENTER">
         <Text fx:id="errorMessage" fill="#ff0000" ></Text>

@@ -3,13 +3,15 @@ package Kasztany.Turtles.model;
 import Kasztany.Turtles.parser.MapParser;
 import Kasztany.Turtles.persistence.GameLog;
 import Kasztany.Turtles.persistence.GameLogRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
 
 
 import java.io.*;
 import java.util.*;
 
-
+@Component
+@Scope("prototype")
 public class Board {
     private final Neighbourhood neighbourhood;
     private final ArrayList<Turtle> turtles;
@@ -72,6 +74,10 @@ public class Board {
         return this.neighbourhood.getFieldByVector(new Vector2d());
     }
 
+    public Field getLastField() {
+        return lastField;
+    }
+
     public Vector2d getMaxVector() {
         return maxVector;
     }
@@ -85,7 +91,6 @@ public class Board {
         return neighbourhood.getFieldByVector(nextTurtlePosition);
     }
 
-    @Autowired
     public GameLogRepository getGameLogRepository() {
         return gameLogRepository;
     }

@@ -5,7 +5,11 @@ import Kasztany.Turtles.persistence.GameLogRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.Resource;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -30,7 +34,7 @@ class TurtlesApplicationTests {
 
 	@Test
 	void turtleConnectionTest(){
-		Field field = new Field(0, new Vector2d(0,0));
+		Field field = new Field(new Vector2d(0,0));
 		Turtle turtle1 = new Turtle("Player1", "#0000000", field);
 		Turtle turtle2 = new Turtle("Player2", "#0000000", field);
 		field.linkTurtle(turtle2);
@@ -41,7 +45,7 @@ class TurtlesApplicationTests {
 
 	@Test
 	void fieldConnectionTest(){
-		Field field = new Field(0, new Vector2d(0,0));
+		Field field = new Field(new Vector2d(0,0));
 		Turtle turtle1 = new Turtle("Player1", "#0000000", field);
 		Turtle turtle2 = new Turtle("Player2", "#0000000", field);
 		Turtle turtle3 = new Turtle("Player2", "#0000000", field);
@@ -53,7 +57,7 @@ class TurtlesApplicationTests {
 
 
 	@Test
-	void dbTest(){
+	void dbTest() throws IOException {
 		List<String> playersNames = new ArrayList<>();
 		HashMap<Integer, String> indexPlayers = new HashMap<>();
 		playersNames.add("Player1");
@@ -70,7 +74,9 @@ class TurtlesApplicationTests {
 			players.put(i, List.of(playersNames.get(i), indexPlayers.get(i)));
 		}
 
-//		board.addFields(10);
+		Resource resource = new ClassPathResource("/map/map0");
+		File map = resource.getFile();
+ 		board.addFields(map);
 		board.addTurtlesFromHashMap(players);
 		GameLogRepository repository = board.getGameLogRepository();
 		long prevRepositoryCount = repository.count();
