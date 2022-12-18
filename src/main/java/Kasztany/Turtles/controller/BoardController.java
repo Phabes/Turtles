@@ -45,7 +45,6 @@ public class BoardController {
     private Field choosedField = null;
     private Field endField = null;
 
-
     public BoardController() throws FileNotFoundException {
     }
 

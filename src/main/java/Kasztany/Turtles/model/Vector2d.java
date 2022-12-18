@@ -2,9 +2,12 @@ package Kasztany.Turtles.model;
 
 import java.util.Objects;
 
+import static java.lang.Math.max;
+
+
 public class Vector2d {
-    private int x;
-    private int y;
+    private final int x;
+    private final int y;
 
     public Vector2d() {
         this.x = 0;
@@ -24,24 +27,13 @@ public class Vector2d {
         return y;
     }
 
-    public void setX(int x) {
-        this.x = x;
-    }
-
-    public void setY(int y) {
-        this.y = y;
-    }
-
-
     public Vector2d add(Vector2d other) {
         return new Vector2d(this.x + other.x, this.y + other.y);
     }
 
-    public void setMaximal(Vector2d vector) {
-        if (vector.x > x)
-            x = vector.x;
-        if (vector.y > y)
-            y = vector.y;
+
+    public Vector2d setMaximal(Vector2d vector){
+        return new Vector2d(max(vector.x, this.x), max(vector.y, this.y));
     }
 
     @Override

@@ -15,7 +15,7 @@ import java.util.*;
 public class Board {
     private final Neighbourhood neighbourhood;
     private final ArrayList<Turtle> turtles;
-    private final Vector2d maxVector = new Vector2d();
+    private Vector2d maxVector = new Vector2d();
     private Field lastField;
     private Field startField;
     private final GameLogRepository gameLogRepository;
@@ -31,7 +31,7 @@ public class Board {
         MapParser mapParser = new MapParser();
 
         Field startField = mapParser.parseMapLine(bufferedReader.readLine());
-        maxVector.setMaximal(startField.getPosition());
+        maxVector = maxVector.setMaximal(startField.getPosition());
         neighbourhood.addField(startField.getPosition(), startField);
         this.startField = startField;
 
@@ -41,7 +41,7 @@ public class Board {
             if (field.getPossibleDirections().isEmpty()) {
                 this.lastField = field;
             }
-            maxVector.setMaximal(field.getPosition());
+            maxVector = maxVector.setMaximal(field.getPosition());
             neighbourhood.addField(field.getPosition(), field);
         });
 
