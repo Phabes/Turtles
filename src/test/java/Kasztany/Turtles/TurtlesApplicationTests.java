@@ -34,10 +34,10 @@ class TurtlesApplicationTests {
         Field field = new Field(new Vector2d(0, 0));
         Turtle turtle1 = new Turtle("Player1", "#0000000", field);
         Turtle turtle2 = new Turtle("Player2", "#0000000", field);
-        field.linkTurtle(turtle2);
-        turtle1.linkTurtle(turtle2);
-        assertEquals(turtle1.getTurtleOnBottom().orElse(null), turtle2);
-        assertEquals(turtle2.getTurtleOnBack().orElse(null), turtle1);
+        field.addTurtle(turtle1);
+        field.addTurtle(turtle2);
+        assertEquals(turtle1.getTurtleOnBack().orElse(null), turtle2);
+        assertEquals(turtle2.getTurtleOnBottom().orElse(null), turtle1);
     }
 
     @Test
@@ -46,10 +46,10 @@ class TurtlesApplicationTests {
         Turtle turtle1 = new Turtle("Player1", "#0000000", field);
         Turtle turtle2 = new Turtle("Player2", "#0000000", field);
         Turtle turtle3 = new Turtle("Player3", "#0000000", field);
-        turtle1.linkTurtle(turtle2);
-        turtle2.linkTurtle(turtle3);
-        field.linkTurtle(turtle3);
-        assertEquals(field.getTopTurtle().orElse(null), turtle1);
+        field.addTurtle(turtle1);
+        field.addTurtle(turtle2);
+        field.addTurtle(turtle3);
+        assertEquals(field.getTopTurtle().orElse(null), turtle3);
     }
 
     @Test

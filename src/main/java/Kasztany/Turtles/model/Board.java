@@ -53,20 +53,13 @@ public class Board {
             turtles.add(new Turtle(players.get(key).get(0), players.get(key).get(1), neighbourhood.getFieldByVector(startVector)));
         }
 
-        neighbourhood.getFieldByVector(startVector).linkTurtle(turtles.get(0));
-
-        for (int i = 1; i < turtles.size(); i++) {
-            turtles.get(i).linkTurtle(turtles.get(i - 1));
+        for(Turtle turtle: turtles){
+            startField.addTurtle(turtle);
         }
     }
 
-
     public Neighbourhood getNeighbourhood() {
         return neighbourhood;
-    }
-
-    public void addTurtle(Turtle turtle) {
-        turtles.add(turtle);
     }
 
     public Field getStartingField() {
@@ -101,12 +94,12 @@ public class Board {
     }
 
     public Turtle findWinner() {
-        int winnerPoints = 10;
+        int winnerPoints = turtles.size() * 5;
 
         Turtle currTurtle = lastField.getTopTurtle().orElse(null);
         while (currTurtle != null) {
             currTurtle.addPoints(winnerPoints);
-            winnerPoints--;
+            winnerPoints -= 5;
             currTurtle = currTurtle.getTurtleOnBottom().orElse(null);
         }
 

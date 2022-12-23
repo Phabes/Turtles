@@ -1,19 +1,22 @@
 package Kasztany.Turtles.model;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.LinkedList;
 import java.util.Optional;
 
 public class Field {
     private final String id;
     private final Vector2d position;
-    private Optional<Turtle> turtle;
+
+    private LinkedList<Turtle> turtles;
     private Optional<Fruit> fruit;
     private ArrayList<Direction> possibleDirections = new ArrayList<>();
 
     public Field(Vector2d position) {
         this.id = "field-" + position.x() + "-" + position.y();
         this.position = position;
-        this.turtle = Optional.empty();
+        this.turtles = new LinkedList<>();
         this.fruit = Optional.empty();
     }
 
@@ -33,13 +36,8 @@ public class Field {
         return position;
     }
 
-
-    public void linkTurtle(Turtle turtle) {
-        this.turtle = Optional.of(turtle);
-    }
-
-    public void freeField() {
-        turtle = Optional.empty();
+    public void addTurtle(Turtle turtle) {
+        this.turtles.add(turtle);
     }
 
     public void addFruit(int points) {
@@ -55,35 +53,57 @@ public class Field {
     }
 
     public int getTurtlesNumber() {
-        int turtles = 0;
-        if (this.turtle.isEmpty()) {
-            return turtles;
-        }
-        Turtle loopTurtle = this.turtle.get();
-        turtles++;
-        while (loopTurtle.getTurtleOnBack().isPresent()) {
-            turtles++;
-            loopTurtle = loopTurtle.getTurtleOnBack().get();
-        }
-        return turtles;
+        return turtles.size();
     }
 
     public Optional<Turtle> getBottomTurtle() {
-        return turtle;
+        if(!turtles.isEmpty()){
+            return Optional.of(turtles.peek());
+        }
+        else return Optional.empty();
     }
 
     public Optional<Turtle> getTopTurtle() {
-        if (this.turtle.isEmpty()) {
+        if (turtles.isEmpty()) {
             return Optional.empty();
         }
-        Turtle loopTurtle = this.turtle.get();
-        while (loopTurtle.getTurtleOnBack().isPresent()) {
-            loopTurtle = loopTurtle.getTurtleOnBack().get();
-        }
-        return Optional.of(loopTurtle);
+        return Optional.of(turtles.pollLast());
     }
 
     public Boolean hasTurtle() {
-        return this.turtle.isPresent();
+        return !this.turtles.isEmpty();
     }
+
+    public Optional<Turtle> getTurtleWithIndex(int index){
+        if(index >= turtles.size() || index < 0){
+            return Optional.empty();
+        }
+        return Optional.of(turtles.get(index));
+    }
+
+    public int getIndexOfTurtle(Turtle turtle){
+        return turtles.indexOf(turtle);
+    }
+
+    public void addTurtles(Collection<Turtle> turtlesToAdd){
+        for(Turtle turtle:turtlesToAdd){
+            turtle.setCurrentField(this);
+            this.turtles.add(turtle);
+        }
+    }
+
+    public LinkedList<Turtle> getAndDeleteTurtlesOverGiven(Turtle turtle){
+        LinkedList<Turtle> connectedTurtles = new LinkedList<>();
+        int index = getIndexOfTurtle(turtle);
+        while (index < getTurtlesNumber()){
+            connectedTurtles.add(turtles.get(index));
+            index+=1;
+        }
+
+        for(Turtle turtleToDel:connectedTurtles){
+            turtles.remove(turtleToDel);
+        }
+        return connectedTurtles;
+    }
+
 }
