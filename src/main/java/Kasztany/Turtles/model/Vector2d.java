@@ -5,26 +5,10 @@ import java.util.Objects;
 import static java.lang.Math.max;
 
 
-public class Vector2d {
-    private final int x;
-    private final int y;
+public record Vector2d(int x, int y) {
 
     public Vector2d() {
-        this.x = 0;
-        this.y = 0;
-    }
-
-    public Vector2d(int x, int y) {
-        this.x = x;
-        this.y = y;
-    }
-
-    public int getX() {
-        return x;
-    }
-
-    public int getY() {
-        return y;
+        this(0,0);
     }
 
     public Vector2d add(Vector2d other) {
@@ -32,13 +16,8 @@ public class Vector2d {
     }
 
 
-    public Vector2d setMaximal(Vector2d vector){
+    public Vector2d setMaximal(Vector2d vector) {
         return new Vector2d(max(vector.x, this.x), max(vector.y, this.y));
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(this.x, this.y);
     }
 
     @Override

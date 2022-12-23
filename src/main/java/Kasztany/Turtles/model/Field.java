@@ -11,7 +11,7 @@ public class Field {
     private ArrayList<Direction> possibleDirections = new ArrayList<>();
 
     public Field(Vector2d position) {
-        this.id = "field-" + String.valueOf(position.getX()) + "-" + String.valueOf(position.getY());
+        this.id = "field-" + position.x() + "-" + position.y();
         this.position = position;
         this.turtle = Optional.empty();
         this.fruit = Optional.empty();

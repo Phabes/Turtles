@@ -13,7 +13,6 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
@@ -22,7 +21,6 @@ import org.springframework.stereotype.Controller;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Optional;
 
 
 @Controller
@@ -82,14 +80,14 @@ public class BoardController {
         });
 
         Vector2d maxVector = board.getMaxVector();
-        double prefSize = globalSettings.getGridWidth() / (maxVector.getX() + 1);
+        double prefSize = globalSettings.getGridWidth() / (maxVector.x() + 1);
         int fruitSize = (int) prefSize / 2;
         fruitBoxElement.setSize(fruitSize);
 
-        for (int x = 0; x <= maxVector.getX(); x++) {
+        for (int x = 0; x <= maxVector.x(); x++) {
             boardGrid.getColumnConstraints().add(new ColumnConstraints(50, prefSize, 200));
         }
-        for (int y = 0; y <= maxVector.getY(); y++) {
+        for (int y = 0; y <= maxVector.y(); y++) {
             boardGrid.getRowConstraints().add(new RowConstraints(50, prefSize, 200));
         }
         drawBoard();
@@ -232,7 +230,7 @@ public class BoardController {
         Platform.runLater(() -> {
             boardGrid.getChildren().clear();
             Vector2d maxVector = board.getMaxVector();
-            double size = Math.max(globalSettings.getGridWidth() / (maxVector.getX() + 1), globalSettings.getMinTurtleSize());
+            double size = Math.max(globalSettings.getGridWidth() / (maxVector.x() + 1), globalSettings.getMinTurtleSize());
             for (Field field : board.getNeighbourhood().getFields()) {
                 GridPane fieldBox = new GridPane();
                 fieldBox.setId(field.getId());
@@ -263,7 +261,7 @@ public class BoardController {
                     fieldBox.add(finishBoxElement.getImage(), 0, 0);
                 }
                 fieldBox.setAlignment(Pos.CENTER);
-                boardGrid.add(fieldBox, field.getPosition().getX(), maxVector.getY() - field.getPosition().getY());
+                boardGrid.add(fieldBox, field.getPosition().x(), maxVector.y() - field.getPosition().y());
             }
             boardGrid.setAlignment(Pos.CENTER);
         });
