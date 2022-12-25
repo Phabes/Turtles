@@ -17,10 +17,10 @@
     </HBox>
     <HBox alignment="CENTER">
         <Text>Board Name</Text>
-        <TextField fx:id="boardName" text="map0"/>
+        <TextField fx:id="boardName" text="map1"/>
     </HBox>
     <HBox alignment="CENTER">
-        <Text fx:id="errorMessage" fill="#ff0000" ></Text>
+        <Text fx:id="errorMessage" fill="#ff0000"/>
     </HBox>
     <HBox alignment="CENTER">
         <Button text="START" onAction="#handleStartClick"/>

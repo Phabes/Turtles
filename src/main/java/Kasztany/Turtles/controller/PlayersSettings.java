@@ -50,7 +50,6 @@ public class PlayersSettings {
     public void receiveData(String numberOfPlayersStr, File map) {
         numberOfPlayers = optionsParser.getInt(numberOfPlayersStr);
         this.map = map;
-//        boardSize = optionsParser.getInt(boardSizeStr);
         for (int i = 0; i < numberOfPlayers; i++) {
             Text playerText = new Text("Player " + i);
             HBox playerTextBox = new HBox(playerText);
@@ -123,7 +122,6 @@ public class PlayersSettings {
             BoardController boardController = loader.getController();
             board.addFields(map);
             board.addTurtlesFromHashMap(getPlayers());
-//            board.addRandomFruits(boardSize);
             boardController.receiveData(board);
 
             Scene boardScene = new Scene(root);

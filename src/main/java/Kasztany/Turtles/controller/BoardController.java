@@ -52,17 +52,7 @@ public class BoardController {
 
         playersBox.setPrefSize(globalSettings.getGridWidth(), globalSettings.getBoardHeight() - globalSettings.getGridHeight());
         playersBox.setAlignment(Pos.CENTER);
-        playersBox.setStyle("""
-                -fx-border-color: blue;
-                -fx-border-width: 1;
-                -fx-border-style: solid;
-                """);
         boardGrid.setPrefSize(globalSettings.getGridWidth(), globalSettings.getGridHeight());
-        boardGrid.setStyle("""
-                -fx-border-color: red;
-                -fx-border-width: 1;
-                -fx-border-style: solid;
-                """);
     }
 
     @FXML
@@ -117,24 +107,14 @@ public class BoardController {
             Field field = turtle.getCurrentField();
             for (Field possibleField : possibleFields) {
                 Node boardField = boardGrid.lookup("#" + possibleField.getId());
-                boardField.setStyle("""
-                        -fx-border-color: #AAAAAA;
-                        -fx-border-width: 1;
-                        -fx-border-style: solid;
-                        -fx-border-insets: 1;
-                        -fx-background-color: #f4f4f4;
-                        """);
+                boardField.getStyleClass().clear();
+                boardField.getStyleClass().add("regularField");
 
             }
             if (choosedField != null) {
                 Node lastChoosenField = boardGrid.lookup("#" + choosedField.getId());
-                lastChoosenField.setStyle("""
-                        -fx-border-color: #AAAAAA;
-                        -fx-border-width: 1;
-                        -fx-border-style: solid;
-                        -fx-border-insets: 1;
-                        -fx-background-color: #f4f4f4;
-                        """);
+                lastChoosenField.getStyleClass().clear();
+                lastChoosenField.getStyleClass().add("regularField");
             }
             choosedField = null;
             possibleFields.clear();
@@ -142,39 +122,23 @@ public class BoardController {
             highlightPossibleFieldsToMove(field, 1);
             for (Field possibleField : possibleFields) {
                 Node boardField = boardGrid.lookup("#" + possibleField.getId());
-                boardField.setStyle("""
-                        -fx-border-color: #AAAAAA;
-                        -fx-border-width: 1;
-                        -fx-border-style: solid;
-                        -fx-border-insets: 1;
-                        -fx-background-color: #add8e6;
-                        """);
+                boardField.getStyleClass().clear();
+                boardField.getStyleClass().add("possibleField");
 
                 boardField.setOnMouseClicked((e) -> {
                     if (choosedField != null) {
                         Node lastChoosenField = boardGrid.lookup("#" + choosedField.getId());
-                        lastChoosenField.setStyle("""
-                                -fx-border-color: #AAAAAA;
-                                -fx-border-width: 1;
-                                -fx-border-style: solid;
-                                -fx-border-insets: 1;
-                                -fx-background-color: #add8e6;
-                                """);
+                        lastChoosenField.getStyleClass().clear();
+                        lastChoosenField.getStyleClass().add("regularField");
                     }
-                    boardField.setStyle("""
-                            -fx-border-color: #ffd700;
-                            -fx-border-width: 1;
-                            -fx-border-style: solid;
-                            -fx-border-insets: 1;
-                            -fx-background-color: #add8e6;
-                            """);
+                    boardField.getStyleClass().clear();
+                    boardField.getStyleClass().add("choosedField");
                     choosedField = possibleField;
                     moveButton.setDisable(false);
                 });
             }
 
             choosedTurtle = turtle;
-
             setMoveButtonColor(turtle.getColor());
         }
     }
@@ -204,21 +168,16 @@ public class BoardController {
         HBox head = new HBox();
         head.setMaxSize(size / 2, size / 3);
         head.setMinSize(size / 2, size / 3);
+        head.getStyleClass().add("turtleHead");
         head.setStyle(
-                "-fx-border-color: black;\n" +
-                        "-fx-border-width: 1;\n" +
-                        "-fx-border-style: solid;\n" +
-                        "-fx-padding:" + size / 20 + ";\n"
+                "-fx-padding:" + size / 20 + ";\n"
         );
         head.setAlignment(Pos.TOP_RIGHT);
         headBox.getChildren().add(head);
         HBox eye = new HBox();
         eye.setMaxSize(4, 4);
         eye.setMinSize(4, 4);
-        eye.setStyle("""
-                -fx-background-color: black;
-                """);
-
+        eye.getStyleClass().add("turtleEye");
         head.getChildren().add(eye);
 
         HBox turtle = new HBox(shell, headBox);
@@ -235,12 +194,7 @@ public class BoardController {
                 GridPane fieldBox = new GridPane();
                 fieldBox.setId(field.getId());
                 fieldBox.setMinSize(globalSettings.getMinTurtleSize(), globalSettings.getMinTurtleSize());
-                fieldBox.setStyle("""
-                        -fx-border-color: #AAAAAA;
-                        -fx-border-width: 1;
-                        -fx-border-style: solid;
-                        -fx-border-insets: 1;
-                        """);
+                fieldBox.getStyleClass().add("field");
                 if (field.getBottomTurtle().isPresent()) {
                     Turtle turtle = field.getBottomTurtle().get();
                     ArrayList<Turtle> turtlesOnField = new ArrayList<>();
@@ -253,10 +207,8 @@ public class BoardController {
                 } else if (field.getFruit().isPresent()) {
                     fieldBox.add(fruitBoxElement.getImage(), 0, 0);
                 }
-                if(field == endField){
-                    fieldBox.setStyle("""
-                            -fx-background-color: #deb252;
-                            """);
+                if (field == endField) {
+                    fieldBox.getStyleClass().add("endField");
                     finishBoxElement.setSize((int) fieldBox.getMinWidth());
                     fieldBox.add(finishBoxElement.getImage(), 0, 0);
                 }
@@ -269,9 +221,7 @@ public class BoardController {
 
     private void setMoveButtonColor(String color) {
         moveButton.setStyle(
-                "-fx-border-color: #" + color + ";\n" +
-                        "-fx-border-width: 3;\n" +
-                        "-fx-border-style: solid;\n"
+                "-fx-border-color: #" + color + ";"
         );
     }
 
