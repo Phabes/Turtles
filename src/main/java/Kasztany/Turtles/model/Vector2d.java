@@ -8,13 +8,12 @@ import static java.lang.Math.max;
 public record Vector2d(int x, int y) {
 
     public Vector2d() {
-        this(0,0);
+        this(0, 0);
     }
 
     public Vector2d add(Vector2d other) {
         return new Vector2d(this.x + other.x, this.y + other.y);
     }
-
 
     public Vector2d setMaximal(Vector2d vector) {
         return new Vector2d(max(vector.x, this.x), max(vector.y, this.y));

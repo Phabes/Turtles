@@ -20,14 +20,12 @@ import org.springframework.stereotype.Controller;
 
 @Controller
 public class GameSettings {
-
     private final FXMLLoaderProvider loaderProvider;
 
     public GameSettings(FXMLLoaderProvider loaderProvider) {
         this.loaderProvider = loaderProvider;
     }
 
-    private final GlobalSettings globalSettings = new GlobalSettings();
     @FXML
     private TextField numberOfPlayers;
     @FXML
@@ -49,7 +47,7 @@ public class GameSettings {
             stage.setTitle("Players Configuration");
             stage.setScene(scene);
             stage.show();
-            globalSettings.setScreenInTheMiddle(stage);
+            GlobalSettings.setScreenInTheMiddle(stage);
         } else {
             errorMessage.setText("No such map in resources");
         }

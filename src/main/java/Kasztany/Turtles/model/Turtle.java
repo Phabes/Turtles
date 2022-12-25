@@ -13,7 +13,6 @@ public class Turtle {
         this.color = color;
         this.currentField = field;
         this.points = 0;
-
     }
 
     public Field getCurrentField() {

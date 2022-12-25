@@ -8,13 +8,12 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 
 public class ImageBoxElement {
-    private final GlobalSettings globalSettings = new GlobalSettings();
     private final Image image;
     private int size;
 
     public ImageBoxElement(String pictureName) throws FileNotFoundException {
         this.image = new Image(new FileInputStream("src/main/resources/images/" + pictureName));
-        this.size = globalSettings.getFruitSize();
+        this.size = GlobalSettings.FRUIT_SIZE;
     }
 
     public void setSize(int size) {

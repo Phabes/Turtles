@@ -26,7 +26,6 @@ import java.util.ArrayList;
 @Controller
 public class BoardController {
     private Board board;
-    private final GlobalSettings globalSettings = new GlobalSettings();
     private final ImageBoxElement fruitBoxElement = new ImageBoxElement("peach.png");
     private final ImageBoxElement finishBoxElement = new ImageBoxElement("finish.png");
     @FXML
@@ -48,21 +47,21 @@ public class BoardController {
 
     @FXML
     public void initialize() {
-        pane.setPrefSize(globalSettings.getBoardWidth(), globalSettings.getBoardHeight());
+        pane.setPrefSize(GlobalSettings.BOARD_WIDTH, GlobalSettings.BOARD_HEIGHT);
 
-        playersBox.setPrefSize(globalSettings.getGridWidth(), globalSettings.getBoardHeight() - globalSettings.getGridHeight());
+        playersBox.setPrefSize(GlobalSettings.GRID_WIDTH, GlobalSettings.BOARD_HEIGHT - GlobalSettings.GRID_HEIGHT);
         playersBox.setAlignment(Pos.CENTER);
-        boardGrid.setPrefSize(globalSettings.getGridWidth(), globalSettings.getGridHeight());
+        boardGrid.setPrefSize(GlobalSettings.GRID_WIDTH, GlobalSettings.GRID_HEIGHT);
     }
 
     @FXML
     public void receiveData(Board receivedBoard) {
         board = receivedBoard;
         endField = board.getLastField();
-        playersBox.setSpacing(globalSettings.getGridWidth() / board.getTurtles().size() - (globalSettings.getBoardHeight() - globalSettings.getGridHeight()));
+        playersBox.setSpacing(GlobalSettings.GRID_WIDTH / board.getTurtles().size() - (GlobalSettings.BOARD_HEIGHT - GlobalSettings.GRID_HEIGHT));
         board.getTurtles().forEach(turtle -> {
             Text turtleText = new Text(turtle.getName());
-            HBox turtleIcon = drawTurtle(globalSettings.getHeaderTurtleSize(), turtle.getColor());
+            HBox turtleIcon = drawTurtle(GlobalSettings.HEADER_TURTLE_SIZE, turtle.getColor());
             VBox turtleBox = new VBox(turtleText, turtleIcon);
             turtleBox.setOnMouseClicked((e) -> turtleClick(turtle));
             turtleBox.setOnMouseEntered((e) -> turtleIcon.setCursor(Cursor.HAND));
@@ -70,7 +69,7 @@ public class BoardController {
         });
 
         Vector2d maxVector = board.getMaxVector();
-        double prefSize = globalSettings.getGridWidth() / (maxVector.x() + 1);
+        double prefSize = GlobalSettings.GRID_WIDTH / (maxVector.x() + 1);
         int fruitSize = (int) prefSize / 2;
         fruitBoxElement.setSize(fruitSize);
 
@@ -189,11 +188,11 @@ public class BoardController {
         Platform.runLater(() -> {
             boardGrid.getChildren().clear();
             Vector2d maxVector = board.getMaxVector();
-            double size = Math.max(globalSettings.getGridWidth() / (maxVector.x() + 1), globalSettings.getMinTurtleSize());
+            double size = Math.max(GlobalSettings.GRID_WIDTH / (maxVector.x() + 1), GlobalSettings.MIN_TURTLE_SIZE);
             for (Field field : board.getNeighbourhood().getFields()) {
                 GridPane fieldBox = new GridPane();
                 fieldBox.setId(field.getId());
-                fieldBox.setMinSize(globalSettings.getMinTurtleSize(), globalSettings.getMinTurtleSize());
+                fieldBox.setMinSize(GlobalSettings.MIN_TURTLE_SIZE, GlobalSettings.MIN_TURTLE_SIZE);
                 fieldBox.getStyleClass().add("field");
                 if (field.getBottomTurtle().isPresent()) {
                     Turtle turtle = field.getBottomTurtle().get();
@@ -241,6 +240,6 @@ public class BoardController {
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         stage.setTitle("End Game");
         stage.setScene(scene);
-        globalSettings.setScreenInTheMiddle(stage);
+        GlobalSettings.setScreenInTheMiddle(stage);
     }
 }

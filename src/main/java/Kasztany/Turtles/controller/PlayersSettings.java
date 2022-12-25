@@ -24,8 +24,6 @@ import java.util.*;
 
 @Controller
 public class PlayersSettings {
-
-    private final GlobalSettings globalSettings;
     private final OptionsParser optionsParser;
     private final Board board;
 
@@ -40,8 +38,7 @@ public class PlayersSettings {
     private final HashMap<Integer, String> indexPlayers = new HashMap<>();
 
 
-    public PlayersSettings(GlobalSettings globalSettings, OptionsParser optionsParser, Board board) {
-        this.globalSettings = globalSettings;
+    public PlayersSettings(OptionsParser optionsParser, Board board) {
         this.optionsParser = optionsParser;
         this.board = board;
     }
@@ -53,13 +50,13 @@ public class PlayersSettings {
         for (int i = 0; i < numberOfPlayers; i++) {
             Text playerText = new Text("Player " + i);
             HBox playerTextBox = new HBox(playerText);
-            playerTextBox.setPrefWidth(globalSettings.getTextFieldSize());
+            playerTextBox.setPrefWidth(GlobalSettings.TEXT_FIELD_SIZE);
             playersTextBoxes.add(playerTextBox);
             playerTextBox.setAlignment(Pos.CENTER);
             playerTextBox.setStyle("-fx-background-color: #454242;");
             TextField playerName = new TextField("Player " + i);
             playersNames.add(playerName);
-            playerName.setPrefWidth(globalSettings.getTextFieldSize());
+            playerName.setPrefWidth(GlobalSettings.TEXT_FIELD_SIZE);
             HBox playerColorBox = new HBox();
             playerColorBox.setAlignment(Pos.CENTER);
             drawColors(playerColorBox, i);
@@ -68,7 +65,7 @@ public class PlayersSettings {
             colorsBoxes.add(playerColorBox);
             HBox playerBox = new HBox(playerTextBox, playerName, colorsBox);
             playerBox.setAlignment(Pos.CENTER);
-            playerBox.setSpacing(globalSettings.getOptionsSpace());
+            playerBox.setSpacing(GlobalSettings.OPTIONS_SPACE);
             configuration.getChildren().add(playerBox);
         }
     }
@@ -128,7 +125,7 @@ public class PlayersSettings {
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
             stage.setTitle("Board");
             stage.setScene(boardScene);
-            globalSettings.setScreenInTheMiddle(stage);
+            GlobalSettings.setScreenInTheMiddle(stage);
         }
     }
 }

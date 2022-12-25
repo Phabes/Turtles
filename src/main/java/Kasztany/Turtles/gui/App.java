@@ -15,9 +15,7 @@ import org.springframework.stereotype.Controller;
 
 @Controller
 public class App extends Application {
-
     private ConfigurableApplicationContext applicationContext;
-    private final GlobalSettings globalSettings = new GlobalSettings();
 
     public void start(Stage primaryStage) throws Exception {
         primaryStage.setOnCloseRequest(windowEvent -> closeWindow());
@@ -28,7 +26,7 @@ public class App extends Application {
         primaryStage.setTitle("Settings");
         primaryStage.setScene(scene);
         primaryStage.show();
-        globalSettings.setScreenInTheMiddle(primaryStage);
+        GlobalSettings.setScreenInTheMiddle(primaryStage);
     }
 
     private void closeWindow() {

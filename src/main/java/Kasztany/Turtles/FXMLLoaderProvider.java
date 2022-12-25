@@ -8,7 +8,6 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class FXMLLoaderProvider {
-
     private final ApplicationContext applicationContext;
 
     public FXMLLoaderProvider(ApplicationContext applicationContext) {
