@@ -53,7 +53,7 @@ public class Board {
             turtles.add(new Turtle(players.get(key).get(0), players.get(key).get(1), neighbourhood.getFieldByVector(startVector)));
         }
 
-        for(Turtle turtle: turtles){
+        for (Turtle turtle : turtles) {
             startField.addTurtle(turtle);
         }
     }
@@ -96,19 +96,22 @@ public class Board {
     public Turtle findWinner() {
         int winnerPoints = turtles.size() * 5;
 
-        Turtle currTurtle = lastField.getTopTurtle().orElse(null);
-        while (currTurtle != null) {
-            currTurtle.addPoints(winnerPoints);
-            winnerPoints -= 5;
-            currTurtle = currTurtle.getTurtleOnBottom().orElse(null);
-        }
-
-        Turtle winningTurtle = this.turtles.get(0);
-        for (Turtle turtle : this.turtles) {
-            if (turtle.getPoints() > winningTurtle.getPoints()) {
-                winningTurtle = turtle;
-            }
-        }
+//        Turtle currTurtle = lastField.getTopTurtle().orElse(null);
+//        while (currTurtle != null) {
+//            currTurtle.addPoints(winnerPoints);
+//            winnerPoints -= 5;
+//            currTurtle = currTurtle.getTurtleOnBottom().orElse(null);
+//        }
+//
+//        Turtle winningTurtle = this.turtles.get(0);
+//        for (Turtle turtle : this.turtles) {
+//            if (turtle.getPoints() > winningTurtle.getPoints()) {
+//                winningTurtle = turtle;
+//            }
+//        }
+        Turtle winningTurtle = lastField.getTopTurtle().orElse(null);
+        if (winningTurtle != null)
+            winningTurtle.addPoints(winnerPoints);
         saveGameLog(this.turtles.indexOf(winningTurtle));
         return winningTurtle;
     }

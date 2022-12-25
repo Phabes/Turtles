@@ -57,10 +57,9 @@ public class Field {
     }
 
     public Optional<Turtle> getBottomTurtle() {
-        if(!turtles.isEmpty()){
+        if (!turtles.isEmpty()) {
             return Optional.of(turtles.peek());
-        }
-        else return Optional.empty();
+        } else return Optional.empty();
     }
 
     public Optional<Turtle> getTopTurtle() {
@@ -74,33 +73,33 @@ public class Field {
         return !this.turtles.isEmpty();
     }
 
-    public Optional<Turtle> getTurtleWithIndex(int index){
-        if(index >= turtles.size() || index < 0){
+    public Optional<Turtle> getTurtleWithIndex(int index) {
+        if (index >= turtles.size() || index < 0) {
             return Optional.empty();
         }
         return Optional.of(turtles.get(index));
     }
 
-    public int getIndexOfTurtle(Turtle turtle){
+    public int getIndexOfTurtle(Turtle turtle) {
         return turtles.indexOf(turtle);
     }
 
-    public void addTurtles(Collection<Turtle> turtlesToAdd){
-        for(Turtle turtle:turtlesToAdd){
+    public void addTurtles(Collection<Turtle> turtlesToAdd) {
+        for (Turtle turtle : turtlesToAdd) {
             turtle.setCurrentField(this);
             this.turtles.add(turtle);
         }
     }
 
-    public LinkedList<Turtle> getAndDeleteTurtlesOverGiven(Turtle turtle){
+    public LinkedList<Turtle> getAndDeleteTurtlesOverGiven(Turtle turtle) {
         LinkedList<Turtle> connectedTurtles = new LinkedList<>();
         int index = getIndexOfTurtle(turtle);
-        while (index < getTurtlesNumber()){
+        while (index < getTurtlesNumber()) {
             connectedTurtles.add(turtles.get(index));
-            index+=1;
+            index += 1;
         }
 
-        for(Turtle turtleToDel:connectedTurtles){
+        for (Turtle turtleToDel : connectedTurtles) {
             turtles.remove(turtleToDel);
         }
         return connectedTurtles;

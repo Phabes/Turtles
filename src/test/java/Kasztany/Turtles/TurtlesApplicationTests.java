@@ -23,7 +23,6 @@ class TurtlesApplicationTests {
     @Autowired
     Neighbourhood neighbourhood;
 
-
     @Test
     void testTest() {
         assertTrue(true);
@@ -81,27 +80,27 @@ class TurtlesApplicationTests {
     }
 
     @Test
-    void vector2dMaximalTest(){
-        Vector2d vector1 = new Vector2d(0,0);
-        Vector2d vector2 = new Vector2d(1,0);
-        Vector2d vector3 = new Vector2d(1,1);
+    void vector2dMaximalTest() {
+        Vector2d vector1 = new Vector2d(0, 0);
+        Vector2d vector2 = new Vector2d(1, 0);
+        Vector2d vector3 = new Vector2d(1, 1);
 
         Vector2d resultVec1 = vector1.setMaximal(vector2);
-        assertEquals(new Vector2d(1,0), resultVec1);
+        assertEquals(new Vector2d(1, 0), resultVec1);
 
         Vector2d resultVec2 = resultVec1.setMaximal(vector3);
-        assertEquals(new Vector2d(1,1), resultVec2);
+        assertEquals(new Vector2d(1, 1), resultVec2);
     }
 
     @Test
-    void vector2dAddTest(){
-        Vector2d vector = new Vector2d(0,0);
+    void vector2dAddTest() {
+        Vector2d vector = new Vector2d(0, 0);
         Vector2d resultVec1 = vector.add(Direction.EAST.toVector());
-        assertEquals(resultVec1, new Vector2d(1,0));
+        assertEquals(resultVec1, new Vector2d(1, 0));
         Vector2d resultVec2 = resultVec1.add(Direction.EAST.toVector());
-        assertEquals(resultVec2, new Vector2d(2,0));
+        assertEquals(resultVec2, new Vector2d(2, 0));
         Vector2d resultVec3 = resultVec2.add(Direction.NORTH.toVector());
-        assertEquals(resultVec3, new Vector2d(2,1));
+        assertEquals(resultVec3, new Vector2d(2, 1));
     }
 
     @Test
@@ -112,7 +111,7 @@ class TurtlesApplicationTests {
 
         Field firstField = board.getStartingField();
         ArrayList<Field> possibleFields = new ArrayList<>();
-        assertEquals(firstField.getPossibleDirections().size(),2);
+        assertEquals(firstField.getPossibleDirections().size(), 2);
 
         for (Direction direction : firstField.getPossibleDirections()) {
             Field possibleField = board.getFieldForTurtleMove(firstField.getPosition(), direction);
@@ -124,7 +123,7 @@ class TurtlesApplicationTests {
     }
 
     @Test
-    void fruitEatingTest(){
+    void fruitEatingTest() {
         int fruit_points = 5;
         Field field = new Field(new Vector2d(0, 0));
         Turtle turtle = new Turtle("Player", "#0000000", field);
@@ -170,10 +169,10 @@ class TurtlesApplicationTests {
 
         assertEquals(nextField.getTurtlesNumber(), 3);
 
-        for(Turtle turtle : turtles){
-            if( turtle.equals(turtle1)){
+        for (Turtle turtle : turtles) {
+            if (turtle.equals(turtle1)) {
                 assertEquals(turtle.getPoints(), 10);
-            }else{
+            } else {
                 assertEquals(turtle.getPoints(), 0);
             }
         }

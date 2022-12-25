@@ -33,12 +33,12 @@ public class Turtle {
 
     public Optional<Turtle> getTurtleOnBack() {
         int index = currentField.getIndexOfTurtle(this);
-        return currentField.getTurtleWithIndex(index+1);
+        return currentField.getTurtleWithIndex(index + 1);
     }
 
     public Optional<Turtle> getTurtleOnBottom() {
         int index = currentField.getIndexOfTurtle(this);
-        return currentField.getTurtleWithIndex(index-1);
+        return currentField.getTurtleWithIndex(index - 1);
     }
 
     public void setColor(String color) {
