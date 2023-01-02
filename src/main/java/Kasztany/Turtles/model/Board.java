@@ -1,5 +1,6 @@
 package Kasztany.Turtles.model;
 
+import Kasztany.Turtles.model.cards.Card;
 import Kasztany.Turtles.parser.MapParser;
 import Kasztany.Turtles.persistence.GameLog;
 import Kasztany.Turtles.persistence.GameLogRepository;
@@ -19,6 +20,10 @@ public class Board {
     private Field lastField;
     private Field startField;
     private final GameLogRepository gameLogRepository;
+
+    private final ArrayList<Card> availableCards=new ArrayList<>();
+    private final ArrayList<Card> usedCards=new ArrayList<>();
+
 
     public Board(GameLogRepository repository) {
         this.gameLogRepository = repository;

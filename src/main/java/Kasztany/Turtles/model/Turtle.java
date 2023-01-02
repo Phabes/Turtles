@@ -3,16 +3,16 @@ package Kasztany.Turtles.model;
 import java.util.Optional;
 
 public class Turtle {
-    private String name;
     private String color;
     private int points;
     private Field currentField;
+    private final Player player;
 
     public Turtle(String name, String color, Field field) {
-        this.name = name;
         this.color = color;
         this.currentField = field;
         this.points = 0;
+        this.player=new Player(name);
     }
 
     public Field getCurrentField() {
@@ -28,7 +28,7 @@ public class Turtle {
     }
 
     public String getName() {
-        return name;
+        return player.getName();
     }
 
     public Optional<Turtle> getTurtleOnBack() {
@@ -45,8 +45,8 @@ public class Turtle {
         this.color = color;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public Player getPlayer() {
+        return player;
     }
 
     public void setPoints(Integer points) {
@@ -64,7 +64,7 @@ public class Turtle {
     }
 
     public void eat(Fruit fruit) {
-        System.out.println(name + " is eating fruit with " + fruit.getPoints() + " points");
+        System.out.println(player.getName() + " is eating fruit with " + fruit.getPoints() + " points");
         points += fruit.getPoints();
     }
 
