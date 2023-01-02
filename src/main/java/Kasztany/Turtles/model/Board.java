@@ -1,6 +1,6 @@
 package Kasztany.Turtles.model;
 
-import Kasztany.Turtles.model.cards.Card;
+import Kasztany.Turtles.model.cards.*;
 import Kasztany.Turtles.parser.MapParser;
 import Kasztany.Turtles.persistence.GameLog;
 import Kasztany.Turtles.persistence.GameLogRepository;
@@ -29,6 +29,22 @@ public class Board {
         this.gameLogRepository = repository;
         this.neighbourhood = new Neighbourhood();
         this.turtles = new ArrayList<>();
+        createCards();
+    }
+
+    public void createCards(){
+        Card card1=new ChoosedMoveCard(this,2,true);
+        Card card2=new ColorBasedMoveCard(this,2,true,"red");
+        Card card3=new LastTurtleMoveCard(this,2);
+        Card card4=new MoveTurtleInStackCard(this,true);
+        Card card5=new MoveTurtleInStackCard(this,false);
+        Card card6=new SwapTurtlesInStackCard(this);
+        availableCards.addAll(List.of(card1,card2,card3,card4,card5,card6));
+
+    }
+
+    public ArrayList<Card> getAvailableCards() {
+        return availableCards;
     }
 
     public void addFields(File map) throws IOException {

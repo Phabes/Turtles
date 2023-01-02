@@ -17,4 +17,6 @@
         <Button fx:id="moveButton" text="Move" onAction="#handleMoveClick" disable="true" />
     </HBox>
     <GridPane fx:id="boardGrid"/>
+    <HBox fx:id="cardsBox">
+    </HBox>
 </VBox>

@@ -2,25 +2,31 @@ package Kasztany.Turtles.controller;
 
 import Kasztany.Turtles.gui.ImageBoxElement;
 import Kasztany.Turtles.model.*;
+import Kasztany.Turtles.model.cards.Card;
 import Kasztany.Turtles.settings.GlobalSettings;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
+import javafx.geometry.Rectangle2D;
 import javafx.scene.Cursor;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.TextField;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import org.springframework.stereotype.Controller;
 
+import java.awt.*;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 
 
 @Controller
@@ -32,6 +38,8 @@ public class BoardController {
     private VBox pane;
     @FXML
     private HBox playersBox;
+    @FXML
+    private HBox cardsBox;
     @FXML
     private GridPane boardGrid;
     @FXML
@@ -49,8 +57,10 @@ public class BoardController {
     public void initialize() {
         pane.setPrefSize(GlobalSettings.BOARD_WIDTH, GlobalSettings.BOARD_HEIGHT);
 
-        playersBox.setPrefSize(GlobalSettings.GRID_WIDTH, GlobalSettings.BOARD_HEIGHT - GlobalSettings.GRID_HEIGHT);
+        playersBox.setPrefSize(GlobalSettings.GRID_WIDTH, GlobalSettings.BOARD_HEIGHT - GlobalSettings.GRID_HEIGHT-GlobalSettings.CARD_HEIGHT);
         playersBox.setAlignment(Pos.CENTER);
+        cardsBox.setPrefSize(GlobalSettings.GRID_WIDTH, GlobalSettings.CARD_HEIGHT);
+        cardsBox.setAlignment(Pos.CENTER);
         boardGrid.setPrefSize(GlobalSettings.GRID_WIDTH, GlobalSettings.GRID_HEIGHT);
     }
 
@@ -79,6 +89,7 @@ public class BoardController {
         for (int y = 0; y <= maxVector.y(); y++) {
             boardGrid.getRowConstraints().add(new RowConstraints(50, prefSize, 200));
         }
+        drawCards(board.getAvailableCards());
         drawBoard();
     }
 
@@ -101,6 +112,23 @@ public class BoardController {
         }
     }
 
+    private void drawCards(ArrayList<Card> cards){
+        for (Card card:cards) {
+            Text header=new Text(card.getHeader());
+            Text additionalInfo=new Text(card.getAdditionalInfo());
+
+            card.getIcon().setSize(GlobalSettings.CARD_WIDTH/2);
+            VBox cardBox=new VBox(header,additionalInfo,card.getIcon().getImage());
+            cardBox.setStyle("""
+                -fx-border-color: red;
+                -fx-border-width: 1;
+                """);
+            cardBox.setAlignment(Pos.CENTER);
+            cardBox.setMinSize(GlobalSettings.CARD_WIDTH, GlobalSettings.CARD_HEIGHT);
+            cardsBox.getChildren().add(cardBox);
+        }
+    }
+
     private void turtleClick(Turtle turtle) {
         if (!board.isGameEnd()) {
             Field field = turtle.getCurrentField();
@@ -118,8 +146,8 @@ public class BoardController {
             choosedField = null;
             possibleFields.clear();
             moveButton.setDisable(true);
-            highlightPossibleFieldsToMove(field, 1,true);
-            highlightPossibleFieldsToMove(field, 1,false);
+//            highlightPossibleFieldsToMove(field, 2,true);
+//            highlightPossibleFieldsToMove(field, 1,false);
             for (Field possibleField : possibleFields) {
                 Node boardField = boardGrid.lookup("#" + possibleField.getId());
                 boardField.getStyleClass().clear();
@@ -143,24 +171,34 @@ public class BoardController {
         }
     }
 
-    private void highlightPossibleFieldsToMove(Field previousField, int steps,boolean moveForward) {
-        steps--;
-        ArrayList<Direction> possibleDirecctions;
-        if(moveForward)
-            possibleDirecctions=previousField.getPossibleForwardDirections();
-        else
-            possibleDirecctions=previousField.getPossibleBackwardDirections();
-        for (Direction direction : possibleDirecctions) {
-            Field nextField = board.getFieldForTurtleMove(previousField.getPosition(), direction);
-            if (nextField != null) {
-                if (steps == 0) {
-                    possibleFields.add(nextField);
-                } else {
-                    highlightPossibleFieldsToMove(nextField, steps, moveForward);
-                }
-            }
-        }
-    }
+//    private void highlightPossibleFieldsToMove(Field firstField, int steps, boolean moveForward) {
+////        ArrayList<Field> possibleFields=new ArrayList<>();
+//        ArrayList<Field> fieldsToCheck=new ArrayList<>();
+//        ArrayList<Field> nextFieldsToCheck=new ArrayList<>();
+//        fieldsToCheck.add(firstField);
+//        for (int i = 0; i < steps; i++) {
+//            for (Field field:fieldsToCheck) {
+//                ArrayList<Direction> possibleDirections;
+//                if(moveForward)
+//                    possibleDirections=field.getPossibleForwardDirections();
+//                else
+//                    possibleDirections=field.getPossibleBackwardDirections();
+//                for (Direction direction : possibleDirections) {
+//                    Field nextField = board.getFieldForTurtleMove(field.getPosition(), direction);
+//                    if (nextField != null) {
+//                        if (i==steps-1) {
+//                            possibleFields.add(nextField);
+//                        }else{
+//                            nextFieldsToCheck.add(nextField);
+//                        }
+//                    }
+//                }
+//            }
+//            Collections.copy(fieldsToCheck,nextFieldsToCheck);
+//            nextFieldsToCheck.clear();
+//        }
+////        return possibleFields;
+//    }
 
     private HBox drawTurtle(double size, String color) {
         HBox shell = new HBox();

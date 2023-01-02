@@ -9,7 +9,13 @@
     -fx-border-width: 1;
     -fx-border-style: solid;
 }
-
+#cardsBox{
+    -fx-border-color: blue;
+    -fx-border-width: 1;
+    -fx-border-style: solid;
+    -fx-padding: 10;
+    -fx-spacing: 30;
+}
 #moveButton {
     -fx-border-color: #454242;
     -fx-border-width: 3;
