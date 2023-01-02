@@ -118,7 +118,8 @@ public class BoardController {
             choosedField = null;
             possibleFields.clear();
             moveButton.setDisable(true);
-            highlightPossibleFieldsToMove(field, 1);
+            highlightPossibleFieldsToMove(field, 1,true);
+            highlightPossibleFieldsToMove(field, 1,false);
             for (Field possibleField : possibleFields) {
                 Node boardField = boardGrid.lookup("#" + possibleField.getId());
                 boardField.getStyleClass().clear();
@@ -142,15 +143,20 @@ public class BoardController {
         }
     }
 
-    private void highlightPossibleFieldsToMove(Field previousField, int steps) {
+    private void highlightPossibleFieldsToMove(Field previousField, int steps,boolean moveForward) {
         steps--;
-        for (Direction direction : previousField.getPossibleDirections()) {
+        ArrayList<Direction> possibleDirecctions;
+        if(moveForward)
+            possibleDirecctions=previousField.getPossibleForwardDirections();
+        else
+            possibleDirecctions=previousField.getPossibleBackwardDirections();
+        for (Direction direction : possibleDirecctions) {
             Field nextField = board.getFieldForTurtleMove(previousField.getPosition(), direction);
             if (nextField != null) {
                 if (steps == 0) {
                     possibleFields.add(nextField);
                 } else {
-                    highlightPossibleFieldsToMove(nextField, steps);
+                    highlightPossibleFieldsToMove(nextField, steps, moveForward);
                 }
             }
         }

@@ -11,7 +11,8 @@ public class Field {
 
     private LinkedList<Turtle> turtles;
     private Optional<Fruit> fruit;
-    private ArrayList<Direction> possibleDirections = new ArrayList<>();
+    private ArrayList<Direction> possibleForwardDirections = new ArrayList<>();
+    private ArrayList<Direction> possibleBackwardDirections = new ArrayList<>();
 
     public Field(Vector2d position) {
         this.id = "field-" + position.x() + "-" + position.y();
@@ -20,16 +21,23 @@ public class Field {
         this.fruit = Optional.empty();
     }
 
-    public void addPossibleDirection(Direction direction) {
-        possibleDirections.add(direction);
+    public void addPossibleForwardDirections(Direction direction) {
+        possibleForwardDirections.add(direction);
+    }
+    public void addPossibleBackwardDirections(Direction direction) {
+        possibleBackwardDirections.add(direction);
     }
 
     public String getId() {
         return id;
     }
 
-    public ArrayList<Direction> getPossibleDirections() {
-        return possibleDirections;
+    public ArrayList<Direction> getPossibleForwardDirections() {
+        return possibleForwardDirections;
+    }
+
+    public ArrayList<Direction> getPossibleBackwardDirections() {
+        return possibleBackwardDirections;
     }
 
     public Vector2d getPosition() {

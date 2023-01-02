@@ -111,14 +111,14 @@ class TurtlesApplicationTests {
 
         Field firstField = board.getStartingField();
         ArrayList<Field> possibleFields = new ArrayList<>();
-        assertEquals(firstField.getPossibleDirections().size(), 2);
+        assertEquals(firstField.getPossibleForwardDirections().size(), 2);
 
-        for (Direction direction : firstField.getPossibleDirections()) {
+        for (Direction direction : firstField.getPossibleForwardDirections()) {
             Field possibleField = board.getFieldForTurtleMove(firstField.getPosition(), direction);
             possibleFields.add(possibleField);
         }
 
-        assertEquals(firstField.getPossibleDirections().size(), possibleFields.size());
+        assertEquals(firstField.getPossibleForwardDirections().size(), possibleFields.size());
 
     }
 
@@ -159,7 +159,7 @@ class TurtlesApplicationTests {
 
         Turtle turtle1 = firstField.getBottomTurtle().orElse(null);
         assertNotNull(turtle1);
-        Field nextField = board.getFieldForTurtleMove(firstField.getPosition(), firstField.getPossibleDirections().get(0));
+        Field nextField = board.getFieldForTurtleMove(firstField.getPosition(), firstField.getPossibleForwardDirections().get(0));
         turtle1.move(nextField);
         Fruit nextFieldFruit = nextField.getFruit().orElse(null);
         assertNotNull(nextFieldFruit);

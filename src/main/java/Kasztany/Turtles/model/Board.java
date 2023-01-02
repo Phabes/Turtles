@@ -38,7 +38,7 @@ public class Board {
         bufferedReader.lines().forEach(line -> {
             System.out.println(line);
             Field field = mapParser.parseMapLine(line);
-            if (field.getPossibleDirections().isEmpty()) {
+            if (field.getPossibleForwardDirections().isEmpty()) {
                 this.lastField = field;
             }
             maxVector = maxVector.setMaximal(field.getPosition());
