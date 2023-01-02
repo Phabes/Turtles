@@ -1,169 +1,122 @@
 package Kasztany.Turtles.model;
 
+import Kasztany.Turtles.parser.MapParser;
 import Kasztany.Turtles.persistence.GameLog;
 import Kasztany.Turtles.persistence.GameLogRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
 
 
-@Service
+import java.io.*;
+import java.util.*;
+
+@Component
+@Scope("prototype")
 public class Board {
-    private final ArrayList<Field> fields;
+    private final Neighbourhood neighbourhood;
     private final ArrayList<Turtle> turtles;
-    private final Vector maxVector = new Vector();
-
+    private Vector2d maxVector = new Vector2d();
     private Field lastField;
-    private GameLogRepository gameLogRepository;
+    private Field startField;
+    private final GameLogRepository gameLogRepository;
 
-    public Board(HashMap<Integer, List<String>> players, int fieldsNum) {
-        this.fields = new ArrayList<>();
-        this.turtles = new ArrayList<>();
-
-        for (int i = 0; i < fieldsNum; i++) {
-            Vector currVec = new Vector(i, 0);
-            maxVector.setMaximal(currVec);
-            this.fields.add(new Field(i, currVec));
-        }
-        for (int i = 0; i < fieldsNum - 1; i++) {
-            fields.get(i).linkField(fields.get(i + 1), Direction.EAST);
-        }
-//        for (int i = 1; i < fieldsNum; i++) {
-//            fields.get(i).linkField(fields.get(i - 1));
-//        }
-//        Vector currVec1 = new Vector(2, 1);
-//        maxVector.setMaximal(currVec1);
-//        this.fields.add(new Field(11, currVec1));
-//        Vector currVec2 = new Vector(2, 2);
-//        maxVector.setMaximal(currVec2);
-//        this.fields.add(new Field(12, currVec2));
-//        Vector currVec3 = new Vector(3, 2);
-//        maxVector.setMaximal(currVec3);
-//        this.fields.add(new Field(13, currVec3));
-//        Vector currVec4 = new Vector(4, 2);
-//        maxVector.setMaximal(currVec4);
-//        this.fields.add(new Field(14, currVec4));
-//        Vector currVec5 = new Vector(4, 1);
-//        maxVector.setMaximal(currVec5);
-//        this.fields.add(new Field(15, currVec5));
-
-        this.lastField = this.fields.get(fieldsNum - 1);
-
-        for (int key : players.keySet()) {
-            System.out.println(key + " " + players.get(key));
-            this.turtles.add(new Turtle(players.get(key).get(0), players.get(key).get(1), this.fields.get(0)));
-        }
-
-        this.fields.get(0).linkTurtle(this.turtles.get(0));
-
-        for (int i = 1; i < turtles.size(); i++) {
-            this.turtles.get(i).linkTurtle(this.turtles.get(i - 1));
-        }
-
-        if (this.fields.get(0).getTopTurtle().isPresent())
-            System.out.println(this.fields.get(0).getTopTurtle().get().getName());
-
-    }
-
-    @Autowired
     public Board(GameLogRepository repository) {
         this.gameLogRepository = repository;
-        this.fields = new ArrayList<>();
+        this.neighbourhood = new Neighbourhood();
         this.turtles = new ArrayList<>();
     }
 
-    public void addFields(int fieldsNum) {
-        for (int i = 0; i < fieldsNum; i++) {
-            Vector currVec = new Vector(i, 0);
-            maxVector.setMaximal(currVec);
-            this.fields.add(new Field(i, currVec));
-        }
-        Vector currVec1 = new Vector(2, 1);
-        maxVector.setMaximal(currVec1);
-        this.fields.add(new Field(11, currVec1));
-        Vector currVec2 = new Vector(2, 2);
-        maxVector.setMaximal(currVec2);
-        this.fields.add(new Field(12, currVec2));
-        Vector currVec3 = new Vector(3, 2);
-        maxVector.setMaximal(currVec3);
-        this.fields.add(new Field(13, currVec3));
-        Vector currVec4 = new Vector(4, 2);
-        maxVector.setMaximal(currVec4);
-        this.fields.add(new Field(14, currVec4));
-        Vector currVec5 = new Vector(4, 1);
-        maxVector.setMaximal(currVec5);
-        this.fields.add(new Field(15, currVec5));
+    public void addFields(File map) throws IOException {
+        BufferedReader bufferedReader = new BufferedReader(new FileReader(map));
+        MapParser mapParser = new MapParser();
+
+        Field startField = mapParser.parseMapLine(bufferedReader.readLine());
+        maxVector = maxVector.setMaximal(startField.getPosition());
+        neighbourhood.addField(startField.getPosition(), startField);
+        this.startField = startField;
+
+        bufferedReader.lines().forEach(line -> {
+            System.out.println(line);
+            Field field = mapParser.parseMapLine(line);
+            if (field.getPossibleDirections().isEmpty()) {
+                this.lastField = field;
+            }
+            maxVector = maxVector.setMaximal(field.getPosition());
+            neighbourhood.addField(field.getPosition(), field);
+        });
+
     }
 
     public void addTurtlesFromHashMap(HashMap<Integer, List<String>> players) {
+        Vector2d startVector = startField.getPosition();
         for (int key : players.keySet()) {
-            this.turtles.add(new Turtle(players.get(key).get(0), players.get(key).get(1), this.fields.get(0)));
+            turtles.add(new Turtle(players.get(key).get(0), players.get(key).get(1), neighbourhood.getFieldByVector(startVector)));
         }
 
-        this.fields.get(0).linkTurtle(this.turtles.get(0));
-
-        for (int i = 1; i < turtles.size(); i++) {
-            this.turtles.get(i).linkTurtle(this.turtles.get(i - 1));
+        for (Turtle turtle : turtles) {
+            startField.addTurtle(turtle);
         }
     }
 
-    public void addTurtle(Turtle turtle) {
-        this.turtles.add(turtle);
+    public Neighbourhood getNeighbourhood() {
+        return neighbourhood;
     }
 
     public Field getStartingField() {
-        return this.fields.get(0);
+        return this.neighbourhood.getFieldByVector(new Vector2d());
     }
 
-    public Vector getMaxVector() {
+    public Field getLastField() {
+        return lastField;
+    }
+
+    public Vector2d getMaxVector() {
         return maxVector;
-    }
-
-    public ArrayList<Field> getFields() {
-        return fields;
     }
 
     public ArrayList<Turtle> getTurtles() {
         return turtles;
     }
 
-    @Autowired
+    public Field getFieldForTurtleMove(Vector2d turtlePosition, Direction direction) {
+        Vector2d nextTurtlePosition = turtlePosition.add(direction.toVector());
+        return neighbourhood.getFieldByVector(nextTurtlePosition);
+    }
+
     public GameLogRepository getGameLogRepository() {
         return gameLogRepository;
     }
 
     public void saveGameLog(int winnerIndex) {
         Turtle winner = turtles.get(winnerIndex);
-        GameLog gameLog = new GameLog(turtles.size(), fields.size(), winner.getName(), winner.getPoints());
+        GameLog gameLog = new GameLog(turtles.size(), neighbourhood.getWholeNeighbourhood().size(), winner.getName(), winner.getPoints());
         gameLogRepository.save(gameLog);
     }
 
     public Turtle findWinner() {
-        int winnerPoints = 10;
+        int winnerPoints = turtles.size() * 5;
 
-        Turtle currTurtle = lastField.getTopTurtle().orElse(null);
-        while (currTurtle != null) {
-            currTurtle.addPoints(winnerPoints);
-            winnerPoints--;
-            currTurtle = currTurtle.getTurtleOnBottom().orElse(null);
-        }
-
-
-        Turtle winningTurtle = this.turtles.get(0);
-        for (Turtle turtle : this.turtles) {
-            if (turtle.getPoints() > winningTurtle.getPoints()) {
-                winningTurtle = turtle;
-            }
-        }
-        //saveGameLog(this.turtles.indexOf(winningTurtle));
+//        Turtle currTurtle = lastField.getTopTurtle().orElse(null);
+//        while (currTurtle != null) {
+//            currTurtle.addPoints(winnerPoints);
+//            winnerPoints -= 5;
+//            currTurtle = currTurtle.getTurtleOnBottom().orElse(null);
+//        }
+//
+//        Turtle winningTurtle = this.turtles.get(0);
+//        for (Turtle turtle : this.turtles) {
+//            if (turtle.getPoints() > winningTurtle.getPoints()) {
+//                winningTurtle = turtle;
+//            }
+//        }
+        Turtle winningTurtle = lastField.getTopTurtle().orElse(null);
+        if (winningTurtle != null)
+            winningTurtle.addPoints(winnerPoints);
+        saveGameLog(this.turtles.indexOf(winningTurtle));
         return winningTurtle;
     }
 
     public Boolean isGameEnd() {
         return lastField.hasTurtle();
     }
-
 }

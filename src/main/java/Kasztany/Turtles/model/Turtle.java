@@ -5,9 +5,7 @@ import java.util.Optional;
 public class Turtle {
     private String name;
     private String color;
-    private Integer points;
-    private Optional<Turtle> turtleOnBack;
-    private Optional<Turtle> turtleOnBottom;
+    private int points;
     private Field currentField;
 
     public Turtle(String name, String color, Field field) {
@@ -15,15 +13,13 @@ public class Turtle {
         this.color = color;
         this.currentField = field;
         this.points = 0;
-        this.turtleOnBack = Optional.empty();
-        this.turtleOnBottom = Optional.empty();
     }
 
     public Field getCurrentField() {
         return currentField;
     }
 
-    public Integer getPoints() {
+    public int getPoints() {
         return points;
     }
 
@@ -36,11 +32,13 @@ public class Turtle {
     }
 
     public Optional<Turtle> getTurtleOnBack() {
-        return turtleOnBack;
+        int index = currentField.getIndexOfTurtle(this);
+        return currentField.getTurtleWithIndex(index + 1);
     }
 
     public Optional<Turtle> getTurtleOnBottom() {
-        return turtleOnBottom;
+        int index = currentField.getIndexOfTurtle(this);
+        return currentField.getTurtleWithIndex(index - 1);
     }
 
     public void setColor(String color) {
@@ -51,76 +49,23 @@ public class Turtle {
         this.name = name;
     }
 
-    public void setCurrentField(Field currentField) {
-        this.currentField = currentField;
-    }
-
     public void setPoints(Integer points) {
         this.points = points;
     }
 
-    public void setTurtleOnBack(Turtle turtle) {
-        this.turtleOnBack = Optional.of(turtle);
+    public void setCurrentField(Field currentField) {
+        this.currentField = currentField;
     }
 
-    public void freeTurtleBack() {
-        this.turtleOnBack = Optional.empty();
-    }
-
-    public void setTurtleOnBottom(Turtle turtle) {
-        this.turtleOnBottom = Optional.of(turtle);
-    }
-
-    public void freeTurtleBottom() {
-        this.turtleOnBottom = Optional.empty();
-    }
-
-    public void move() {
+    public void move(Field nextField) {
         Field prevField = this.currentField;
-        Optional<Field> potentialNextField = currentField.getFirstNeighbourField();
-        if(potentialNextField.isPresent()){
-            Field nextField = potentialNextField.get();
-            Optional<Turtle> turtleToStick = nextField.getTopTurtle();
-
-            if (turtleToStick.isPresent()) {
-                Optional<Turtle> currTurtle = Optional.of(this);
-                while (currTurtle.isPresent()) {
-                    Turtle turtle = currTurtle.get();
-                    turtle.setCurrentField(nextField);
-                    if (turtle.equals(this)) {
-                        if (turtleOnBottom.isPresent()) {
-                            turtleOnBottom.get().freeTurtleBack();
-                        } else {
-                            prevField.freeField();
-                        }
-                        setTurtleOnBottom(turtleToStick.get());
-                        turtleToStick.get().setTurtleOnBack(this);
-                    }
-                    currTurtle = turtle.getTurtleOnBack();
-                }
-            } else {
-                Optional<Turtle> currTurtle = Optional.of(this);
-                while (currTurtle.isPresent()) {
-                    Turtle turtle = currTurtle.get();
-                    turtle.setCurrentField(nextField);
-                    if (turtle.equals(this)) {
-                        currentField.linkTurtle(this);
-                        if (turtleOnBottom.isPresent()) {
-                            turtleOnBottom.get().freeTurtleBack();
-                            freeTurtleBottom();
-                        } else {
-                            prevField.freeField();
-                        }
-                    }
-                    currTurtle = turtle.getTurtleOnBack();
-                }
-            }
-        }
+        this.currentField = nextField;
+        this.currentField.addTurtles(prevField.getAndDeleteTurtlesOverGiven(this));
     }
 
-    public void linkTurtle(Turtle bottomTurtle) {
-        this.turtleOnBottom = Optional.of(bottomTurtle);
-        turtleOnBottom.ifPresent(turtle -> turtle.setTurtleOnBack(this));
+    public void eat(Fruit fruit) {
+        System.out.println(name + " is eating fruit with " + fruit.getPoints() + " points");
+        points += fruit.getPoints();
     }
 
     public void addPoints(int points) {

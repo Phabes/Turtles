@@ -1,63 +1,26 @@
 package Kasztany.Turtles.settings;
 
-import org.springframework.stereotype.Service;
+import javafx.geometry.Rectangle2D;
+import javafx.stage.Screen;
+import javafx.stage.Stage;
 
-@Service
 public class GlobalSettings {
-    private final int optionsSpace;
-    private final int textFieldSize;
-    private final int endPanelWidth;
-    private final double boardWidth;
-    private final double boardHeight;
-    private final double gridWidth;
-    private final double gridHeight;
-    private final double minTurtleSize;
-    private final double headerTurtleSize;
+    public static final int OPTIONS_SPACE = 20;
+    public static final int TEXT_FIELD_SIZE = 100;
+    public static final double BOARD_WIDTH = 1000;
+    public static final double BOARD_HEIGHT = 700;
+    public static final double GRID_WIDTH = 800;
+    public static final double GRID_HEIGHT = 650;
+    public static final double MIN_TURTLE_SIZE = 40;
+    public static final double HEADER_TURTLE_SIZE = 50;
+    public static final int FRUIT_SIZE = 20;
 
-    public GlobalSettings(){
-        optionsSpace = 20;
-        textFieldSize = 100;
-        endPanelWidth = 300;
-        boardWidth = 1000;
-        boardHeight = 700;
-        gridWidth = 800;
-        gridHeight = 650;
-        minTurtleSize = 40;
-        headerTurtleSize = 50;
-    }
-    public int getOptionsSpace() {
-        return optionsSpace;
+    private GlobalSettings() {
     }
 
-    public int getTextFieldSize() {
-        return textFieldSize;
-    }
-
-    public int getEndPanelWidth() {
-        return endPanelWidth;
-    }
-
-    public double getBoardWidth() {
-        return boardWidth;
-    }
-
-    public double getBoardHeight() {
-        return boardHeight;
-    }
-
-    public double getGridWidth() {
-        return gridWidth;
-    }
-
-    public double getGridHeight() {
-        return gridHeight;
-    }
-
-    public double getMinTurtleSize() {
-        return minTurtleSize;
-    }
-
-    public double getHeaderTurtleSize() {
-        return headerTurtleSize;
+    public static void setScreenInTheMiddle(Stage stage) {
+        Rectangle2D primScreenBounds = Screen.getPrimary().getVisualBounds();
+        stage.setX((primScreenBounds.getWidth() - stage.getWidth()) / 2);
+        stage.setY((primScreenBounds.getHeight() - stage.getHeight()) / 2);
     }
 }
