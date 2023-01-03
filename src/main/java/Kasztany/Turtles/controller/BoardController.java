@@ -44,7 +44,6 @@ public class BoardController {
     private GridPane boardGrid;
     @FXML
     private Button moveButton;
-
     private final ArrayList<Field> possibleFields = new ArrayList<>();
     private Turtle choosedTurtle = null;
     private Field choosedField = null;
@@ -57,7 +56,7 @@ public class BoardController {
     public void initialize() {
         pane.setPrefSize(GlobalSettings.BOARD_WIDTH, GlobalSettings.BOARD_HEIGHT);
 
-        playersBox.setPrefSize(GlobalSettings.GRID_WIDTH, GlobalSettings.BOARD_HEIGHT - GlobalSettings.GRID_HEIGHT-GlobalSettings.CARD_HEIGHT);
+        playersBox.setPrefSize(GlobalSettings.GRID_WIDTH, GlobalSettings.BOARD_HEIGHT - GlobalSettings.GRID_HEIGHT - GlobalSettings.CARD_HEIGHT);
         playersBox.setAlignment(Pos.CENTER);
         cardsBox.setPrefSize(GlobalSettings.GRID_WIDTH, GlobalSettings.CARD_HEIGHT);
         cardsBox.setAlignment(Pos.CENTER);
@@ -112,17 +111,17 @@ public class BoardController {
         }
     }
 
-    private void drawCards(ArrayList<Card> cards){
-        for (Card card:cards) {
-            Text header=new Text(card.getHeader());
-            Text additionalInfo=new Text(card.getAdditionalInfo());
+    private void drawCards(ArrayList<Card> cards) {
+        for (Card card : cards) {
+            Text header = new Text(card.getHeader());
+            Text additionalInfo = new Text(card.getAdditionalInfo());
 
-            card.getIcon().setSize(GlobalSettings.CARD_WIDTH/2);
-            VBox cardBox=new VBox(header,additionalInfo,card.getIcon().getImage());
+            card.getIcon().setSize(GlobalSettings.CARD_WIDTH / 2);
+            VBox cardBox = new VBox(header, additionalInfo, card.getIcon().getImage());
             cardBox.setStyle("""
-                -fx-border-color: red;
-                -fx-border-width: 1;
-                """);
+                    -fx-border-color: red;
+                    -fx-border-width: 1;
+                    """);
             cardBox.setAlignment(Pos.CENTER);
             cardBox.setMinSize(GlobalSettings.CARD_WIDTH, GlobalSettings.CARD_HEIGHT);
             cardsBox.getChildren().add(cardBox);

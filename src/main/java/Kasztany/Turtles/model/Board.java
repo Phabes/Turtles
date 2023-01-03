@@ -21,8 +21,8 @@ public class Board {
     private Field startField;
     private final GameLogRepository gameLogRepository;
 
-    private final ArrayList<Card> availableCards=new ArrayList<>();
-    private final ArrayList<Card> usedCards=new ArrayList<>();
+    private final ArrayList<Card> availableCards = new ArrayList<>();
+    private final ArrayList<Card> usedCards = new ArrayList<>();
 
 
     public Board(GameLogRepository repository) {
@@ -32,14 +32,14 @@ public class Board {
         createCards();
     }
 
-    public void createCards(){
-        Card card1=new ChoosedMoveCard(this,2,true);
-        Card card2=new ColorBasedMoveCard(this,2,true,"red");
-        Card card3=new LastTurtleMoveCard(this,2);
-        Card card4=new MoveTurtleInStackCard(this,true);
-        Card card5=new MoveTurtleInStackCard(this,false);
-        Card card6=new SwapTurtlesInStackCard(this);
-        availableCards.addAll(List.of(card1,card2,card3,card4,card5,card6));
+    public void createCards() {
+        Card card1 = new ChoosedMoveCard(this, 2, true);
+        Card card2 = new ColorBasedMoveCard(this, 2, true, "red");
+        Card card3 = new LastTurtleMoveCard(this, 2);
+        Card card4 = new MoveTurtleInStackCard(this, true);
+        Card card5 = new MoveTurtleInStackCard(this, false);
+        Card card6 = new SwapTurtlesInStackCard(this);
+        availableCards.addAll(List.of(card1, card2, card3, card4, card5, card6));
 
     }
 

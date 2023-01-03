@@ -10,6 +10,6 @@
       spacing="10">
     <VBox fx:id="configuration" spacing="20"/>
     <HBox alignment="CENTER">
-        <Button text="START" onAction="#handleStartClick"/>
+        <Button fx:id="nextStep" text="NEXT" onAction="#handleStartClick"/>
     </HBox>
 </VBox>

@@ -24,6 +24,7 @@ public class Field {
     public void addPossibleForwardDirections(Direction direction) {
         possibleForwardDirections.add(direction);
     }
+
     public void addPossibleBackwardDirections(Direction direction) {
         possibleBackwardDirections.add(direction);
     }

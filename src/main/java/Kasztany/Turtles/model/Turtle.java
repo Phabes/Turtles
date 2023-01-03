@@ -12,7 +12,7 @@ public class Turtle {
         this.color = color;
         this.currentField = field;
         this.points = 0;
-        this.player=new Player(name);
+        this.player = new Player(name);
     }
 
     public Field getCurrentField() {

@@ -4,7 +4,7 @@ import Kasztany.Turtles.model.Board;
 
 import java.io.FileNotFoundException;
 
-public class SwapTurtlesInStackCard extends Card{
+public class SwapTurtlesInStackCard extends Card {
     public SwapTurtlesInStackCard(Board board) {
         super(board);
         super.setHeader("Swap turtles in stack");

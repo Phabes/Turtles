@@ -16,7 +16,6 @@ public abstract class Card {
     private String additionalInfo;
 
 
-
     public Card(Board board) {
         this.board = board;
 
@@ -72,7 +71,7 @@ public abstract class Card {
     }
 
     public void setIcon(String iconName) throws FileNotFoundException {
-        this.icon=new ImageBoxElement(iconName);
+        this.icon = new ImageBoxElement(iconName);
     }
 
     public ImageBoxElement getIcon() {
