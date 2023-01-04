@@ -32,25 +32,41 @@ public class Board {
         this.neighbourhood = new Neighbourhood();
         this.turtles = new ArrayList<>();
         this.turn = new Turn(turtles);
-        createCards();
     }
 
-    public void createCards() {
-        Card card1 = new ChoosedMoveCard(this, 2, true);
-        Card card2 = new ColorBasedMoveCard(this, 2, true, "red");
-        Card card3 = new LastTurtleMoveCard(this, 2);
-        Card card4 = new MoveTurtleInStackCard(this, true);
-        Card card5 = new MoveTurtleInStackCard(this, false);
-        Card card6 = new SwapTurtlesInStackCard(this);
-        availableCards.addAll(List.of(card1, card2, card3, card4, card5, card6));
-
+    private int getRandomNumber(int min, int max) {
+        return (int) ((Math.random() * (max - min)) + min);
     }
 
-    public void changeTurn(){
+    public void createCards(int total) {
+        for (int i = 0; i < total; i++) {
+            int number = getRandomNumber(0, 5);
+            System.out.println(number);
+            if (number == 0)
+                availableCards.add(new ChoosedMoveCard(this, 2, true));
+            if (number == 1)
+                availableCards.add(new ColorBasedMoveCard(this, 2, true, "red"));
+            if (number == 2)
+                availableCards.add(new LastTurtleMoveCard(this, 2));
+            if (number == 3)
+                availableCards.add(new MoveTurtleInStackCard(this, true));
+            if (number == 4)
+                availableCards.add(new SwapTurtlesInStackCard(this));
+        }
+//        Card card1 = new ChoosedMoveCard(this, 2, true);
+//        Card card2 = new ColorBasedMoveCard(this, 2, true, "red");
+//        Card card3 = new LastTurtleMoveCard(this, 2);
+//        Card card4 = new MoveTurtleInStackCard(this, true);
+//        Card card5 = new MoveTurtleInStackCard(this, false);
+//        Card card6 = new SwapTurtlesInStackCard(this);
+//        availableCards.addAll(List.of(card1, card2, card3, card4, card5, card6));
+    }
+
+    public void changeTurn() {
         turn.next();
     }
 
-    public Player getCurrentPlayer(){
+    public Player getCurrentPlayer() {
         return turn.getCurrentPlayer();
     }
 
@@ -88,6 +104,17 @@ public class Board {
         for (Turtle turtle : turtles) {
             startField.addTurtle(turtle);
         }
+        createCards((turtles.size() + 6) * 5);
+        handCardsToPlayers();
+    }
+
+    private void handCardsToPlayers() {
+        System.out.println(availableCards.size());
+        for (int i = 0; i < 5 * turtles.size(); i++) {
+            Turtle turtle = turtles.get(i % turtles.size());
+            turtle.addPlayerCard(availableCards.remove(i));
+        }
+        System.out.println(availableCards.size());
     }
 
     public Neighbourhood getNeighbourhood() {

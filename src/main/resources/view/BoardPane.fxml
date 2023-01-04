@@ -14,10 +14,9 @@
         <URL value="@/css/board.css"/>
     </stylesheets>
     <HBox fx:id="playersBox">
-        <Button fx:id="showPlayer" text="Show" onAction="#handleShowClick"/>
+        <Button text="Show" onAction="#handleShowClick"/>
         <Button fx:id="moveButton" text="Move" onAction="#handleMoveClick" disable="true"/>
     </HBox>
     <GridPane fx:id="boardGrid"/>
-    <HBox fx:id="cardsBox">
-    </HBox>
+    <HBox fx:id="cardsBox"/>
 </VBox>

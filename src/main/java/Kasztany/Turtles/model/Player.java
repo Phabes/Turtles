@@ -6,7 +6,7 @@ import java.util.ArrayList;
 
 public class Player {
     private final String name;
-    private ArrayList<Card> cards;
+    private final ArrayList<Card> cards = new ArrayList<>();
 
     public Player(String name) {
         this.name = name;
@@ -18,5 +18,9 @@ public class Player {
 
     public ArrayList<Card> getCards() {
         return cards;
+    }
+
+    public void addCard(Card card) {
+        cards.add(card);
     }
 }

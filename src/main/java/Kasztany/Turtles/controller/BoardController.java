@@ -69,11 +69,9 @@ public class BoardController {
         endField = board.getLastField();
         playersBox.setSpacing(GlobalSettings.GRID_WIDTH / board.getTurtles().size() - (GlobalSettings.BOARD_HEIGHT - GlobalSettings.GRID_HEIGHT));
         board.getTurtles().forEach(turtle -> {
-            Text turtleText = new Text(turtle.getName());
-            HBox turtleIcon = drawTurtle(GlobalSettings.HEADER_TURTLE_SIZE, turtle.getColor());
-            VBox turtleBox = new VBox(turtleText, turtleIcon);
+            VBox turtleBox = new VBox(drawTurtle(GlobalSettings.HEADER_TURTLE_SIZE, turtle.getColor()));
             turtleBox.setOnMouseClicked((e) -> turtleClick(turtle));
-            turtleBox.setOnMouseEntered((e) -> turtleIcon.setCursor(Cursor.HAND));
+            turtleBox.setOnMouseEntered((e) -> turtleBox.setCursor(Cursor.HAND));
             playersBox.getChildren().add(turtleBox);
         });
 
@@ -88,21 +86,20 @@ public class BoardController {
         for (int y = 0; y <= maxVector.y(); y++) {
             boardGrid.getRowConstraints().add(new RowConstraints(50, prefSize, 200));
         }
-        drawCards(board.getAvailableCards());
         drawBoard();
+//        drawCards(board.getAvailableCards());
+        drawCards(board.getCurrentPlayer().getCards());
     }
 
     private void drawCards(ArrayList<Card> cards) {
+        cardsBox.getChildren().clear();
         for (Card card : cards) {
             Text header = new Text(card.getHeader());
             Text additionalInfo = new Text(card.getAdditionalInfo());
 
             card.getIcon().setSize(GlobalSettings.CARD_WIDTH / 2);
             VBox cardBox = new VBox(header, additionalInfo, card.getIcon().getImage());
-            cardBox.setStyle("""
-                    -fx-border-color: red;
-                    -fx-border-width: 1;
-                    """);
+            cardBox.getStyleClass().add("card");
             cardBox.setAlignment(Pos.CENTER);
             cardBox.setMinSize(GlobalSettings.CARD_WIDTH, GlobalSettings.CARD_HEIGHT);
             cardsBox.getChildren().add(cardBox);
@@ -285,6 +282,7 @@ public class BoardController {
             moveButton.setDisable(true);
             setMoveButtonColor("454242");
             board.changeTurn();
+            drawCards(board.getCurrentPlayer().getCards());
         }
     }
 

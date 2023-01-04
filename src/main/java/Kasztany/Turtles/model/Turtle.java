@@ -1,5 +1,8 @@
 package Kasztany.Turtles.model;
 
+import Kasztany.Turtles.model.cards.Card;
+
+import java.util.ArrayList;
 import java.util.Optional;
 
 public class Turtle {
@@ -70,5 +73,9 @@ public class Turtle {
 
     public void addPoints(int points) {
         this.points += points;
+    }
+
+    public void addPlayerCard(Card card){
+        player.addCard(card);
     }
 }
