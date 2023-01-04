@@ -6,6 +6,7 @@ import javafx.stage.Stage;
 
 public class GlobalSettings {
     public static final int OPTIONS_SPACE = 20;
+    public static final int COLOR_SIZE = 30;
     public static final int TEXT_FIELD_SIZE = 100;
     public static final double BOARD_WIDTH = 1000;
     public static final double BOARD_HEIGHT = 750;

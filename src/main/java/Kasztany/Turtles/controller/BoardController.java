@@ -92,25 +92,6 @@ public class BoardController {
         drawBoard();
     }
 
-    @FXML
-    public void handleMoveClick(ActionEvent event) throws IOException {
-        if (choosedTurtle != null && choosedField != null) {
-            Field nextTurtleField = choosedField;
-            choosedTurtle.move(nextTurtleField);
-            if (nextTurtleField.getFruit().isPresent()) {
-                choosedTurtle.eat(nextTurtleField.getFruit().get());
-                nextTurtleField.deleteFruit();
-            }
-            if (board.isGameEnd()) {
-                showEndView(event);
-            }
-            drawBoard();
-            moveButton.setDisable(true);
-            choosedTurtle = null;
-            setMoveButtonColor("454242");
-        }
-    }
-
     private void drawCards(ArrayList<Card> cards) {
         for (Card card : cards) {
             Text header = new Text(card.getHeader());
@@ -145,8 +126,9 @@ public class BoardController {
             choosedField = null;
             possibleFields.clear();
             moveButton.setDisable(true);
-//            highlightPossibleFieldsToMove(field, 2,true);
-//            highlightPossibleFieldsToMove(field, 1,false);
+//            highlightPossibleFieldsToMove(field, 2, true);
+//            highlightPossibleFieldsToMove(field, 1, false);
+            highlightPossibleFieldsToMove(field, 1, true);
             for (Field possibleField : possibleFields) {
                 Node boardField = boardGrid.lookup("#" + possibleField.getId());
                 boardField.getStyleClass().clear();
@@ -170,34 +152,34 @@ public class BoardController {
         }
     }
 
-//    private void highlightPossibleFieldsToMove(Field firstField, int steps, boolean moveForward) {
-////        ArrayList<Field> possibleFields=new ArrayList<>();
-//        ArrayList<Field> fieldsToCheck=new ArrayList<>();
-//        ArrayList<Field> nextFieldsToCheck=new ArrayList<>();
-//        fieldsToCheck.add(firstField);
-//        for (int i = 0; i < steps; i++) {
-//            for (Field field:fieldsToCheck) {
-//                ArrayList<Direction> possibleDirections;
-//                if(moveForward)
-//                    possibleDirections=field.getPossibleForwardDirections();
-//                else
-//                    possibleDirections=field.getPossibleBackwardDirections();
-//                for (Direction direction : possibleDirections) {
-//                    Field nextField = board.getFieldForTurtleMove(field.getPosition(), direction);
-//                    if (nextField != null) {
-//                        if (i==steps-1) {
-//                            possibleFields.add(nextField);
-//                        }else{
-//                            nextFieldsToCheck.add(nextField);
-//                        }
-//                    }
-//                }
-//            }
-//            Collections.copy(fieldsToCheck,nextFieldsToCheck);
-//            nextFieldsToCheck.clear();
-//        }
-////        return possibleFields;
-//    }
+    private void highlightPossibleFieldsToMove(Field firstField, int steps, boolean moveForward) {
+//        ArrayList<Field> possibleFields=new ArrayList<>();
+        ArrayList<Field> fieldsToCheck = new ArrayList<>();
+        ArrayList<Field> nextFieldsToCheck = new ArrayList<>();
+        fieldsToCheck.add(firstField);
+        for (int i = 0; i < steps; i++) {
+            for (Field field : fieldsToCheck) {
+                ArrayList<Direction> possibleDirections;
+                if (moveForward)
+                    possibleDirections = field.getPossibleForwardDirections();
+                else
+                    possibleDirections = field.getPossibleBackwardDirections();
+                for (Direction direction : possibleDirections) {
+                    Field nextField = board.getFieldForTurtleMove(field.getPosition(), direction);
+                    if (nextField != null) {
+                        if (i == steps - 1) {
+                            possibleFields.add(nextField);
+                        } else {
+                            nextFieldsToCheck.add(nextField);
+                        }
+                    }
+                }
+            }
+            Collections.copy(fieldsToCheck, nextFieldsToCheck);
+            nextFieldsToCheck.clear();
+        }
+//        return possibleFields;
+    }
 
     private HBox drawTurtle(double size, String color) {
         HBox shell = new HBox();
@@ -283,6 +265,42 @@ public class BoardController {
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         stage.setTitle("End Game");
         stage.setScene(scene);
+        GlobalSettings.setScreenInTheMiddle(stage);
+    }
+
+    @FXML
+    public void handleMoveClick(ActionEvent event) throws IOException {
+        if (choosedTurtle != null && choosedField != null) {
+            Field nextTurtleField = choosedField;
+            choosedTurtle.move(nextTurtleField);
+            if (nextTurtleField.getFruit().isPresent()) {
+                choosedTurtle.eat(nextTurtleField.getFruit().get());
+                nextTurtleField.deleteFruit();
+            }
+            if (board.isGameEnd()) {
+                showEndView(event);
+            }
+            drawBoard();
+            choosedTurtle = null;
+            moveButton.setDisable(true);
+            setMoveButtonColor("454242");
+            board.changeTurn();
+        }
+    }
+
+    @FXML
+    public void handleShowClick(ActionEvent event) throws IOException {
+//        Turtle winner = board.findWinner();
+        Player currentPlayer = board.getCurrentPlayer();
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/PlayerData.fxml"));
+        Parent root = loader.load();
+        PlayerData playerData = loader.getController();
+        playerData.reveiceData(currentPlayer);
+        Scene scene = new Scene(root);
+        Stage stage = new Stage();
+        stage.setTitle("Player Data");
+        stage.setScene(scene);
+        stage.show();
         GlobalSettings.setScreenInTheMiddle(stage);
     }
 }

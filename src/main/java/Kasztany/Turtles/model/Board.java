@@ -24,11 +24,14 @@ public class Board {
     private final ArrayList<Card> availableCards = new ArrayList<>();
     private final ArrayList<Card> usedCards = new ArrayList<>();
 
+    private final Turn turn;
+
 
     public Board(GameLogRepository repository) {
         this.gameLogRepository = repository;
         this.neighbourhood = new Neighbourhood();
         this.turtles = new ArrayList<>();
+        this.turn = new Turn(turtles);
         createCards();
     }
 
@@ -41,6 +44,14 @@ public class Board {
         Card card6 = new SwapTurtlesInStackCard(this);
         availableCards.addAll(List.of(card1, card2, card3, card4, card5, card6));
 
+    }
+
+    public void changeTurn(){
+        turn.next();
+    }
+
+    public Player getCurrentPlayer(){
+        return turn.getCurrentPlayer();
     }
 
     public ArrayList<Card> getAvailableCards() {
@@ -117,22 +128,22 @@ public class Board {
     public Turtle findWinner() {
         int winnerPoints = turtles.size() * 5;
 
-//        Turtle currTurtle = lastField.getTopTurtle().orElse(null);
-//        while (currTurtle != null) {
-//            currTurtle.addPoints(winnerPoints);
-//            winnerPoints -= 5;
-//            currTurtle = currTurtle.getTurtleOnBottom().orElse(null);
-//        }
-//
-//        Turtle winningTurtle = this.turtles.get(0);
-//        for (Turtle turtle : this.turtles) {
-//            if (turtle.getPoints() > winningTurtle.getPoints()) {
-//                winningTurtle = turtle;
-//            }
-//        }
-        Turtle winningTurtle = lastField.getTopTurtle().orElse(null);
-        if (winningTurtle != null)
-            winningTurtle.addPoints(winnerPoints);
+        Turtle currTurtle = lastField.getTopTurtle().orElse(null);
+        while (currTurtle != null) {
+            currTurtle.addPoints(winnerPoints);
+            winnerPoints -= 5;
+            currTurtle = currTurtle.getTurtleOnBottom().orElse(null);
+        }
+
+        Turtle winningTurtle = this.turtles.get(0);
+        for (Turtle turtle : this.turtles) {
+            if (turtle.getPoints() > winningTurtle.getPoints()) {
+                winningTurtle = turtle;
+            }
+        }
+//        Turtle winningTurtle = lastField.getTopTurtle().orElse(null);
+//        if (winningTurtle != null)
+//            winningTurtle.addPoints(winnerPoints);
         saveGameLog(this.turtles.indexOf(winningTurtle));
         return winningTurtle;
     }

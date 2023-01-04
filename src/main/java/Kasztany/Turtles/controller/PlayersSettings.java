@@ -88,7 +88,7 @@ public class PlayersSettings {
     private void drawColors(HBox playerColorBox) {
         for (String color : colors) {
             VBox colorBox = new VBox();
-            colorBox.setPrefSize(30, 30);
+            colorBox.setPrefSize(GlobalSettings.COLOR_SIZE, GlobalSettings.COLOR_SIZE);
             if (indexPlayers.containsValue(color))
                 colorBox.setStyle("-fx-background-color: #454242;");
             else {
@@ -96,6 +96,7 @@ public class PlayersSettings {
                 colorBox.setOnMouseClicked((e) -> {
                     playersTextBoxes.get(index).setStyle("-fx-background-color: #" + color + ";");
                     indexPlayers.put(index, color);
+                    nextStep.setDisable(false);
                     for (HBox box : colorsBoxes) {
                         box.getChildren().clear();
                         drawColors(box);
@@ -146,6 +147,7 @@ public class PlayersSettings {
                 nextStep.setText("START");
             shuffleColors();
             drawPlayerSettings();
+            nextStep.setDisable(true);
         }
     }
 }
