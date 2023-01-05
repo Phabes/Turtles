@@ -73,4 +73,9 @@
     -fx-border-color: #db43e7;
     -fx-background-color: rgba(0, 255, 128, 0.67);
     -fx-border-width: 1;
+    -fx-alignment: center;
+}
+
+.turtleInfo {
+    -fx-alignment: center;
 }

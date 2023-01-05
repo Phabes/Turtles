@@ -1,12 +1,21 @@
 package Kasztany.Turtles.model.cards;
 
 import Kasztany.Turtles.model.Board;
+import Kasztany.Turtles.settings.GlobalSettings;
+import javafx.scene.layout.HBox;
+import javafx.scene.text.Text;
 
 import java.io.FileNotFoundException;
+import java.util.ArrayList;
 
 public class MoveTurtleInStackCard extends Card {
-    public MoveTurtleInStackCard(Board board, boolean toTop) {
+    private final String color;
+    private final boolean toTop;
+
+    public MoveTurtleInStackCard(Board board, ArrayList<String> availableColors) {
         super(board);
+        this.color = availableColors.get(GlobalSettings.getRandomNumber(0, availableColors.size()));
+        this.toTop = GlobalSettings.getRandomNumber(0, 2) == 0;
         super.setHeader("Move turtle in stack");
 
         try {
@@ -21,6 +30,14 @@ public class MoveTurtleInStackCard extends Card {
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
+    }
+
+    @Override
+    public HBox getInfo() {
+        HBox colorBox = new HBox();
+        colorBox.setMinSize(20, 20);
+        colorBox.setStyle("-fx-background-color: #" + color);
+        return new HBox(new Text("Top " + toTop), colorBox);
     }
 
     @Override

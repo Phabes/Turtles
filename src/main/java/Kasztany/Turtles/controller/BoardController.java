@@ -18,6 +18,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
+import javafx.scene.shape.Shape;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import org.springframework.stereotype.Controller;
@@ -95,12 +96,11 @@ public class BoardController {
         cardsBox.getChildren().clear();
         for (Card card : cards) {
             Text header = new Text(card.getHeader());
-            Text additionalInfo = new Text(card.getAdditionalInfo());
-
+            HBox info = card.getInfo();
+            info.getStyleClass().add("turtleInfo");
             card.getIcon().setSize(GlobalSettings.CARD_WIDTH / 2);
-            VBox cardBox = new VBox(header, additionalInfo, card.getIcon().getImage());
+            VBox cardBox = new VBox(header, info, card.getIcon().getImage());
             cardBox.getStyleClass().add("card");
-            cardBox.setAlignment(Pos.CENTER);
             cardBox.setMinSize(GlobalSettings.CARD_WIDTH, GlobalSettings.CARD_HEIGHT);
             cardsBox.getChildren().add(cardBox);
         }
@@ -283,12 +283,12 @@ public class BoardController {
             setMoveButtonColor("454242");
             board.changeTurn();
             drawCards(board.getCurrentPlayer().getCards());
+//            handleShowClick(event);
         }
     }
 
     @FXML
     public void handleShowClick(ActionEvent event) throws IOException {
-//        Turtle winner = board.findWinner();
         Player currentPlayer = board.getCurrentPlayer();
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/PlayerData.fxml"));
         Parent root = loader.load();

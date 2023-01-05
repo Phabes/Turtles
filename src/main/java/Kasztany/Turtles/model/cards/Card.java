@@ -4,6 +4,8 @@ import Kasztany.Turtles.gui.ImageBoxElement;
 import Kasztany.Turtles.model.Board;
 import Kasztany.Turtles.model.Direction;
 import Kasztany.Turtles.model.Field;
+import javafx.scene.layout.HBox;
+import javafx.scene.text.Text;
 
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
@@ -18,7 +20,6 @@ public abstract class Card {
 
     public Card(Board board) {
         this.board = board;
-
     }
 
     public void doTask() {
@@ -78,4 +79,7 @@ public abstract class Card {
         return icon;
     }
 
+    public HBox getInfo(){
+        return new HBox(new Text(additionalInfo));
+    }
 }

@@ -4,6 +4,7 @@ import Kasztany.Turtles.model.cards.*;
 import Kasztany.Turtles.parser.MapParser;
 import Kasztany.Turtles.persistence.GameLog;
 import Kasztany.Turtles.persistence.GameLogRepository;
+import Kasztany.Turtles.settings.GlobalSettings;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
@@ -34,22 +35,17 @@ public class Board {
         this.turn = new Turn(turtles);
     }
 
-    private int getRandomNumber(int min, int max) {
-        return (int) ((Math.random() * (max - min)) + min);
-    }
-
-    public void createCards(int total) {
+    public void createCards(int total, ArrayList<String> availableColors) {
         for (int i = 0; i < total; i++) {
-            int number = getRandomNumber(0, 5);
-            System.out.println(number);
+            int number = GlobalSettings.getRandomNumber(0, 5);
             if (number == 0)
-                availableCards.add(new ChoosedMoveCard(this, 2, true));
+                availableCards.add(new ChoosedMoveCard(this));
             if (number == 1)
-                availableCards.add(new ColorBasedMoveCard(this, 2, true, "red"));
+                availableCards.add(new ColorBasedMoveCard(this, availableColors));
             if (number == 2)
-                availableCards.add(new LastTurtleMoveCard(this, 2));
+                availableCards.add(new LastTurtleMoveCard(this));
             if (number == 3)
-                availableCards.add(new MoveTurtleInStackCard(this, true));
+                availableCards.add(new MoveTurtleInStackCard(this, availableColors));
             if (number == 4)
                 availableCards.add(new SwapTurtlesInStackCard(this));
         }
@@ -100,21 +96,20 @@ public class Board {
         for (int key : players.keySet()) {
             turtles.add(new Turtle(players.get(key).get(0), players.get(key).get(1), neighbourhood.getFieldByVector(startVector)));
         }
-
+        ArrayList<String> availableColors = new ArrayList<>();
         for (Turtle turtle : turtles) {
             startField.addTurtle(turtle);
+            availableColors.add(turtle.getColor());
         }
-        createCards((turtles.size() + 6) * 5);
+        createCards((turtles.size() + 6) * 5, availableColors);
         handCardsToPlayers();
     }
 
     private void handCardsToPlayers() {
-        System.out.println(availableCards.size());
         for (int i = 0; i < 5 * turtles.size(); i++) {
             Turtle turtle = turtles.get(i % turtles.size());
             turtle.addPlayerCard(availableCards.remove(i));
         }
-        System.out.println(availableCards.size());
     }
 
     public Neighbourhood getNeighbourhood() {
