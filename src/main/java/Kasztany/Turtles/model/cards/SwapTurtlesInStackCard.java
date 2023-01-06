@@ -1,15 +1,19 @@
 package Kasztany.Turtles.model.cards;
 
 import Kasztany.Turtles.model.Board;
+import Kasztany.Turtles.model.Field;
+import Kasztany.Turtles.model.Turtle;
 import javafx.scene.layout.HBox;
 import javafx.scene.text.Text;
 
 import java.io.FileNotFoundException;
+import java.util.ArrayDeque;
 
 public class SwapTurtlesInStackCard extends Card {
     public SwapTurtlesInStackCard(Board board) {
         super(board);
         super.setHeader("Swap turtles in stack");
+        super.setNumberOfTurtlesRequired(2);
         super.setAdditionalInfo("");
         try {
             super.setIcon("atom-variant.png");
@@ -24,7 +28,8 @@ public class SwapTurtlesInStackCard extends Card {
     }
 
     @Override
-    public void doTask() {
-
+    public boolean doTask(ArrayDeque<Turtle> choosedTurtles, Field choosedField) {
+        System.out.println("Did sth");
+        return true;
     }
 }

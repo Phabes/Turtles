@@ -1,11 +1,14 @@
 package Kasztany.Turtles.model.cards;
 
 import Kasztany.Turtles.model.Board;
+import Kasztany.Turtles.model.Field;
+import Kasztany.Turtles.model.Turtle;
 import Kasztany.Turtles.settings.GlobalSettings;
 import javafx.scene.layout.HBox;
 import javafx.scene.text.Text;
 
 import java.io.FileNotFoundException;
+import java.util.ArrayDeque;
 import java.util.ArrayList;
 
 public class MoveTurtleInStackCard extends Card {
@@ -16,6 +19,7 @@ public class MoveTurtleInStackCard extends Card {
         super(board);
         this.color = availableColors.get(GlobalSettings.getRandomNumber(0, availableColors.size()));
         this.toTop = GlobalSettings.getRandomNumber(0, 2) == 0;
+        super.setNumberOfTurtlesRequired(1);
         super.setHeader("Move turtle in stack");
 
         try {
@@ -41,7 +45,8 @@ public class MoveTurtleInStackCard extends Card {
     }
 
     @Override
-    public void doTask() {
-
+    public boolean doTask(ArrayDeque<Turtle> choosedTurtles, Field choosedField) {
+        System.out.println("Did sth");
+        return true;
     }
 }

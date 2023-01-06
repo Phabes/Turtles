@@ -17,6 +17,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.shape.Shape;
 import javafx.scene.text.Text;
@@ -26,6 +27,7 @@ import org.springframework.stereotype.Controller;
 import java.awt.*;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Collections;
 
@@ -45,9 +47,13 @@ public class BoardController {
     private GridPane boardGrid;
     @FXML
     private Button moveButton;
+    @FXML
+    private Text informationText;
+
     private final ArrayList<Field> possibleFields = new ArrayList<>();
-    private Turtle choosedTurtle = null;
+    private ArrayDeque<Turtle> choosedTurtles = new ArrayDeque<>();
     private Field choosedField = null;
+    private Card choosedCard = null;
     private Field endField = null;
 
     public BoardController() throws FileNotFoundException {
@@ -62,6 +68,7 @@ public class BoardController {
         cardsBox.setPrefSize(GlobalSettings.GRID_WIDTH, GlobalSettings.CARD_HEIGHT);
         cardsBox.setAlignment(Pos.CENTER);
         boardGrid.setPrefSize(GlobalSettings.GRID_WIDTH, GlobalSettings.GRID_HEIGHT);
+        informationText.setText("Choose Card");
     }
 
     @FXML
@@ -73,6 +80,8 @@ public class BoardController {
             VBox turtleBox = new VBox(drawTurtle(GlobalSettings.HEADER_TURTLE_SIZE, turtle.getColor()));
             turtleBox.setOnMouseClicked((e) -> turtleClick(turtle));
             turtleBox.setOnMouseEntered((e) -> turtleBox.setCursor(Cursor.HAND));
+            turtleBox.setId(turtle.getColor());
+            turtleBox.setAlignment(Pos.CENTER);
             playersBox.getChildren().add(turtleBox);
         });
 
@@ -88,7 +97,6 @@ public class BoardController {
             boardGrid.getRowConstraints().add(new RowConstraints(50, prefSize, 200));
         }
         drawBoard();
-//        drawCards(board.getAvailableCards());
         drawCards(board.getCurrentPlayer().getCards());
     }
 
@@ -102,81 +110,107 @@ public class BoardController {
             VBox cardBox = new VBox(header, info, card.getIcon().getImage());
             cardBox.getStyleClass().add("card");
             cardBox.setMinSize(GlobalSettings.CARD_WIDTH, GlobalSettings.CARD_HEIGHT);
+            cardBox.setOnMouseClicked((e) -> {
+
+                cardsBox.getChildren().forEach(child -> {
+                    child.setStyle("-fx-border-color: #db43e7");
+                });
+                cardBox.setStyle("-fx-border-color: red");
+
+
+                choosedCard = card;
+                choosedTurtles.clear();
+
+                clearBoard();
+                drawBoard();
+                if (choosedCard.getNumberOfTurtlesRequired() == 0) {
+                    choosedTurtles.addAll(choosedCard.getTurtles());
+                    highlightTurtles();
+                }
+                if (choosedCard.isFieldRequired()) {
+                    choosedTurtles.forEach(turtle -> {
+                        possibleFields.addAll(choosedCard.getFieldsToHighlight(turtle));
+                    });
+                    highlightPossibleFields();
+                }
+
+            });
             cardsBox.getChildren().add(cardBox);
         }
     }
 
-    private void turtleClick(Turtle turtle) {
-        if (!board.isGameEnd()) {
-            Field field = turtle.getCurrentField();
-            for (Field possibleField : possibleFields) {
-                Node boardField = boardGrid.lookup("#" + possibleField.getId());
-                boardField.getStyleClass().clear();
-                boardField.getStyleClass().add("regularField");
-
-            }
-            if (choosedField != null) {
-                Node lastChoosenField = boardGrid.lookup("#" + choosedField.getId());
-                lastChoosenField.getStyleClass().clear();
-                lastChoosenField.getStyleClass().add("regularField");
-            }
-            choosedField = null;
-            possibleFields.clear();
-            moveButton.setDisable(true);
-//            highlightPossibleFieldsToMove(field, 2, true);
-//            highlightPossibleFieldsToMove(field, 1, false);
-            highlightPossibleFieldsToMove(field, 1, true);
-            for (Field possibleField : possibleFields) {
-                Node boardField = boardGrid.lookup("#" + possibleField.getId());
-                boardField.getStyleClass().clear();
-                boardField.getStyleClass().add("possibleField");
-
-                boardField.setOnMouseClicked((e) -> {
-                    if (choosedField != null) {
-                        Node lastChoosenField = boardGrid.lookup("#" + choosedField.getId());
-                        lastChoosenField.getStyleClass().clear();
-                        lastChoosenField.getStyleClass().add("regularField");
-                    }
-                    boardField.getStyleClass().clear();
-                    boardField.getStyleClass().add("choosedField");
-                    choosedField = possibleField;
-                    moveButton.setDisable(false);
-                });
-            }
-
-            choosedTurtle = turtle;
-            setMoveButtonColor(turtle.getColor());
-        }
-    }
-
-    private void highlightPossibleFieldsToMove(Field firstField, int steps, boolean moveForward) {
-//        ArrayList<Field> possibleFields=new ArrayList<>();
-        ArrayList<Field> fieldsToCheck = new ArrayList<>();
-        ArrayList<Field> nextFieldsToCheck = new ArrayList<>();
-        fieldsToCheck.add(firstField);
-        for (int i = 0; i < steps; i++) {
-            for (Field field : fieldsToCheck) {
-                ArrayList<Direction> possibleDirections;
-                if (moveForward)
-                    possibleDirections = field.getPossibleForwardDirections();
-                else
-                    possibleDirections = field.getPossibleBackwardDirections();
-                for (Direction direction : possibleDirections) {
-                    Field nextField = board.getFieldForTurtleMove(field.getPosition(), direction);
-                    if (nextField != null) {
-                        if (i == steps - 1) {
-                            possibleFields.add(nextField);
-                        } else {
-                            nextFieldsToCheck.add(nextField);
-                        }
-                    }
+    private void highlightTurtles() {
+        playersBox.getChildren().forEach(turtleBox -> {
+            if (turtleBox instanceof VBox)
+                turtleBox.getStyleClass().clear();
+            choosedTurtles.forEach(choosedTurtle -> {
+                if (choosedTurtle.getColor().equals(turtleBox.getId())) {
+                    turtleBox.getStyleClass().clear();
+                    turtleBox.getStyleClass().add("choosedTurtle");
                 }
-            }
-            Collections.copy(fieldsToCheck, nextFieldsToCheck);
-            nextFieldsToCheck.clear();
-        }
-//        return possibleFields;
+            });
+        });
     }
+
+    private void clearBoard() {
+
+        choosedField = null;
+        for (Field possibleField : possibleFields) {
+            Node boardField = boardGrid.lookup("#" + possibleField.getId());
+            boardField.getStyleClass().clear();
+            boardField.getStyleClass().add("regularField");
+        }
+        possibleFields.clear();
+
+        playersBox.getChildren().forEach(turtleBox -> {
+            if (turtleBox instanceof VBox)
+                turtleBox.getStyleClass().clear();
+        });
+        moveButton.setDisable(true);
+    }
+
+    private void turtleClick(Turtle turtle) {
+        if (board.isGameEnd() || choosedCard == null || choosedCard.getNumberOfTurtlesRequired() == 0)
+            return;
+
+        if (choosedTurtles.contains(turtle))
+            return;
+        if (choosedTurtles.size() < choosedCard.getNumberOfTurtlesRequired())
+            choosedTurtles.add(turtle);
+        else if (choosedTurtles.size() == choosedCard.getNumberOfTurtlesRequired()) {
+            choosedTurtles.poll();
+            choosedTurtles.add(turtle);
+        }
+        clearBoard();
+        highlightTurtles();
+        if (choosedCard.isFieldRequired()) {
+            choosedTurtles.forEach(choosedTurtle -> {
+                possibleFields.addAll(choosedCard.getFieldsToHighlight(choosedTurtle));
+            });
+            highlightPossibleFields();
+        }
+    }
+
+    private void highlightPossibleFields() {
+        for (Field possibleField : possibleFields) {
+            Node boardField = boardGrid.lookup("#" + possibleField.getId());
+            boardField.getStyleClass().clear();
+            boardField.getStyleClass().add("possibleField");
+
+            boardField.setOnMouseClicked((e) -> {
+                if (choosedField != null) {
+                    Node lastChoosenField = boardGrid.lookup("#" + choosedField.getId());
+                    lastChoosenField.getStyleClass().clear();
+                    lastChoosenField.getStyleClass().add("possibleField");
+                }
+                boardField.getStyleClass().clear();
+                boardField.getStyleClass().add("choosedField");
+                choosedField = possibleField;
+                moveButton.setDisable(false);
+            });
+        }
+    }
+
 
     private HBox drawTurtle(double size, String color) {
         HBox shell = new HBox();
@@ -207,7 +241,7 @@ public class BoardController {
     }
 
     private void drawBoard() {
-        Platform.runLater(() -> {
+//        Platform.runLater(() -> {
             boardGrid.getChildren().clear();
             Vector2d maxVector = board.getMaxVector();
             double size = Math.max(GlobalSettings.GRID_WIDTH / (maxVector.x() + 1), GlobalSettings.MIN_TURTLE_SIZE);
@@ -237,7 +271,7 @@ public class BoardController {
                 boardGrid.add(fieldBox, field.getPosition().x(), maxVector.y() - field.getPosition().y());
             }
             boardGrid.setAlignment(Pos.CENTER);
-        });
+//        });
     }
 
     private void setMoveButtonColor(String color) {
@@ -267,24 +301,23 @@ public class BoardController {
 
     @FXML
     public void handleMoveClick(ActionEvent event) throws IOException {
-        if (choosedTurtle != null && choosedField != null) {
-            Field nextTurtleField = choosedField;
-            choosedTurtle.move(nextTurtleField);
-            if (nextTurtleField.getFruit().isPresent()) {
-                choosedTurtle.eat(nextTurtleField.getFruit().get());
-                nextTurtleField.deleteFruit();
-            }
-            if (board.isGameEnd()) {
-                showEndView(event);
-            }
+
+        if(choosedCard.doTask(choosedTurtles, choosedField)){
+
+            board.changeTurn();
+            clearBoard();
+            choosedTurtles.clear();
+            drawCards(board.getCurrentPlayer().getCards());
             drawBoard();
-            choosedTurtle = null;
             moveButton.setDisable(true);
             setMoveButtonColor("454242");
-            board.changeTurn();
-            drawCards(board.getCurrentPlayer().getCards());
-//            handleShowClick(event);
+
+        }else{
+                System.out.println("ERROR ");
         }
+
+
+        informationText.setText("Choose Card");
     }
 
     @FXML

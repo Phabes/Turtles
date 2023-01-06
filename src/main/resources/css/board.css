@@ -23,6 +23,9 @@
     -fx-border-width: 3;
     -fx-border-style: solid;
 }
+#informationText{
+    -fx-font-size: 25;
+}
 
 .field {
     -fx-border-color: #AAAAAA;
@@ -38,7 +41,12 @@
     -fx-border-insets: 1;
     -fx-background-color: #f4f4f4;
 }
-
+.choosedTurtle{
+    -fx-padding: 4;
+    -fx-border-width: 2;
+    -fx-border-radius:3;
+    -fx-border-color: #00FFFF;
+}
 .possibleField {
     -fx-border-color: #AAAAAA;
     -fx-border-width: 1;
@@ -72,7 +80,7 @@
 .card {
     -fx-border-color: #db43e7;
     -fx-background-color: rgba(0, 255, 128, 0.67);
-    -fx-border-width: 1;
+    -fx-border-width: 2;
     -fx-alignment: center;
 }
 
