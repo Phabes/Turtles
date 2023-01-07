@@ -35,35 +35,6 @@ public class LastTurtleMoveCard extends Card {
     }
 
 
-    public ArrayList<Turtle> getLastTurtles() {
-
-        ArrayList<Field> fieldsToCheck = new ArrayList<>();
-        ArrayList<Field> nextFieldsToCheck = new ArrayList<>();
-
-        ArrayList<Turtle> lastTurtles = new ArrayList<>();
-        fieldsToCheck.add(board.getStartingField());
-
-        while(lastTurtles.isEmpty()) {
-            for (Field field : fieldsToCheck) {
-                ArrayList<Direction> possibleDirections;
-                possibleDirections = field.getPossibleForwardDirections();
-                for (Direction direction : possibleDirections) {
-                    Field nextField = board.getFieldForTurtleMove(field.getPosition(), direction);
-                    if (nextField != null) {
-                        if (nextField.hasTurtle()) {
-                            lastTurtles.addAll(nextField.getTurtles());
-                        } else {
-                            nextFieldsToCheck.add(nextField);
-                        }
-                    }
-                }
-            }
-            Collections.copy(fieldsToCheck, nextFieldsToCheck);
-            nextFieldsToCheck.clear();
-        }
-        return lastTurtles;
-    }
-
     public boolean doTask(ArrayDeque<Turtle> choosedTurtles, Field choosedField) {
         System.out.println("Did sth");
         return true;

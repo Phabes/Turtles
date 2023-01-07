@@ -10,6 +10,7 @@ import javafx.scene.text.Text;
 import java.io.FileNotFoundException;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
+import java.util.Optional;
 
 public class MoveTurtleInStackCard extends Card {
     private final String color;
@@ -50,11 +51,17 @@ public class MoveTurtleInStackCard extends Card {
         if(choosedTurtles.size()!=1)
             return false;
 
-        Turtle turtle = choosedTurtles.poll();
+        Optional<Turtle> optionalTurtle = super.board.getTurtleWithColor(color);
+        Turtle turtle = optionalTurtle.orElse(null);
+        if(turtle == null){
+            return false;
+        }
+        Field field = turtle.getCurrentField();
+
         if(this.toTop){
-            return choosedField.moveTurtleTop(turtle);
+            return field.moveTurtleTop(turtle);
         }else{
-            return choosedField.moveTurtleDown(turtle);
+            return field.moveTurtleDown(turtle);
         }
     }
 }

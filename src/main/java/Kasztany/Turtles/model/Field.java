@@ -135,10 +135,9 @@ public class Field {
     }
 
     public boolean swapTurtles(Turtle turtle1, Turtle turtle2){
-        int indexTurtle1 = this.turtles.indexOf(turtle1);
-        int indexTurtle2 = this.turtles.indexOf(turtle2);
-
         if(this.turtles.contains(turtle1) && this.turtles.contains(turtle2)){
+            int indexTurtle1 = this.turtles.indexOf(turtle1);
+            int indexTurtle2 = this.turtles.indexOf(turtle2);
             this.turtles.remove(turtle1);
             this.turtles.add(indexTurtle2, turtle1);
             this.turtles.remove(turtle2);
