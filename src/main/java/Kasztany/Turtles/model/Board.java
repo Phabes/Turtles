@@ -173,4 +173,13 @@ public class Board {
     public Boolean isGameEnd() {
         return lastField.hasTurtle();
     }
+
+    public Optional<Turtle> getTurtleWithColor(String color){
+        for(Turtle turtle: this.turtles){
+            if(turtle.getColor().equals(color)){
+                return Optional.of(turtle);
+            }
+        }
+        return Optional.empty();
+    }
 }

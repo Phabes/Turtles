@@ -1,6 +1,7 @@
 package Kasztany.Turtles.model.cards;
 
 import Kasztany.Turtles.model.Board;
+import Kasztany.Turtles.model.Field;
 import Kasztany.Turtles.model.Turtle;
 import Kasztany.Turtles.settings.GlobalSettings;
 import javafx.scene.layout.HBox;
@@ -8,6 +9,7 @@ import javafx.scene.text.Text;
 
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
+import java.util.Optional;
 
 public class ColorBasedMoveCard extends Card {
     private final int steps;
@@ -41,6 +43,13 @@ public class ColorBasedMoveCard extends Card {
 
     @Override
     public void doTask() {
+        Optional<Turtle> optionalTurtleToMove = board.getTurtleWithColor(color);
+        Turtle turtleToMove;
+        if(optionalTurtleToMove.isPresent()){
+            turtleToMove = optionalTurtleToMove.get();
+            Field currentField = turtleToMove.getCurrentField();
+            ArrayList<Field> possibleFields = this.getPossibleFieldsToMove(currentField, steps, moveForward);
+        }
 
     }
 }

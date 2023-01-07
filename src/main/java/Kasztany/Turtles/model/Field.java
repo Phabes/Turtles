@@ -33,6 +33,10 @@ public class Field {
         return id;
     }
 
+    public LinkedList<Turtle> getTurtles() {
+        return turtles;
+    }
+
     public ArrayList<Direction> getPossibleForwardDirections() {
         return possibleForwardDirections;
     }
@@ -113,5 +117,27 @@ public class Field {
         }
         return connectedTurtles;
     }
+
+    public void moveTurtleDown(Turtle turtle){
+        this.turtles.remove(turtle);
+        this.turtles.addFirst(turtle);
+    }
+
+    public void moveTurtleTop(Turtle turtle){
+        this.turtles.remove(turtle);
+        this.turtles.addLast(turtle);
+    }
+
+    public void swapTurtles(Turtle turtle1, Turtle turtle2){
+        int indexTurtle1 = this.turtles.indexOf(turtle1);
+        int indexTurtle2 = this.turtles.indexOf(turtle2);
+
+        this.turtles.remove(turtle1);
+        this.turtles.add(indexTurtle2, turtle1);
+        this.turtles.remove(turtle2);
+        this.turtles.add(indexTurtle1, turtle2);
+    }
+
+
 
 }

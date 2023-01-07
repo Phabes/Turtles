@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 public abstract class Card {
-    private final Board board;
+    protected final Board board;
     private ImageBoxElement icon;
     private String header;
     private String additionalInfo;
@@ -26,7 +26,7 @@ public abstract class Card {
 
     }
 
-    private ArrayList<Field> getPossibleFieldsToMove(Field firstField, int steps, boolean moveForward) {
+    protected ArrayList<Field> getPossibleFieldsToMove(Field firstField, int steps, boolean moveForward) {
         ArrayList<Field> possibleFields = new ArrayList<>();
         ArrayList<Field> fieldsToCheck = new ArrayList<>();
         ArrayList<Field> nextFieldsToCheck = new ArrayList<>();
