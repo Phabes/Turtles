@@ -117,7 +117,7 @@ public class Board {
     }
 
     public Field getStartingField() {
-        return this.neighbourhood.getFieldByVector(new Vector2d());
+        return startField;
     }
 
     public Field getLastField() {

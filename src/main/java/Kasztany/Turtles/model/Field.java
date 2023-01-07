@@ -118,24 +118,34 @@ public class Field {
         return connectedTurtles;
     }
 
-    public void moveTurtleDown(Turtle turtle){
-        this.turtles.remove(turtle);
-        this.turtles.addFirst(turtle);
+    public boolean moveTurtleDown(Turtle turtle){
+        if(this.turtles.remove(turtle)){
+            this.turtles.addFirst(turtle);
+            return true;
+        }
+        return false;
     }
 
-    public void moveTurtleTop(Turtle turtle){
-        this.turtles.remove(turtle);
-        this.turtles.addLast(turtle);
+    public boolean moveTurtleTop(Turtle turtle){
+        if(this.turtles.remove(turtle)){
+            this.turtles.addLast(turtle);
+            return true;
+        }
+        return false;
     }
 
-    public void swapTurtles(Turtle turtle1, Turtle turtle2){
+    public boolean swapTurtles(Turtle turtle1, Turtle turtle2){
         int indexTurtle1 = this.turtles.indexOf(turtle1);
         int indexTurtle2 = this.turtles.indexOf(turtle2);
 
-        this.turtles.remove(turtle1);
-        this.turtles.add(indexTurtle2, turtle1);
-        this.turtles.remove(turtle2);
-        this.turtles.add(indexTurtle1, turtle2);
+        if(this.turtles.contains(turtle1) && this.turtles.contains(turtle2)){
+            this.turtles.remove(turtle1);
+            this.turtles.add(indexTurtle2, turtle1);
+            this.turtles.remove(turtle2);
+            this.turtles.add(indexTurtle1, turtle2);
+            return true;
+        }
+        return false;
     }
 
 

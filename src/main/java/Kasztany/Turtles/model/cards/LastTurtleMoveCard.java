@@ -9,6 +9,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.text.Text;
 
 import java.io.FileNotFoundException;
+import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Collections;
 
@@ -18,6 +19,7 @@ public class LastTurtleMoveCard extends Card {
     public LastTurtleMoveCard(Board board) {
         super(board);
         this.steps = GlobalSettings.getRandomNumber(1, 3);
+        super.setFieldRequired(true);
         super.setHeader("Move last turtle");
         super.setAdditionalInfo("Steps " + steps);
         try {
@@ -33,7 +35,7 @@ public class LastTurtleMoveCard extends Card {
     }
 
 
-    public ArrayList<Turtle> findLastTurtles() {
+    public ArrayList<Turtle> getLastTurtles() {
 
         ArrayList<Field> fieldsToCheck = new ArrayList<>();
         ArrayList<Field> nextFieldsToCheck = new ArrayList<>();
@@ -62,10 +64,49 @@ public class LastTurtleMoveCard extends Card {
         return lastTurtles;
     }
 
+    public boolean doTask(ArrayDeque<Turtle> choosedTurtles, Field choosedField) {
+        System.out.println("Did sth");
+        return true;
+    }
+    @Override
+    public ArrayList<Turtle> getTurtles(){
+        ArrayList<Turtle> turtles=new ArrayList<>();
+        Turtle lastTurtle=getLastTurtle();
+        if(lastTurtle!=null)
+            turtles.add(lastTurtle);
+        return turtles;
+    }
+
+    private Turtle getLastTurtle(){
+
+        ArrayList<Field> fieldsToCheck = new ArrayList<>();
+        ArrayList<Field> nextFieldsToCheck = new ArrayList<>();
+        fieldsToCheck.add(board.getStartingField());
+
+        while(fieldsToCheck.size()>0){
+            for (Field field : fieldsToCheck) {
+
+                if(field.getBottomTurtle().isPresent())
+                    return field.getBottomTurtle().get();
+                ArrayList<Direction> possibleDirections;
+                possibleDirections = field.getPossibleForwardDirections();
+                for (Direction direction : possibleDirections) {
+                    Field nextField = board.getFieldForTurtleMove(field.getPosition(), direction);
+                    if (nextField != null) {
+                        nextFieldsToCheck.add(nextField);
+                    }
+                }
+            }
+            Collections.copy(fieldsToCheck, nextFieldsToCheck);
+            nextFieldsToCheck.clear();
+        }
+        return null;
+    }
 
     @Override
-    public void doTask() {
-        ArrayList<Turtle> lastTurtles = this.findLastTurtles();
-
+    public ArrayList<Field> getFieldsToHighlight(Turtle turtle){
+        return super.getPossibleFieldsToMove(turtle, steps,true);
     }
+
+
 }

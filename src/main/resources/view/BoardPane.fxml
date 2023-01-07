@@ -4,6 +4,7 @@
 <?import javafx.scene.layout.*?>
 
 <?import java.net.URL?>
+<?import javafx.scene.text.Text?>
 <VBox xmlns="http://javafx.com/javafx"
       xmlns:fx="http://javafx.com/fxml"
       fx:controller="Kasztany.Turtles.controller.BoardController"
@@ -13,6 +14,10 @@
     <stylesheets>
         <URL value="@/css/board.css"/>
     </stylesheets>
+    <HBox alignment="CENTER">
+        <Text fx:id="informationText"></Text>
+    </HBox>
+
     <HBox fx:id="playersBox">
         <Button text="Show" onAction="#handleShowClick"/>
         <Button fx:id="moveButton" text="Move" onAction="#handleMoveClick" disable="true"/>
