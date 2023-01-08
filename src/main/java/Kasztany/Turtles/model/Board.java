@@ -139,9 +139,19 @@ public class Board {
         return gameLogRepository;
     }
 
-    public void saveGameLog(int winnerIndex) {
+    public void saveGameLog(int winnerIndex, int secondIndex, int thirdIndex) {
         Turtle winner = turtles.get(winnerIndex);
         GameLog gameLog = new GameLog(turtles.size(), neighbourhood.getWholeNeighbourhood().size(), winner.getName(), winner.getPoints());
+        Turtle second, third;
+        if(secondIndex >= 0){
+            second = turtles.get(secondIndex);
+            gameLog.setSecondPlayer(second.getName(), second.getPoints());
+        }
+
+        if(thirdIndex >= 0){
+            third = turtles.get(thirdIndex);
+            gameLog.setThirdPlayer(third.getName(), third.getPoints());
+        }
         gameLogRepository.save(gameLog);
     }
 
@@ -161,10 +171,19 @@ public class Board {
                 winningTurtle = turtle;
             }
         }
-//        Turtle winningTurtle = lastField.getTopTurtle().orElse(null);
-//        if (winningTurtle != null)
-//            winningTurtle.addPoints(winnerPoints);
-        saveGameLog(this.turtles.indexOf(winningTurtle));
+
+        this.turtles.sort(Comparator.comparing(Turtle::getPoints));
+        Collections.reverse(this.turtles);
+
+        if(this.turtles.size() > 1){
+            if(this.turtles.size() > 2){
+                saveGameLog(0, 1, 2);
+            }else{
+                saveGameLog(0, 1, -1);
+            }
+        }else{
+            saveGameLog(0, -1, -1);
+        }
         return winningTurtle;
     }
 

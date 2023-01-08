@@ -75,7 +75,7 @@ class TurtlesApplicationTests {
         board.addTurtlesFromHashMap(players);
         GameLogRepository repository = board.getGameLogRepository();
         long prevRepositoryCount = repository.count();
-        board.saveGameLog(0);
+        board.saveGameLog(0, 2, 1);
         assertEquals(1, repository.count() - prevRepositoryCount);
     }
 

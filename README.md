@@ -48,7 +48,7 @@ Klasa **App** uruchamia pierwszy widok.
 Wczytywanie plików FXML ułatwia klasa **FXMLLoaderProvider**.
 
 ### Persistence
-Zawiera klasy pozwalające na zapis obiektów do bazy danych. W aplikacji zapisywane są logi z podsumowaniem gier po zakończeniu rozgrywki. Zawierają one liczbę graczy oraz pól, pseudonim i ilość punktów zwycięzcy oraz datę. Do reprezentowania logów stworzona została osobna klasa **GameLog.** 
+Zawiera klasy pozwalające na zapis obiektów do bazy danych. W aplikacji zapisywane są logi z podsumowaniem gier po zakończeniu rozgrywki. Zawierają one liczbę graczy oraz pól, pseudonimy i ilość punktów zdobytą przez trzech najlepszych graczy oraz datę. Do reprezentowania logów stworzona została osobna klasa **GameLog.** 
 
 Aby umożliwić zapis do bazy wykorzystany został interfejs **GameLogRepository** rozszerzający JpaRepository ze Spring Boot.
 
