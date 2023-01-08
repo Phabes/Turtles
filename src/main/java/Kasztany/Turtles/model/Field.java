@@ -79,7 +79,7 @@ public class Field {
         if (turtles.isEmpty()) {
             return Optional.empty();
         }
-        return Optional.of(turtles.pollLast());
+        return Optional.of(turtles.peekLast());
     }
 
     public Boolean hasTurtle() {

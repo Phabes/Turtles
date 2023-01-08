@@ -179,4 +179,112 @@ class TurtlesApplicationTests {
 
     }
 
+
+    @Test
+    void changeTurnTest() throws IOException {
+        List<String> playersNames = new ArrayList<>();
+        HashMap<Integer, String> indexPlayers = new HashMap<>();
+        playersNames.add("Player1");
+        playersNames.add("Player2");
+        playersNames.add("Player3");
+        indexPlayers.put(0, "#000000");
+        indexPlayers.put(1, "#000000");
+        indexPlayers.put(2, "#000000");
+
+        HashMap<Integer, List<String>> players = new HashMap<>();
+        for (int i = 0; i < 3; i++) {
+            players.put(i, List.of(playersNames.get(i), indexPlayers.get(i)));
+        }
+
+        Resource resource = new ClassPathResource("/map/maptest");
+        File map = resource.getFile();
+        board.addFields(map);
+        board.addTurtlesFromHashMap(players);
+
+        Player prevPlayer = board.getCurrentPlayer();
+        board.changeTurn();
+        assertNotEquals(prevPlayer, board.getCurrentPlayer());
+
+        board.changeTurn();
+        board.changeTurn();
+        assertEquals(prevPlayer, board.getCurrentPlayer());
+    }
+
+    @Test
+    void swapTurtlesTest(){
+        Field field = new Field(new Vector2d(0, 0));
+        Turtle turtle1 = new Turtle("Player1", "#0000000", field);
+        Turtle turtle2 = new Turtle("Player2", "#0000000", field);
+        Turtle turtle3 = new Turtle("Player3", "#0000000", field);
+        field.addTurtle(turtle1);
+        field.addTurtle(turtle2);
+        field.addTurtle(turtle3);
+
+        int firstTurtleIndex = field.getIndexOfTurtle(turtle1);
+        int thirdTurtleIndex = field.getIndexOfTurtle(turtle3);
+
+        assertTrue(field.swapTurtles(turtle1, turtle3));
+        assertEquals(firstTurtleIndex, field.getIndexOfTurtle(turtle3));
+        assertEquals(thirdTurtleIndex, field.getIndexOfTurtle(turtle1));
+
+        assertTrue(field.swapTurtles(turtle1, turtle3));
+        assertEquals(firstTurtleIndex, field.getIndexOfTurtle(turtle1));
+        assertEquals(thirdTurtleIndex, field.getIndexOfTurtle(turtle3));
+    }
+
+    @Test
+    void moveTurtleInStackTest(){
+        Field field = new Field(new Vector2d(0, 0));
+        Turtle turtle1 = new Turtle("Player1", "#0000000", field);
+        Turtle turtle2 = new Turtle("Player2", "#0000000", field);
+        Turtle turtle3 = new Turtle("Player3", "#0000000", field);
+        field.addTurtle(turtle1);
+        field.addTurtle(turtle2);
+        field.addTurtle(turtle3);
+        assertEquals(field.getTopTurtle().orElse(null), turtle3);
+
+        field.moveTurtleTop(turtle1);
+        assertEquals(field.getTopTurtle().orElse(null), turtle1);
+
+        field.moveTurtleTop(turtle2);
+        assertEquals(field.getTopTurtle().orElse(null), turtle2);
+
+        field.moveTurtleDown(turtle2);
+        assertTrue(field.hasTurtle());
+    }
+
+    @Test
+    void cardsDistributionTest() throws IOException {
+        List<String> playersNames = new ArrayList<>();
+        HashMap<Integer, String> indexPlayers = new HashMap<>();
+        playersNames.add("Player1");
+        playersNames.add("Player2");
+        playersNames.add("Player3");
+        indexPlayers.put(0, "#000000");
+        indexPlayers.put(1, "#000000");
+        indexPlayers.put(2, "#000000");
+
+        HashMap<Integer, List<String>> players = new HashMap<>();
+        for (int i = 0; i < 3; i++) {
+            players.put(i, List.of(playersNames.get(i), indexPlayers.get(i)));
+        }
+
+        Resource resource = new ClassPathResource("/map/maptest");
+        File map = resource.getFile();
+        board.addFields(map);
+        board.addTurtlesFromHashMap(players);
+
+        ArrayList<Turtle> turtles = board.getTurtles();
+        for(Turtle turtle : turtles){
+            assertEquals(turtle.getPlayer().getCards().size(), 5);
+        }
+
+        board.burnCard(board.getCurrentPlayer().getCards().get(0));
+        assertEquals(board.getCurrentPlayer().getCards().size(), 5);
+
+        board.burnCard(board.getCurrentPlayer().getCards().get(4));
+        assertEquals(board.getCurrentPlayer().getCards().size(), 5);
+
+    }
+
 }

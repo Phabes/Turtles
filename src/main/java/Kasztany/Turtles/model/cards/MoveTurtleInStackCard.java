@@ -10,7 +10,7 @@ import javafx.scene.text.Text;
 import java.io.FileNotFoundException;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
-import java.util.Optional;
+
 
 public class MoveTurtleInStackCard extends Card {
     private final String color;
@@ -42,7 +42,13 @@ public class MoveTurtleInStackCard extends Card {
         HBox colorBox = new HBox();
         colorBox.setMinSize(20, 20);
         colorBox.setStyle("-fx-background-color: #" + color);
-        return new HBox(new Text("Top " + toTop), colorBox);
+
+        if(toTop){
+            return new HBox(new Text("Top"), colorBox);
+        }else{
+            return new HBox(new Text("Bottom"), colorBox);
+        }
+
     }
 
     @Override
