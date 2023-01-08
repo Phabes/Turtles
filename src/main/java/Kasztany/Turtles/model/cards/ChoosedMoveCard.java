@@ -34,19 +34,25 @@ public class ChoosedMoveCard extends Card {
     }
 
     @Override
-    public HBox getInfo(){
+    public HBox getInfo() {
         return new HBox(new Text("Steps " + steps));
     }
 
     @Override
     public boolean doTask(ArrayDeque<Turtle> choosedTurtles, Field choosedField) {
-        System.out.println("Did sth");
+//        System.out.println("Did sth");
+        Turtle choosedTurtle = choosedTurtles.poll();
+        assert choosedTurtle != null;
+        choosedTurtle.move(choosedField);
+        if (choosedField.getFruit().isPresent()) {
+            choosedTurtle.eat(choosedField.getFruit().get());
+            choosedField.deleteFruit();
+        }
         return true;
     }
 
     @Override
-    public ArrayList<Field> getFieldsToHighlight(Turtle turtle){
-        return super.getPossibleFieldsToMove(turtle,steps,moveForward);
+    public ArrayList<Field> getFieldsToHighlight(Turtle turtle) {
+        return super.getPossibleFieldsToMove(turtle, steps, moveForward);
     }
-
 }

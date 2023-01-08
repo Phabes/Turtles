@@ -21,6 +21,7 @@ public class ColorBasedMoveCard extends Card {
         super(board);
         this.steps = GlobalSettings.getRandomNumber(1, 3);
         super.setFieldRequired(true);
+        super.setNumberOfTurtlesRequired(1);
         this.moveForward = GlobalSettings.getRandomNumber(0, 2) == 0;
         this.color = availableColors.get(GlobalSettings.getRandomNumber(0, availableColors.size()));
         super.setHeader("Move specific turtle");
@@ -44,29 +45,28 @@ public class ColorBasedMoveCard extends Card {
     }
 
     public boolean doTask(ArrayDeque<Turtle> choosedTurtles, Field choosedField) {
-        if(choosedTurtles.size()!=1)
-            return false;
-        Turtle choosedTurtle=choosedTurtles.poll();
-        if (choosedTurtle != null && choosedField != null) {
-            choosedTurtle.move(choosedField);
-            if (choosedField.getFruit().isPresent()) {
-                choosedTurtle.eat(choosedField.getFruit().get());
-                choosedField.deleteFruit();
-            }
+        Turtle choosedTurtle = choosedTurtles.poll();
+        assert choosedTurtle != null;
+        choosedTurtle.move(choosedField);
+        if (choosedField.getFruit().isPresent()) {
+            choosedTurtle.eat(choosedField.getFruit().get());
+            choosedField.deleteFruit();
         }
         return true;
     }
+
     @Override
-    public  ArrayList<Turtle> getTurtles(){
-        ArrayList<Turtle> turtles=new ArrayList<>();
+    public ArrayList<Turtle> getTurtles() {
+        ArrayList<Turtle> turtles = new ArrayList<>();
         board.getTurtles().forEach(turtle -> {
-            if(turtle.getColor().equals(color))
+            if (turtle.getColor().equals(color))
                 turtles.add(turtle);
         });
         return turtles;
     }
+
     @Override
-    public ArrayList<Field> getFieldsToHighlight(Turtle turtle){
-        return super.getPossibleFieldsToMove(turtle,steps,moveForward);
+    public ArrayList<Field> getFieldsToHighlight(Turtle turtle) {
+        return super.getPossibleFieldsToMove(turtle, steps, moveForward);
     }
 }

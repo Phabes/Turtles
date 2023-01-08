@@ -75,7 +75,7 @@ public class Turtle {
         this.points += points;
     }
 
-    public void addPlayerCard(Card card){
+    public void addPlayerCard(Card card) {
         player.addCard(card);
     }
 }

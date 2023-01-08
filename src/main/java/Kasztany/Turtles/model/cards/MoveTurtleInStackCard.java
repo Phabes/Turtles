@@ -20,7 +20,7 @@ public class MoveTurtleInStackCard extends Card {
         super(board);
         this.color = availableColors.get(GlobalSettings.getRandomNumber(0, availableColors.size()));
         this.toTop = GlobalSettings.getRandomNumber(0, 2) == 0;
-        super.setNumberOfTurtlesRequired(1);
+//        super.setNumberOfTurtlesRequired(1);
         super.setHeader("Move turtle in stack");
 
         try {
@@ -48,9 +48,6 @@ public class MoveTurtleInStackCard extends Card {
     @Override
     public boolean doTask(ArrayDeque<Turtle> choosedTurtles, Field choosedField) {
         //System.out.println("Did sth");
-        if(choosedTurtles.size()!=1)
-            return false;
-
         Optional<Turtle> optionalTurtle = super.board.getTurtleWithColor(color);
         Turtle turtle = optionalTurtle.orElse(null);
         if(turtle == null){

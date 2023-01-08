@@ -18,8 +18,8 @@ public abstract class Card {
     private ImageBoxElement icon;
     private String header;
     private String additionalInfo;
-    private int numberOfTurtlesRequired=0;
-    private boolean fieldRequired=false;
+    private int numberOfTurtlesRequired = 0;
+    private boolean fieldRequired = false;
 
     public Card(Board board) {
         this.board = board;
@@ -53,7 +53,7 @@ public abstract class Card {
         return icon;
     }
 
-    public HBox getInfo(){
+    public HBox getInfo() {
         return new HBox(new Text(additionalInfo));
     }
 
@@ -73,12 +73,12 @@ public abstract class Card {
         this.numberOfTurtlesRequired = numberOfTurtlesRequired;
     }
 
-    public  ArrayList<Turtle> getTurtles(){
+    public ArrayList<Turtle> getTurtles() {
         return new ArrayList<>();
     }
 
-    protected ArrayList<Field>  getPossibleFieldsToMove(Turtle turtle, int steps, boolean moveForward) {
-        ArrayList<Field> possibleFields=new ArrayList<>();
+    protected ArrayList<Field> getPossibleFieldsToMove(Turtle turtle, int steps, boolean moveForward) {
+        ArrayList<Field> possibleFields = new ArrayList<>();
         ArrayList<Field> fieldsToCheck = new ArrayList<>();
         ArrayList<Field> nextFieldsToCheck = new ArrayList<>();
         fieldsToCheck.add(turtle.getCurrentField());
@@ -105,7 +105,25 @@ public abstract class Card {
         }
         return possibleFields;
     }
-    public ArrayList<Field> getFieldsToHighlight(Turtle turtle){
+
+    public ArrayList<Field> getFieldsToHighlight(Turtle turtle) {
         return new ArrayList<>();
+    }
+
+    public boolean validate(Field choosedField, ArrayDeque<Turtle> choosedTurtles){
+//        System.out.println("XDD");
+//        boolean xd = choosedField != null;
+//        System.out.println(choosedTurtles.size()+ " " +numberOfTurtlesRequired + " "+xd);
+        if(choosedTurtles.size() == numberOfTurtlesRequired){
+            if(fieldRequired){
+//                boolean xd = choosedField != null;
+//                System.out.println("VALIDATE " + xd);
+                return choosedField != null;
+            }
+//            System.out.println("VALIDATE TRUE");
+            return true;
+        }
+//        System.out.println("VALIDATE FALSE");
+        return false;
     }
 }

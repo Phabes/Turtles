@@ -37,7 +37,8 @@ public class Board {
 
     public void createCards(int total, ArrayList<String> availableColors) {
         for (int i = 0; i < total; i++) {
-            int number = GlobalSettings.getRandomNumber(0, 5);
+//            int number = GlobalSettings.getRandomNumber(0, 5);
+            int number = GlobalSettings.getRandomNumber(3, 4);
             if (number == 0)
                 availableCards.add(new ChoosedMoveCard(this));
             if (number == 1)

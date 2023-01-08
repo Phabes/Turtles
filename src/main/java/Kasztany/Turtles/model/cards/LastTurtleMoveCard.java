@@ -39,25 +39,26 @@ public class LastTurtleMoveCard extends Card {
         System.out.println("Did sth");
         return true;
     }
+
     @Override
-    public ArrayList<Turtle> getTurtles(){
-        ArrayList<Turtle> turtles=new ArrayList<>();
-        Turtle lastTurtle=getLastTurtle();
-        if(lastTurtle!=null)
+    public ArrayList<Turtle> getTurtles() {
+        ArrayList<Turtle> turtles = new ArrayList<>();
+        Turtle lastTurtle = getLastTurtle();
+        if (lastTurtle != null)
             turtles.add(lastTurtle);
         return turtles;
     }
 
-    private Turtle getLastTurtle(){
+    private Turtle getLastTurtle() {
 
         ArrayList<Field> fieldsToCheck = new ArrayList<>();
         ArrayList<Field> nextFieldsToCheck = new ArrayList<>();
         fieldsToCheck.add(board.getStartingField());
 
-        while(fieldsToCheck.size()>0){
+        while (fieldsToCheck.size() > 0) {
             for (Field field : fieldsToCheck) {
 
-                if(field.getBottomTurtle().isPresent())
+                if (field.getBottomTurtle().isPresent())
                     return field.getBottomTurtle().get();
                 ArrayList<Direction> possibleDirections;
                 possibleDirections = field.getPossibleForwardDirections();
@@ -75,9 +76,7 @@ public class LastTurtleMoveCard extends Card {
     }
 
     @Override
-    public ArrayList<Field> getFieldsToHighlight(Turtle turtle){
-        return super.getPossibleFieldsToMove(turtle, steps,true);
+    public ArrayList<Field> getFieldsToHighlight(Turtle turtle) {
+        return super.getPossibleFieldsToMove(turtle, steps, true);
     }
-
-
 }
