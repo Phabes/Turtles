@@ -12,6 +12,7 @@ import java.io.FileNotFoundException;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 
 public class LastTurtleMoveCard extends Card {
     private final int steps;
@@ -75,9 +76,7 @@ public class LastTurtleMoveCard extends Card {
                     }
                 }
             }
-            Collections.copy(fieldsToCheck, nextFieldsToCheck);
-//            fieldsToCheck.clear();
-//            fieldsToCheck.addAll(nextFieldsToCheck);
+            fieldsToCheck = new ArrayList<Field>(nextFieldsToCheck);
             nextFieldsToCheck.clear();
         }
         return null;

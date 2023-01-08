@@ -100,7 +100,7 @@ public abstract class Card {
                     }
                 }
             }
-            Collections.copy(fieldsToCheck, nextFieldsToCheck);
+            fieldsToCheck = new ArrayList<Field>(nextFieldsToCheck);
             nextFieldsToCheck.clear();
         }
         return possibleFields;
