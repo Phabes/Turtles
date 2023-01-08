@@ -111,19 +111,11 @@ public abstract class Card {
     }
 
     public boolean validate(Field choosedField, ArrayDeque<Turtle> choosedTurtles){
-//        System.out.println("XDD");
-//        boolean xd = choosedField != null;
-//        System.out.println(choosedTurtles.size()+ " " +numberOfTurtlesRequired + " "+xd);
         if(choosedTurtles.size() == numberOfTurtlesRequired){
-            if(fieldRequired){
-//                boolean xd = choosedField != null;
-//                System.out.println("VALIDATE " + xd);
+            if(fieldRequired)
                 return choosedField != null;
-            }
-//            System.out.println("VALIDATE TRUE");
             return true;
         }
-//        System.out.println("VALIDATE FALSE");
         return false;
     }
 

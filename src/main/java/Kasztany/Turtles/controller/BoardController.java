@@ -131,7 +131,6 @@ public class BoardController {
         }
         possibleFields.clear();
         highlightTurtles();
-//        moveButton.setDisable(true);
     }
 
     private void highlightPossibleFields() {
@@ -324,6 +323,5 @@ public class BoardController {
         choosedField = possibleField;
 
         moveButton.setDisable(!choosedCard.validate(choosedField, choosedTurtles));
-//        moveButton.setDisable(false);
     }
 }
