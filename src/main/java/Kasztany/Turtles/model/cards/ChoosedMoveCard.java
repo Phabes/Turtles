@@ -40,7 +40,6 @@ public class ChoosedMoveCard extends Card {
 
     @Override
     public boolean doTask(ArrayDeque<Turtle> choosedTurtles, Field choosedField) {
-//        System.out.println("Did sth");
         Turtle choosedTurtle = choosedTurtles.poll();
         assert choosedTurtle != null;
         choosedTurtle.move(choosedField);

@@ -69,4 +69,9 @@ public class ColorBasedMoveCard extends Card {
     public ArrayList<Field> getFieldsToHighlight(Turtle turtle) {
         return super.getPossibleFieldsToMove(turtle, steps, moveForward);
     }
+
+    @Override
+    public boolean changeTurtleDisabled() {
+        return true;
+    }
 }

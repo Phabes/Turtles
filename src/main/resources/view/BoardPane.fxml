@@ -17,7 +17,6 @@
     <HBox alignment="CENTER">
         <Text fx:id="informationText"/>
     </HBox>
-
     <HBox fx:id="playersBox">
         <Button text="Show" onAction="#handleShowClick"/>
         <Button fx:id="moveButton" text="Move" onAction="#handleMoveClick" disable="true"/>

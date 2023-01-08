@@ -21,10 +21,8 @@ public class Board {
     private Field lastField;
     private Field startField;
     private final GameLogRepository gameLogRepository;
-
     private final ArrayList<Card> availableCards = new ArrayList<>();
     private final ArrayList<Card> usedCards = new ArrayList<>();
-
     private final Turn turn;
 
 
@@ -37,8 +35,7 @@ public class Board {
 
     public void createCards(int total, ArrayList<String> availableColors) {
         for (int i = 0; i < total; i++) {
-//            int number = GlobalSettings.getRandomNumber(0, 5);
-            int number = GlobalSettings.getRandomNumber(3, 4);
+            int number = GlobalSettings.getRandomNumber(0, 5);
             if (number == 0)
                 availableCards.add(new ChoosedMoveCard(this));
             if (number == 1)
@@ -102,12 +99,12 @@ public class Board {
             startField.addTurtle(turtle);
             availableColors.add(turtle.getColor());
         }
-        createCards((turtles.size() + 6) * 5, availableColors);
+        createCards(turtles.size() * 5 + 1, availableColors);
         handCardsToPlayers();
     }
 
     private void handCardsToPlayers() {
-        for (int i = 0; i < 5 * turtles.size(); i++) {
+        for (int i = turtles.size() * 5 - 1; i >= 0; i--) {
             Turtle turtle = turtles.get(i % turtles.size());
             turtle.addPlayerCard(availableCards.remove(i));
         }
@@ -182,5 +179,18 @@ public class Board {
             }
         }
         return Optional.empty();
+    }
+
+    public void burnCard(Card choosedCard) {
+        Player currentPlayer = getCurrentPlayer();
+        currentPlayer.removeCard(choosedCard);
+        if(availableCards.size() == 0){
+            ArrayList<String> colors = new ArrayList<>();
+            for(Turtle turtle: turtles){
+                colors.add(turtle.getColor());
+            }
+            createCards(30, colors);
+        }
+        currentPlayer.addCard(availableCards.remove(0));
     }
 }

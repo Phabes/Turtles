@@ -30,7 +30,6 @@ public class SwapTurtlesInStackCard extends Card {
 
     @Override
     public boolean doTask(ArrayDeque<Turtle> choosedTurtles, Field choosedField) {
-        //System.out.println("Did sth");
         Turtle turtle1 = choosedTurtles.poll();
         Turtle turtle2 = choosedTurtles.poll();
         assert turtle1 != null;

@@ -126,4 +126,8 @@ public abstract class Card {
 //        System.out.println("VALIDATE FALSE");
         return false;
     }
+
+    public boolean changeTurtleDisabled() {
+        return false;
+    }
 }

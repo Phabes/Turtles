@@ -19,8 +19,8 @@ public class MoveTurtleInStackCard extends Card {
     public MoveTurtleInStackCard(Board board, ArrayList<String> availableColors) {
         super(board);
         this.color = availableColors.get(GlobalSettings.getRandomNumber(0, availableColors.size()));
+        super.setNumberOfTurtlesRequired(1);
         this.toTop = GlobalSettings.getRandomNumber(0, 2) == 0;
-//        super.setNumberOfTurtlesRequired(1);
         super.setHeader("Move turtle in stack");
 
         try {
@@ -47,18 +47,34 @@ public class MoveTurtleInStackCard extends Card {
 
     @Override
     public boolean doTask(ArrayDeque<Turtle> choosedTurtles, Field choosedField) {
-        //System.out.println("Did sth");
-        Optional<Turtle> optionalTurtle = super.board.getTurtleWithColor(color);
-        Turtle turtle = optionalTurtle.orElse(null);
-        if(turtle == null){
-            return false;
-        }
-        Field field = turtle.getCurrentField();
+//        Optional<Turtle> optionalTurtle = super.board.getTurtleWithColor(color);
+//        Turtle turtle = optionalTurtle.orElse(null);
+//        if(turtle == null){
+//            return false;
+//        }
+        Turtle choosedTurtle = choosedTurtles.poll();
+        assert choosedTurtle != null;
+        Field field = choosedTurtle.getCurrentField();
 
         if(this.toTop){
-            return field.moveTurtleTop(turtle);
+            return field.moveTurtleTop(choosedTurtle);
         }else{
-            return field.moveTurtleDown(turtle);
+            return field.moveTurtleDown(choosedTurtle);
         }
+    }
+
+    @Override
+    public ArrayList<Turtle> getTurtles() {
+        ArrayList<Turtle> turtles = new ArrayList<>();
+        board.getTurtles().forEach(turtle -> {
+            if (turtle.getColor().equals(color))
+                turtles.add(turtle);
+        });
+        return turtles;
+    }
+
+    @Override
+    public boolean changeTurtleDisabled() {
+        return true;
     }
 }
