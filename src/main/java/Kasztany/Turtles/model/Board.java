@@ -101,6 +101,7 @@ public class Board {
         }
         createCards(turtles.size() * 5 + 1, availableColors);
         handCardsToPlayers();
+        changeTurn();
     }
 
     private void handCardsToPlayers() {
@@ -211,5 +212,9 @@ public class Board {
             createCards(30, colors);
         }
         currentPlayer.addCard(availableCards.remove(0));
+    }
+
+    public Turn getTurn() {
+        return turn;
     }
 }

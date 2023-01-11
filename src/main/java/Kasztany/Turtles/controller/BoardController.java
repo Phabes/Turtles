@@ -47,8 +47,12 @@ public class BoardController {
     private Field choosedField = null;
     private Card choosedCard = null;
     private Field endField = null;
+    private final FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/PlayerData.fxml"));
+    private final Scene playerDataScene;
 
-    public BoardController() throws FileNotFoundException {
+    public BoardController() throws IOException {
+        Parent root = loader.load();
+        playerDataScene = new Scene(root);
     }
 
     @FXML
@@ -63,8 +67,10 @@ public class BoardController {
     }
 
     @FXML
-    public void receiveData(Board receivedBoard) {
+    public void receiveData(Board receivedBoard) throws IOException {
         board = receivedBoard;
+        PlayerData playerData = loader.getController();
+        playerData.bind(board.getTurn());
         endField = board.getLastField();
         playersBox.setSpacing(GlobalSettings.GRID_WIDTH / board.getTurtles().size() - (GlobalSettings.BOARD_HEIGHT - GlobalSettings.GRID_HEIGHT));
         board.getTurtles().forEach(turtle -> {
@@ -137,7 +143,12 @@ public class BoardController {
         for (Field possibleField : possibleFields) {
             Node boardField = boardGrid.lookup("#" + possibleField.getId());
             boardField.getStyleClass().clear();
-            boardField.getStyleClass().add("possibleField");
+            if (possibleFields.size() != 1)
+                boardField.getStyleClass().add("possibleField");
+            else {
+                boardField.getStyleClass().add("choosedField");
+                choosedField = possibleField;
+            }
 
             boardField.setOnMouseClicked((e) -> fieldClick(possibleField, boardField));
         }
@@ -253,16 +264,10 @@ public class BoardController {
     }
 
     @FXML
-    public void handleShowClick(ActionEvent event) throws IOException {
-        Player currentPlayer = board.getCurrentPlayer();
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/PlayerData.fxml"));
-        Parent root = loader.load();
-        PlayerData playerData = loader.getController();
-        playerData.reveiceData(currentPlayer);
-        Scene scene = new Scene(root);
+    public void handleShowClick(ActionEvent event) {
         Stage stage = new Stage();
         stage.setTitle("Player Data");
-        stage.setScene(scene);
+        stage.setScene(playerDataScene);
         stage.show();
         GlobalSettings.setScreenInTheMiddle(stage);
     }

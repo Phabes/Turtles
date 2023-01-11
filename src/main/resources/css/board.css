@@ -101,3 +101,7 @@
     -fx-alignment: center;
     -fx-cursor: hand;
 }
+
+#playerColor{
+    -fx-pref-height: 30;
+}
