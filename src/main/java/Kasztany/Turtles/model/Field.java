@@ -9,10 +9,10 @@ public class Field {
     private final String id;
     private final Vector2d position;
 
-    private LinkedList<Turtle> turtles;
+    private final LinkedList<Turtle> turtles;
     private Optional<Fruit> fruit;
-    private ArrayList<Direction> possibleForwardDirections = new ArrayList<>();
-    private ArrayList<Direction> possibleBackwardDirections = new ArrayList<>();
+    private final ArrayList<Direction> possibleForwardDirections = new ArrayList<>();
+    private final ArrayList<Direction> possibleBackwardDirections = new ArrayList<>();
 
     public Field(Vector2d position) {
         this.id = "field-" + position.x() + "-" + position.y();
