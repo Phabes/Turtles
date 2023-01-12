@@ -20,7 +20,6 @@ public class ChoosedMoveCard extends Card {
         this.steps = GlobalSettings.getRandomNumber(1, 3);
         this.moveForward = GlobalSettings.getRandomNumber(0, 2) == 0;
         super.setFieldRequired(true);
-        super.setNumberOfTurtlesRequired(1);
         super.setHeader("Choose any turtle");
         super.setAdditionalInfo("Steps " + steps);
         try {

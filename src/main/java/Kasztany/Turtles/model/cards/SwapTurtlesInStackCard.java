@@ -15,7 +15,7 @@ public class SwapTurtlesInStackCard extends Card {
         super(board);
         super.setHeader("Swap turtles in stack");
         super.setNumberOfTurtlesRequired(2);
-        super.setAdditionalInfo("");
+        super.setAdditionalInfo("2 turtles required");
         try {
             super.setIcon("atom-variant.png");
         } catch (FileNotFoundException e) {

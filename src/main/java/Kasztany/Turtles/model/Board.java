@@ -47,13 +47,6 @@ public class Board {
             if (number == 4)
                 availableCards.add(new SwapTurtlesInStackCard(this));
         }
-//        Card card1 = new ChoosedMoveCard(this, 2, true);
-//        Card card2 = new ColorBasedMoveCard(this, 2, true, "red");
-//        Card card3 = new LastTurtleMoveCard(this, 2);
-//        Card card4 = new MoveTurtleInStackCard(this, true);
-//        Card card5 = new MoveTurtleInStackCard(this, false);
-//        Card card6 = new SwapTurtlesInStackCard(this);
-//        availableCards.addAll(List.of(card1, card2, card3, card4, card5, card6));
     }
 
     public void changeTurn() {
@@ -144,12 +137,12 @@ public class Board {
         Turtle winner = turtles.get(winnerIndex);
         GameLog gameLog = new GameLog(turtles.size(), neighbourhood.getWholeNeighbourhood().size(), winner.getName(), winner.getPoints());
         Turtle second, third;
-        if(secondIndex >= 0){
+        if (secondIndex >= 0) {
             second = turtles.get(secondIndex);
             gameLog.setSecondPlayer(second.getName(), second.getPoints());
         }
 
-        if(thirdIndex >= 0){
+        if (thirdIndex >= 0) {
             third = turtles.get(thirdIndex);
             gameLog.setThirdPlayer(third.getName(), third.getPoints());
         }
@@ -176,13 +169,13 @@ public class Board {
         this.turtles.sort(Comparator.comparing(Turtle::getPoints));
         Collections.reverse(this.turtles);
 
-        if(this.turtles.size() > 1){
-            if(this.turtles.size() > 2){
+        if (this.turtles.size() > 1) {
+            if (this.turtles.size() > 2) {
                 saveGameLog(0, 1, 2);
-            }else{
+            } else {
                 saveGameLog(0, 1, -1);
             }
-        }else{
+        } else {
             saveGameLog(0, -1, -1);
         }
         return winningTurtle;
@@ -192,9 +185,9 @@ public class Board {
         return lastField.hasTurtle();
     }
 
-    public Optional<Turtle> getTurtleWithColor(String color){
-        for(Turtle turtle: this.turtles){
-            if(turtle.getColor().equals(color)){
+    public Optional<Turtle> getTurtleWithColor(String color) {
+        for (Turtle turtle : this.turtles) {
+            if (turtle.getColor().equals(color)) {
                 return Optional.of(turtle);
             }
         }
@@ -204,9 +197,9 @@ public class Board {
     public void burnCard(Card choosedCard) {
         Player currentPlayer = getCurrentPlayer();
         currentPlayer.removeCard(choosedCard);
-        if(availableCards.size() == 0){
+        if (availableCards.size() == 0) {
             ArrayList<String> colors = new ArrayList<>();
-            for(Turtle turtle: turtles){
+            for (Turtle turtle : turtles) {
                 colors.add(turtle.getColor());
             }
             createCards(30, colors);

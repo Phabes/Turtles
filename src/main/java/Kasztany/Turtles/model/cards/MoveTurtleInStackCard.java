@@ -18,10 +18,9 @@ public class MoveTurtleInStackCard extends Card {
 
     public MoveTurtleInStackCard(Board board, ArrayList<String> availableColors) {
         super(board);
-        this.color = availableColors.get(GlobalSettings.getRandomNumber(0, availableColors.size()));
-        super.setNumberOfTurtlesRequired(1);
-        this.toTop = GlobalSettings.getRandomNumber(0, 2) == 0;
         super.setHeader("Move turtle in stack");
+        this.color = availableColors.get(GlobalSettings.getRandomNumber(0, availableColors.size()));
+        this.toTop = GlobalSettings.getRandomNumber(0, 2) == 0;
 
         try {
             if (toTop) {

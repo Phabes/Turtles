@@ -11,14 +11,13 @@ import javafx.scene.text.Text;
 import java.io.FileNotFoundException;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
-import java.util.Collections;
 
 public abstract class Card {
     protected final Board board;
     private ImageBoxElement icon;
     private String header;
     private String additionalInfo;
-    private int numberOfTurtlesRequired = 0;
+    private int numberOfTurtlesRequired = 1;
     private boolean fieldRequired = false;
 
     public Card(Board board) {

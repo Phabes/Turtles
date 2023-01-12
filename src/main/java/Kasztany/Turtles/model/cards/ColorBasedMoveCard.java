@@ -21,7 +21,6 @@ public class ColorBasedMoveCard extends Card {
         super(board);
         this.steps = GlobalSettings.getRandomNumber(1, 3);
         super.setFieldRequired(true);
-        super.setNumberOfTurtlesRequired(1);
         this.moveForward = GlobalSettings.getRandomNumber(0, 2) == 0;
         this.color = availableColors.get(GlobalSettings.getRandomNumber(0, availableColors.size()));
         super.setHeader("Move specific turtle");

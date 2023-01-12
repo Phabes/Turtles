@@ -21,7 +21,6 @@ public class LastTurtleMoveCard extends Card {
         super(board);
         this.steps = GlobalSettings.getRandomNumber(1, 3);
         super.setFieldRequired(true);
-        super.setNumberOfTurtlesRequired(1);
         super.setHeader("Move last turtle");
         super.setAdditionalInfo("Steps " + steps);
         try {
