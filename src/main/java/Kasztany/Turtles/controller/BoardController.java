@@ -4,12 +4,10 @@ import Kasztany.Turtles.gui.ImageBoxElement;
 import Kasztany.Turtles.model.*;
 import Kasztany.Turtles.model.cards.Card;
 import Kasztany.Turtles.settings.GlobalSettings;
-import javafx.beans.binding.Bindings;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleObjectProperty;
-import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -24,7 +22,6 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import org.springframework.stereotype.Controller;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
@@ -219,7 +216,7 @@ public class BoardController {
             } else if (field.getFruit().isPresent()) {
                 fieldBox.add(fruitBoxElement.getImage(), 0, 0);
             }
-            if (field == endField) {
+            if (field == endField && !board.isGameEnd()) {
                 fieldBox.getStyleClass().add("endField");
                 finishBoxElement.setSize((int) fieldBox.getMinWidth());
                 fieldBox.add(finishBoxElement.getImage(), 0, 0);
@@ -244,15 +241,16 @@ public class BoardController {
     }
 
     private void showEndView(ActionEvent event) throws IOException {
-        Turtle winner = board.findWinner();
+        ArrayList<Turtle> ranking = board.getRanking();
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/EndGame.fxml"));
         Parent root = loader.load();
         EndGame endGame = loader.getController();
-        endGame.reveiceData(winner);
+        endGame.reveiceData(ranking);
         Scene scene = new Scene(root);
-        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        Stage stage = new Stage();
         stage.setTitle("End Game");
         stage.setScene(scene);
+        stage.show();
         GlobalSettings.setScreenInTheMiddle(stage);
     }
 

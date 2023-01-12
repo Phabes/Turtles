@@ -2,7 +2,6 @@ package Kasztany.Turtles.model;
 
 import Kasztany.Turtles.model.cards.Card;
 
-import java.util.ArrayList;
 import java.util.Optional;
 
 public class Turtle {

@@ -3,12 +3,17 @@
 
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Text?>
+<?import javafx.scene.layout.HBox?>
+<?import java.net.URL?>
 <VBox xmlns="http://javafx.com/javafx"
       xmlns:fx="http://javafx.com/fxml"
       fx:controller="Kasztany.Turtles.controller.EndGame"
       alignment="CENTER"
       spacing="10"
       prefWidth="300">
-    <Text fx:id="winnerName"/>
-    <Text fx:id="winnerPoints"/>
+
+    <stylesheets>
+        <URL value="@/css/ranking.css"/>
+    </stylesheets>
+    <VBox fx:id="rankingBox"/>
 </VBox>

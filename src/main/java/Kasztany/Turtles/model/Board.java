@@ -149,7 +149,7 @@ public class Board {
         gameLogRepository.save(gameLog);
     }
 
-    public Turtle findWinner() {
+    public ArrayList<Turtle> getRanking() {
         int winnerPoints = turtles.size() * 5;
 
         Turtle currTurtle = lastField.getTopTurtle().orElse(null);
@@ -159,15 +159,8 @@ public class Board {
             currTurtle = currTurtle.getTurtleOnBottom().orElse(null);
         }
 
-        Turtle winningTurtle = this.turtles.get(0);
-        for (Turtle turtle : this.turtles) {
-            if (turtle.getPoints() > winningTurtle.getPoints()) {
-                winningTurtle = turtle;
-            }
-        }
-
-        this.turtles.sort(Comparator.comparing(Turtle::getPoints));
-        Collections.reverse(this.turtles);
+        turtles.sort(Comparator.comparing(Turtle::getPoints));
+        Collections.reverse(turtles);
 
         if (this.turtles.size() > 1) {
             if (this.turtles.size() > 2) {
@@ -178,7 +171,7 @@ public class Board {
         } else {
             saveGameLog(0, -1, -1);
         }
-        return winningTurtle;
+        return turtles;
     }
 
     public Boolean isGameEnd() {
