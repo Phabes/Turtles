@@ -1,6 +1,7 @@
 package Kasztany.Turtles.controller;
 
-import Kasztany.Turtles.settings.GlobalSettings;
+import java.io.File;
+import java.io.IOException;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -10,15 +11,21 @@ import javafx.scene.Scene;
 import javafx.scene.control.TextField;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import Kasztany.Turtles.FXMLLoaderProvider;
+import Kasztany.Turtles.settings.GlobalSettings;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Controller;
 
-import java.io.File;
-import java.io.IOException;
-
 @Controller
 public class GameSettings {
+
+    private final FXMLLoaderProvider loaderProvider;
+
+    public GameSettings(FXMLLoaderProvider loaderProvider) {
+        this.loaderProvider = loaderProvider;
+    }
+
     private final GlobalSettings globalSettings = new GlobalSettings();
     @FXML
     private TextField numberOfPlayers;
@@ -32,7 +39,7 @@ public class GameSettings {
         Resource resource = new ClassPathResource("/map/"+boardName.getText());
         if(resource.exists()){
             File map=resource.getFile();
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/PlayersSettings.fxml"));
+            FXMLLoader loader = loaderProvider.getLoader(getClass().getResource("/view/PlayersSettings.fxml"));
             Parent root = loader.load();
             PlayersSettings playersSettings = loader.getController();
             playersSettings.receiveData(numberOfPlayers.getText(), map);
