@@ -24,7 +24,7 @@ public class EndGame {
         playerColorBox.getStyleClass().add("rankingComponent");
         HBox row = new HBox(playerNameBox, playerPointsBox, playerColorBox);
         rankingBox.getChildren().add(row);
-        for(Turtle turtle: ranking){
+        for (Turtle turtle : ranking) {
             playerName = new Text(turtle.getName());
             playerNameBox = new HBox(playerName);
             playerNameBox.getStyleClass().add("rankingComponent");

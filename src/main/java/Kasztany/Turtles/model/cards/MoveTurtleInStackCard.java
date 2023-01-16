@@ -39,12 +39,12 @@ public class MoveTurtleInStackCard extends Card {
     @Override
     public HBox getInfo() {
         HBox colorBox = new HBox();
-        colorBox.setMinSize(20, 20);
+        colorBox.setMinSize(GlobalSettings.COLOR_SIZE_ON_CARD, GlobalSettings.COLOR_SIZE_ON_CARD);
         colorBox.setStyle("-fx-background-color: #" + color);
 
-        if(toTop){
+        if (toTop) {
             return new HBox(new Text("Top"), colorBox);
-        }else{
+        } else {
             return new HBox(new Text("Bottom"), colorBox);
         }
 
@@ -61,9 +61,9 @@ public class MoveTurtleInStackCard extends Card {
         assert choosedTurtle != null;
         Field field = choosedTurtle.getCurrentField();
 
-        if(this.toTop){
+        if (this.toTop) {
             return field.moveTurtleTop(choosedTurtle);
-        }else{
+        } else {
             return field.moveTurtleDown(choosedTurtle);
         }
     }

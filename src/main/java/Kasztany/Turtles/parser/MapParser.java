@@ -20,7 +20,7 @@ public class MapParser {
             String[] splitedDirectionsStrings = splitedLine[1].split(";");
             String[] forwardDirectionsStrings = new String[0];
             String[] backwardDirectionsStrings = new String[0];
-            if(splitedDirectionsStrings.length>0)
+            if (splitedDirectionsStrings.length > 0)
                 forwardDirectionsStrings = splitedDirectionsStrings[0].split(",");
             Arrays.stream(forwardDirectionsStrings).toList().forEach(dir -> {
                 Direction direction = switch (dir) {
@@ -34,7 +34,7 @@ public class MapParser {
                     field.addPossibleForwardDirections(direction);
                 }
             });
-            if(splitedDirectionsStrings.length>1)
+            if (splitedDirectionsStrings.length > 1)
                 backwardDirectionsStrings = splitedDirectionsStrings[1].split(",");
             Arrays.stream(backwardDirectionsStrings).toList().forEach(dir -> {
                 Direction direction = switch (dir) {

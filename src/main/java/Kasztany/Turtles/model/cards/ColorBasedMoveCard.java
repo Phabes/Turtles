@@ -10,7 +10,6 @@ import javafx.scene.text.Text;
 import java.io.FileNotFoundException;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
-import java.util.Optional;
 
 public class ColorBasedMoveCard extends Card {
     private final int steps;
@@ -38,7 +37,7 @@ public class ColorBasedMoveCard extends Card {
     @Override
     public HBox getInfo() {
         HBox colorBox = new HBox();
-        colorBox.setMinSize(20, 20);
+        colorBox.setMinSize(GlobalSettings.COLOR_SIZE_ON_CARD, GlobalSettings.COLOR_SIZE_ON_CARD);
         colorBox.setStyle("-fx-background-color: #" + color);
         return new HBox(new Text("Steps " + steps), colorBox);
     }

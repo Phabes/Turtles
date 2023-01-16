@@ -17,6 +17,7 @@ public class GlobalSettings {
     public static final double MIN_TURTLE_SIZE = 40;
     public static final double HEADER_TURTLE_SIZE = 50;
     public static final int FRUIT_SIZE = 20;
+    public static final int COLOR_SIZE_ON_CARD = 20;
 
     private GlobalSettings() {
     }

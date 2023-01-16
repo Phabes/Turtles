@@ -211,7 +211,7 @@ class TurtlesApplicationTests {
     }
 
     @Test
-    void swapTurtlesTest(){
+    void swapTurtlesTest() {
         Field field = new Field(new Vector2d(0, 0));
         Turtle turtle1 = new Turtle("Player1", "#0000000", field);
         Turtle turtle2 = new Turtle("Player2", "#0000000", field);
@@ -233,7 +233,7 @@ class TurtlesApplicationTests {
     }
 
     @Test
-    void moveTurtleInStackTest(){
+    void moveTurtleInStackTest() {
         Field field = new Field(new Vector2d(0, 0));
         Turtle turtle1 = new Turtle("Player1", "#0000000", field);
         Turtle turtle2 = new Turtle("Player2", "#0000000", field);
@@ -275,7 +275,7 @@ class TurtlesApplicationTests {
         board.addTurtlesFromHashMap(players);
 
         ArrayList<Turtle> turtles = board.getTurtles();
-        for(Turtle turtle : turtles){
+        for (Turtle turtle : turtles) {
             assertEquals(turtle.getPlayer().getCards().size(), 5);
         }
 

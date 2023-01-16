@@ -109,9 +109,9 @@ public abstract class Card {
         return new ArrayList<>();
     }
 
-    public boolean validate(Field choosedField, ArrayDeque<Turtle> choosedTurtles){
-        if(choosedTurtles.size() == numberOfTurtlesRequired){
-            if(fieldRequired)
+    public boolean validate(Field choosedField, ArrayDeque<Turtle> choosedTurtles) {
+        if (choosedTurtles.size() == numberOfTurtlesRequired) {
+            if (fieldRequired)
                 return choosedField != null;
             return true;
         }

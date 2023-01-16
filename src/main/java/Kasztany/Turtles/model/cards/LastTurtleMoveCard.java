@@ -11,8 +11,6 @@ import javafx.scene.text.Text;
 import java.io.FileNotFoundException;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
 
 public class LastTurtleMoveCard extends Card {
     private final int steps;
@@ -70,7 +68,7 @@ public class LastTurtleMoveCard extends Card {
                 for (Direction direction : possibleDirections) {
                     Field nextField = board.getFieldForTurtleMove(field.getPosition(), direction);
                     if (nextField != null) {
-                        if(!nextFieldsToCheck.contains(nextField))
+                        if (!nextFieldsToCheck.contains(nextField))
                             nextFieldsToCheck.add(nextField);
                     }
                 }

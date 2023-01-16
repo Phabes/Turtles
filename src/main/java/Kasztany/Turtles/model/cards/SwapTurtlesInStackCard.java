@@ -4,11 +4,9 @@ import Kasztany.Turtles.model.Board;
 import Kasztany.Turtles.model.Field;
 import Kasztany.Turtles.model.Turtle;
 import javafx.scene.layout.HBox;
-import javafx.scene.text.Text;
 
 import java.io.FileNotFoundException;
 import java.util.ArrayDeque;
-import java.util.ArrayList;
 
 public class SwapTurtlesInStackCard extends Card {
     public SwapTurtlesInStackCard(Board board) {
