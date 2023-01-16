@@ -1,17 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 
+<?import javafx.scene.text.Text?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.layout.HBox?>
 <?import java.net.URL?>
 <VBox xmlns="http://javafx.com/javafx"
       xmlns:fx="http://javafx.com/fxml"
-      fx:controller="Kasztany.Turtles.controller.EndGame"
+      fx:controller="Kasztany.Turtles.controller.PlayerData"
       alignment="CENTER"
       spacing="10"
       prefWidth="300">
-
     <stylesheets>
-        <URL value="@/css/ranking.css"/>
+        <URL value="@/css/board.css"/>
     </stylesheets>
-    <VBox fx:id="rankingBox"/>
+    <Text fx:id="playerName"/>
+    <HBox fx:id="playerColor"/>
 </VBox>

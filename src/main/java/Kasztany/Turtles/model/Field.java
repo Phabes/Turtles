@@ -9,9 +9,10 @@ public class Field {
     private final String id;
     private final Vector2d position;
 
-    private LinkedList<Turtle> turtles;
+    private final LinkedList<Turtle> turtles;
     private Optional<Fruit> fruit;
-    private ArrayList<Direction> possibleDirections = new ArrayList<>();
+    private final ArrayList<Direction> possibleForwardDirections = new ArrayList<>();
+    private final ArrayList<Direction> possibleBackwardDirections = new ArrayList<>();
 
     public Field(Vector2d position) {
         this.id = "field-" + position.x() + "-" + position.y();
@@ -20,16 +21,28 @@ public class Field {
         this.fruit = Optional.empty();
     }
 
-    public void addPossibleDirection(Direction direction) {
-        possibleDirections.add(direction);
+    public void addPossibleForwardDirections(Direction direction) {
+        possibleForwardDirections.add(direction);
+    }
+
+    public void addPossibleBackwardDirections(Direction direction) {
+        possibleBackwardDirections.add(direction);
     }
 
     public String getId() {
         return id;
     }
 
-    public ArrayList<Direction> getPossibleDirections() {
-        return possibleDirections;
+    public LinkedList<Turtle> getTurtles() {
+        return turtles;
+    }
+
+    public ArrayList<Direction> getPossibleForwardDirections() {
+        return possibleForwardDirections;
+    }
+
+    public ArrayList<Direction> getPossibleBackwardDirections() {
+        return possibleBackwardDirections;
     }
 
     public Vector2d getPosition() {
@@ -66,7 +79,7 @@ public class Field {
         if (turtles.isEmpty()) {
             return Optional.empty();
         }
-        return Optional.of(turtles.pollLast());
+        return Optional.of(turtles.peekLast());
     }
 
     public Boolean hasTurtle() {
@@ -104,5 +117,35 @@ public class Field {
         }
         return connectedTurtles;
     }
+
+    public boolean moveTurtleDown(Turtle turtle) {
+        if (this.turtles.remove(turtle)) {
+            this.turtles.addFirst(turtle);
+            return true;
+        }
+        return false;
+    }
+
+    public boolean moveTurtleTop(Turtle turtle) {
+        if (this.turtles.remove(turtle)) {
+            this.turtles.addLast(turtle);
+            return true;
+        }
+        return false;
+    }
+
+    public boolean swapTurtles(Turtle turtle1, Turtle turtle2) {
+        if (this.turtles.contains(turtle1) && this.turtles.contains(turtle2)) {
+            int indexTurtle1 = this.turtles.indexOf(turtle1);
+            int indexTurtle2 = this.turtles.indexOf(turtle2);
+            this.turtles.remove(turtle1);
+            this.turtles.add(indexTurtle2, turtle1);
+            this.turtles.remove(turtle2);
+            this.turtles.add(indexTurtle1, turtle2);
+            return true;
+        }
+        return false;
+    }
+
 
 }

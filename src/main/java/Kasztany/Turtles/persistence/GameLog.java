@@ -18,6 +18,10 @@ public class GameLog {
     private Integer fieldsNum;
     private String winnerName;
     private Integer winnerPoints;
+    private String secondPlayerName;
+    private Integer secondPlayerPoints;
+    private String thirdPlayerName;
+    private Integer thirdPlayerPoints;
     private LocalDate date;
 
     public GameLog(Integer numberOfPlayers, Integer fieldsNum, String winnerName, Integer winnerPoints) {
@@ -33,7 +37,21 @@ public class GameLog {
         this.fieldsNum = 0;
         this.winnerName = " ";
         this.winnerPoints = 0;
+        this.secondPlayerName = "";
+        this.secondPlayerPoints = 0;
+        this.thirdPlayerName = "";
+        this.thirdPlayerPoints = 0;
         this.date = LocalDate.now();
+    }
+
+    public void setSecondPlayer(String name, int points){
+        this.secondPlayerName = name;
+        this.secondPlayerPoints = points;
+    }
+
+    public void setThirdPlayer(String name, int points){
+        this.thirdPlayerName = name;
+        this.thirdPlayerPoints = points;
     }
 
     public Integer getId() {

@@ -1,19 +1,33 @@
-#playersBox{
+#playersBox {
+    -fx-padding: 4;
     -fx-border-color: blue;
     -fx-border-width: 1;
     -fx-border-style: solid;
 }
 
-#boardGrid{
+#boardGrid {
     -fx-border-color: red;
     -fx-border-width: 1;
     -fx-border-style: solid;
+}
+
+#cardsBox {
+    -fx-border-color: blue;
+    -fx-border-width: 1;
+    -fx-border-style: solid;
+    -fx-padding: 10;
+    -fx-spacing: 30;
 }
 
 #moveButton {
     -fx-border-color: #454242;
     -fx-border-width: 3;
     -fx-border-style: solid;
+    -fx-cursor: hand;
+}
+
+#informationText {
+    -fx-font-size: 25;
 }
 
 .field {
@@ -23,7 +37,7 @@
     -fx-border-insets: 1;
 }
 
-.regularField{
+.regularField {
     -fx-border-color: #AAAAAA;
     -fx-border-width: 1;
     -fx-border-style: solid;
@@ -31,15 +45,16 @@
     -fx-background-color: #f4f4f4;
 }
 
-.possibleField{
+.possibleField {
     -fx-border-color: #AAAAAA;
     -fx-border-width: 1;
     -fx-border-style: solid;
     -fx-border-insets: 1;
     -fx-background-color: #add8e6;
+    -fx-cursor: hand;
 }
 
-.choosedField{
+.choosedField {
     -fx-border-color: #ffd700;
     -fx-border-width: 1;
     -fx-border-style: solid;
@@ -47,16 +62,46 @@
     -fx-background-color: #add8e6;
 }
 
-.endField{
+.endField {
     -fx-background-color: #deb252;
 }
 
-.turtleHead{
+.turtleHead {
     -fx-border-color: black;
     -fx-border-width: 1;
     -fx-border-style: solid;
 }
 
-.turtleEye{
+.turtleEye {
     -fx-background-color: black;
+}
+
+.simpleTurtle {
+    -fx-padding: 4;
+    -fx-border-width: 2;
+    -fx-border-radius: 3;
+    -fx-border-color: #f4f4f4;
+}
+
+.choosedTurtle {
+    -fx-padding: 4;
+    -fx-border-width: 2;
+    -fx-border-radius: 3;
+    -fx-border-color: #00FFFF;
+}
+
+.turtleInfo {
+    -fx-alignment: center;
+}
+
+.card {
+    -fx-border-color: #db43e7;
+    -fx-background-color: rgba(0, 255, 128, 0.67);
+    -fx-border-width: 2;
+    -fx-alignment: center;
+    -fx-cursor: hand;
+}
+
+#playerColor {
+    -fx-pref-height: 30;
 }

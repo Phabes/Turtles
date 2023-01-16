@@ -1,8 +1,10 @@
 package Kasztany.Turtles.model;
 
+import Kasztany.Turtles.model.cards.*;
 import Kasztany.Turtles.parser.MapParser;
 import Kasztany.Turtles.persistence.GameLog;
 import Kasztany.Turtles.persistence.GameLogRepository;
+import Kasztany.Turtles.settings.GlobalSettings;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
@@ -19,11 +21,44 @@ public class Board {
     private Field lastField;
     private Field startField;
     private final GameLogRepository gameLogRepository;
+    private final ArrayList<Card> availableCards = new ArrayList<>();
+    private final ArrayList<Card> usedCards = new ArrayList<>();
+    private final Turn turn;
+
 
     public Board(GameLogRepository repository) {
         this.gameLogRepository = repository;
         this.neighbourhood = new Neighbourhood();
         this.turtles = new ArrayList<>();
+        this.turn = new Turn(turtles);
+    }
+
+    public void createCards(int total, ArrayList<String> availableColors) {
+        for (int i = 0; i < total; i++) {
+            int number = GlobalSettings.getRandomNumber(0, 5);
+            if (number == 0)
+                availableCards.add(new ChoosedMoveCard(this));
+            if (number == 1)
+                availableCards.add(new ColorBasedMoveCard(this, availableColors));
+            if (number == 2)
+                availableCards.add(new LastTurtleMoveCard(this));
+            if (number == 3)
+                availableCards.add(new MoveTurtleInStackCard(this, availableColors));
+            if (number == 4)
+                availableCards.add(new SwapTurtlesInStackCard(this));
+        }
+    }
+
+    public void changeTurn() {
+        turn.next();
+    }
+
+    public Player getCurrentPlayer() {
+        return turn.getCurrentPlayer();
+    }
+
+    public ArrayList<Card> getAvailableCards() {
+        return availableCards;
     }
 
     public void addFields(File map) throws IOException {
@@ -38,7 +73,7 @@ public class Board {
         bufferedReader.lines().forEach(line -> {
             System.out.println(line);
             Field field = mapParser.parseMapLine(line);
-            if (field.getPossibleDirections().isEmpty()) {
+            if (field.getPossibleForwardDirections().isEmpty()) {
                 this.lastField = field;
             }
             maxVector = maxVector.setMaximal(field.getPosition());
@@ -52,9 +87,20 @@ public class Board {
         for (int key : players.keySet()) {
             turtles.add(new Turtle(players.get(key).get(0), players.get(key).get(1), neighbourhood.getFieldByVector(startVector)));
         }
-
+        ArrayList<String> availableColors = new ArrayList<>();
         for (Turtle turtle : turtles) {
             startField.addTurtle(turtle);
+            availableColors.add(turtle.getColor());
+        }
+        createCards(turtles.size() * 5 + 1, availableColors);
+        handCardsToPlayers();
+        changeTurn();
+    }
+
+    private void handCardsToPlayers() {
+        for (int i = turtles.size() * 5 - 1; i >= 0; i--) {
+            Turtle turtle = turtles.get(i % turtles.size());
+            turtle.addPlayerCard(availableCards.remove(i));
         }
     }
 
@@ -63,7 +109,7 @@ public class Board {
     }
 
     public Field getStartingField() {
-        return this.neighbourhood.getFieldByVector(new Vector2d());
+        return startField;
     }
 
     public Field getLastField() {
@@ -87,36 +133,74 @@ public class Board {
         return gameLogRepository;
     }
 
-    public void saveGameLog(int winnerIndex) {
+    public void saveGameLog(int winnerIndex, int secondIndex, int thirdIndex) {
         Turtle winner = turtles.get(winnerIndex);
         GameLog gameLog = new GameLog(turtles.size(), neighbourhood.getWholeNeighbourhood().size(), winner.getName(), winner.getPoints());
+        Turtle second, third;
+        if (secondIndex >= 0) {
+            second = turtles.get(secondIndex);
+            gameLog.setSecondPlayer(second.getName(), second.getPoints());
+        }
+
+        if (thirdIndex >= 0) {
+            third = turtles.get(thirdIndex);
+            gameLog.setThirdPlayer(third.getName(), third.getPoints());
+        }
         gameLogRepository.save(gameLog);
     }
 
-    public Turtle findWinner() {
+    public ArrayList<Turtle> getRanking() {
         int winnerPoints = turtles.size() * 5;
 
-//        Turtle currTurtle = lastField.getTopTurtle().orElse(null);
-//        while (currTurtle != null) {
-//            currTurtle.addPoints(winnerPoints);
-//            winnerPoints -= 5;
-//            currTurtle = currTurtle.getTurtleOnBottom().orElse(null);
-//        }
-//
-//        Turtle winningTurtle = this.turtles.get(0);
-//        for (Turtle turtle : this.turtles) {
-//            if (turtle.getPoints() > winningTurtle.getPoints()) {
-//                winningTurtle = turtle;
-//            }
-//        }
-        Turtle winningTurtle = lastField.getTopTurtle().orElse(null);
-        if (winningTurtle != null)
-            winningTurtle.addPoints(winnerPoints);
-        saveGameLog(this.turtles.indexOf(winningTurtle));
-        return winningTurtle;
+        Turtle currTurtle = lastField.getTopTurtle().orElse(null);
+        while (currTurtle != null) {
+            currTurtle.addPoints(winnerPoints);
+            winnerPoints -= 5;
+            currTurtle = currTurtle.getTurtleOnBottom().orElse(null);
+        }
+
+        turtles.sort(Comparator.comparing(Turtle::getPoints));
+        Collections.reverse(turtles);
+
+        if (this.turtles.size() > 1) {
+            if (this.turtles.size() > 2) {
+                saveGameLog(0, 1, 2);
+            } else {
+                saveGameLog(0, 1, -1);
+            }
+        } else {
+            saveGameLog(0, -1, -1);
+        }
+        return turtles;
     }
 
     public Boolean isGameEnd() {
         return lastField.hasTurtle();
+    }
+
+    public Optional<Turtle> getTurtleWithColor(String color) {
+        for (Turtle turtle : this.turtles) {
+            if (turtle.getColor().equals(color)) {
+                return Optional.of(turtle);
+            }
+        }
+        return Optional.empty();
+    }
+
+    public void burnCard(Card choosedCard) {
+        Player currentPlayer = getCurrentPlayer();
+        currentPlayer.removeCard(choosedCard);
+        if (availableCards.size() == 0) {
+            ArrayList<String> colors = new ArrayList<>();
+            for (Turtle turtle : turtles) {
+                colors.add(turtle.getColor());
+            }
+            createCards(30, colors);
+        }
+        currentPlayer.addCard(availableCards.remove(0));
+    }
+
+    public Turn getTurn() {
+        return turn;
     }
 }

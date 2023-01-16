@@ -51,6 +51,5 @@ public class GameSettings {
         } else {
             errorMessage.setText("No such map in resources");
         }
-
     }
 }
